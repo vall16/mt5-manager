@@ -1,0 +1,78 @@
+<div class="user-dashboard">
+  <div class="dashboard-header">
+    <div class="user-info">
+      <div class="user-avatar">
+        {{ (authService.currentUserValue?.username || '?').charAt(0).toUpperCase() }}
+      </div>
+      <div class="user-details">
+        <h2>Welcome, {{ authService.currentUserValue?.username }}</h2>
+        <p class="user-email">Manage your MT5 trading accounts</p>
+      </div>
+    </div>
+    <button class="logout-button" (click)="logout()">
+      <span>Logout</span>
+    </button>
+  </div>
+
+  <div class="traders-section">
+    <div class="section-header">
+      <h3>My Traders</h3>
+      <button class="add-trader-btn" (click)="openAddModal()">
+        <span class="plus-icon">+</span>
+        <span>Add Trader</span>
+      </button>
+    </div>
+
+    <div class="traders-grid">
+      <div class="trader-card" *ngFor="let trader of traders">
+        <div class="card-header">
+          <div class="trader-info">
+            <h4>{{ trader.name }}</h4>
+            <span class="trader-status" [class.active]="trader.status === 'active'" [class.inactive]="trader.status === 'inactive'">
+              {{ trader.status }}
+            </span>
+          </div>
+          <button class="delete-btn" (click)="deleteTrader(trader)" title="Delete trader">
+            ×
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div class="detail-row">
+            <span class="label">Login:</span>
+            <span class="value">{{ trader.mt5_login }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Server:</span>
+            <span class="value">{{ trader.mt5_server }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Created:</span>
+            <span class="value">{{ trader.created_at | date:'short' }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="action-btn primary" (click)="goToMT5Dashboard(trader)">
+            Open Dashboard
+          </button>
+          <button class="action-btn secondary" (click)="toggleTraderStatus(trader)">
+            {{ trader.status === 'active' ? 'Deactivate' : 'Activate' }}
+          </button>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="traders.length === 0">
+        <div class="empty-icon">📊</div>
+        <h3>No traders yet</h3>
+        <p>Click the "Add Trader" button to create your first MT5 trading account</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-add-trader-modal (traderAdded)="onTraderAdded()" (cancel)="closeAddModal()"></app-add-trader-modal>
+  </div>
+</div>

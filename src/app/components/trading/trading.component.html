@@ -1,0 +1,123 @@
+<div class="trading-container">
+  <h1>Trading Panel</h1>
+
+  <div class="message" *ngIf="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+    {{ message }}
+  </div>
+
+  <div class="trading-grid">
+    <div class="card symbol-card">
+      <h2>Symbol Selection</h2>
+
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="symbolSearch"
+          placeholder="Search symbols..."
+          class="search-input"
+        />
+      </div>
+
+      <div class="symbol-select">
+        <label>Select Symbol:</label>
+        <select [(ngModel)]="selectedSymbol" (change)="onSymbolChange()" class="select-input">
+          <option value="">-- Select Symbol --</option>
+          <option *ngFor="let symbol of filteredSymbols" [value]="symbol.symbol">
+            {{ symbol.symbol }} ({{ symbol.currency_base }}/{{ symbol.currency_profit }})
+          </option>
+        </select>
+      </div>
+
+      <div class="tick-info" *ngIf="currentTick && selectedSymbol">
+        <h3>Current Prices</h3>
+        <div class="price-display">
+          <div class="price-item bid">
+            <span class="price-label">BID</span>
+            <span class="price-value">{{ currentTick.bid | number:'1.5-5' }}</span>
+          </div>
+          <div class="price-item ask">
+            <span class="price-label">ASK</span>
+            <span class="price-value">{{ currentTick.ask | number:'1.5-5' }}</span>
+          </div>
+          <div class="spread-info">
+            <span class="spread-label">Spread:</span>
+            <span class="spread-value">{{ getSpreadPips() | number:'1.1-1' }} pips</span>
+          </div>
+        </div>
+        <button class="refresh-tick-btn" (click)="refreshTick()">Refresh Price</button>
+      </div>
+    </div>
+
+    <div class="card order-form-card">
+      <h2>Order Parameters</h2>
+
+      <div class="form-group">
+        <label>Lot Size:</label>
+        <input type="number" [(ngModel)]="orderForm.lot" step="0.01" min="0.01" class="form-input" />
+      </div>
+
+      <div class="form-group">
+        <label>Stop Loss (points):</label>
+        <input type="number" [(ngModel)]="orderForm.sl_point" step="10" min="0" class="form-input" />
+      </div>
+
+      <div class="form-group">
+        <label>Take Profit (points):</label>
+        <input type="number" [(ngModel)]="orderForm.tp_point" step="10" min="0" class="form-input" />
+      </div>
+
+      <div class="form-group">
+        <label>Deviation:</label>
+        <input type="number" [(ngModel)]="orderForm.deviation" step="1" min="0" class="form-input" />
+      </div>
+
+      <div class="form-group">
+        <label>Magic Number:</label>
+        <input type="number" [(ngModel)]="orderForm.magic" class="form-input" />
+      </div>
+
+      <div class="form-group">
+        <label>Comment:</label>
+        <input type="text" [(ngModel)]="orderForm.comment" placeholder="Optional comment" class="form-input" />
+      </div>
+    </div>
+
+    <div class="card actions-card">
+      <h2>Actions</h2>
+
+      <div class="action-buttons">
+        <button
+          class="btn btn-buy"
+          (click)="executeBuy()"
+          [disabled]="loading || !selectedSymbol"
+        >
+          <span *ngIf="!loading">BUY</span>
+          <span *ngIf="loading">Processing...</span>
+        </button>
+
+        <button
+          class="btn btn-sell"
+          (click)="executeSell()"
+          [disabled]="loading || !selectedSymbol"
+        >
+          <span *ngIf="!loading">SELL</span>
+          <span *ngIf="loading">Processing...</span>
+        </button>
+
+        <button
+          class="btn btn-close"
+          (click)="closeAllPositions()"
+          [disabled]="loading || !selectedSymbol"
+        >
+          <span *ngIf="!loading">CLOSE ALL</span>
+          <span *ngIf="loading">Processing...</span>
+        </button>
+      </div>
+
+      <div class="action-info">
+        <p>Selected Symbol: <strong>{{ selectedSymbol || 'None' }}</strong></p>
+        <p>Order Size: <strong>{{ orderForm.lot }}</strong> lots</p>
+      </div>
+    </div>
+  </div>
+</div>

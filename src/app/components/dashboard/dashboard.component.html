@@ -1,0 +1,124 @@
+<div class="dashboard-container">
+  <div class="header">
+    <h1>MetaTrader 5 Dashboard</h1>
+    <div class="connection-status" [class.connected]="isConnected" [class.disconnected]="!isConnected">
+      <span class="status-indicator"></span>
+      {{ isConnected ? 'Connected' : 'Disconnected' }}
+    </div>
+  </div>
+
+  <div class="error-message" *ngIf="error">
+    {{ error }}
+  </div>
+
+  <div class="content-grid">
+    <div class="card account-card">
+      <h2>Account Information</h2>
+      <div class="account-details" *ngIf="accountInfo">
+        <div class="detail-row">
+          <span class="label">Login:</span>
+          <span class="value">{{ accountInfo.login }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Server:</span>
+          <span class="value">{{ accountInfo.server }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Name:</span>
+          <span class="value">{{ accountInfo.name }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Currency:</span>
+          <span class="value">{{ accountInfo.currency }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Leverage:</span>
+          <span class="value">1:{{ accountInfo.leverage }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card margin-card">
+      <h2>Balance & Margin</h2>
+      <div class="margin-details" *ngIf="marginInfo">
+        <div class="balance-item">
+          <span class="balance-label">Balance</span>
+          <span class="balance-value">{{ marginInfo.balance | number:'1.2-2' }}</span>
+        </div>
+        <div class="balance-item">
+          <span class="balance-label">Equity</span>
+          <span class="balance-value">{{ marginInfo.equity | number:'1.2-2' }}</span>
+        </div>
+        <div class="balance-item">
+          <span class="balance-label">Margin</span>
+          <span class="balance-value">{{ marginInfo.margin | number:'1.2-2' }}</span>
+        </div>
+        <div class="balance-item">
+          <span class="balance-label">Margin Level</span>
+          <span class="balance-value">{{ marginInfo.margin_level | number:'1.2-2' }}%</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card positions-card">
+      <div class="card-header">
+        <h2>Open Positions ({{ openPositions.length }})</h2>
+        <button class="refresh-btn" (click)="refresh()">Refresh</button>
+      </div>
+
+      <div class="positions-summary" *ngIf="openPositions.length > 0">
+        <span class="total-label">Total P/L:</span>
+        <span class="total-value" [ngClass]="getPositionClass(getTotalProfit())">
+          {{ getTotalProfit() | number:'1.2-2' }}
+        </span>
+      </div>
+
+      <div class="positions-list">
+        <div class="position-item" *ngFor="let position of openPositions">
+          <div class="position-header">
+            <span class="symbol">{{ position.symbol }}</span>
+            <span class="type" [class.buy]="position.type === 0" [class.sell]="position.type === 1">
+              {{ getPositionType(position.type) }}
+            </span>
+          </div>
+          <div class="position-details">
+            <div class="detail">
+              <span class="label">Ticket:</span>
+              <span class="value">{{ position.ticket }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Volume:</span>
+              <span class="value">{{ position.volume }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Open Price:</span>
+              <span class="value">{{ position.price_open | number:'1.5-5' }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">Current:</span>
+              <span class="value">{{ position.price_current | number:'1.5-5' }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">SL:</span>
+              <span class="value">{{ position.sl | number:'1.5-5' }}</span>
+            </div>
+            <div class="detail">
+              <span class="label">TP:</span>
+              <span class="value">{{ position.tp | number:'1.5-5' }}</span>
+            </div>
+            <div class="detail profit">
+              <span class="label">Profit:</span>
+              <span class="value" [ngClass]="getPositionClass(position.profit)">
+                {{ position.profit | number:'1.2-2' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="no-positions" *ngIf="openPositions.length === 0">
+          No open positions
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
