@@ -28,23 +28,24 @@ export class AddTraderModalComponent {
   constructor(private traderService: TraderService) {}
 
   async onSubmit() {
-    if (!this.validateForm()) {
-      return;
-    }
+    // if (!this.validateForm()) {
+    //   return;
+    // }
 
-    this.loading = true;
-    this.errorMessage = '';
+    // this.loading = true;
+    // this.errorMessage = '';
 
-    const result = await this.traderService.createTrader(this.traderForm);
+    // // const result = await this.traderService.createTrader(this.traderForm);
+    // const result = await this.traderService.createTrader(this.traderForm);
 
-    if (result.success) {
-      this.traderAdded.emit();
-      this.resetForm();
-    } else {
-      this.errorMessage = result.message;
-    }
+    // if (result.success) {
+    //   this.traderAdded.emit();
+    //   this.resetForm();
+    // } else {
+    //   this.errorMessage = result.message;
+    // }
 
-    this.loading = false;
+    // this.loading = false;
   }
 
   validateForm(): boolean {

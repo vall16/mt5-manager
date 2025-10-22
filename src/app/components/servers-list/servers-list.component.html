@@ -1,0 +1,159 @@
+<div class="container">
+  
+  <div class="header">
+    <h1>Trading Servers</h1>
+    <!-- <button class="close-btn" (click)="onClose()">✖</button> -->
+     <!-- FORM per aggiungere un server -->
+  <!-- <div class="add-server-form">
+    <h3>Add New Server</h3>
+    <form (ngSubmit)="addServer()" #serverForm="ngForm">
+      <div class="form-row">
+        <label>Server:</label>
+        <input type="text" [(ngModel)]="newServer.server" name="server" required />
+      </div>
+      <div class="form-row">
+        <label>Platform:</label>
+        <input type="text" [(ngModel)]="newServer.platform" name="platform" required />
+      </div>
+      <div class="form-row">
+        <label>User:</label>
+        <input type="text" [(ngModel)]="newServer.user" name="user" required />
+      </div>
+      <div class="form-row">
+        <label>Password:</label>
+        <input type="password" [(ngModel)]="newServer.pwd" name="pwd" required />
+      </div>
+      <div class="form-row">
+        <label>IP:</label>
+        <input type="text" [(ngModel)]="newServer.ip" name="ip" required />
+      </div>
+      <div class="form-row">
+        <label>Port:</label>
+        <input type="number" [(ngModel)]="newServer.port" name="port" required />
+      </div>
+      <div class="form-row">
+        <label>Active:</label>
+        <input type="checkbox" [(ngModel)]="newServer.is_active" name="is_active" />
+      </div>
+
+      <button type="submit" [disabled]="serverForm.invalid">Add Server</button>
+    </form>
+  </div> -->
+
+  <hr />
+
+  
+  </div>
+
+
+  <div *ngIf="loading" class="loading">
+    Loading servers...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  <div class="servers-header">
+  <!-- <h2>Servers</h2> -->
+  <button class="add-btn" (click)="toggleAddForm()">
+    {{ showAddForm ? '✖' : '+' }}
+  </button>
+</div>
+
+<div *ngIf="showAddForm" class="add-server-row">
+  <input type="text" placeholder="Server" [(ngModel)]="newServer.server">
+  <input type="text" placeholder="Platform" [(ngModel)]="newServer.platform">
+  <input type="text" placeholder="User" [(ngModel)]="newServer.user">
+  <input type="text" placeholder="IP" [(ngModel)]="newServer.ip">
+  <input type="number" placeholder="Port" [(ngModel)]="newServer.port">
+  <label class="chk">
+    <input type="checkbox" [(ngModel)]="newServer.is_active"> Active
+  </label>
+  <button class="save-btn" (click)="addServer()">Save</button>
+</div>
+
+
+<!-- </div> -->
+ <div *ngIf="!loading && servers.length > 0" class="servers-grid-container">
+
+  <!-- Intestazioni -->
+  <div class="grid-header">
+    <div class="grid-cell">Server</div>
+    <div class="grid-cell">Platform</div>
+    <div class="grid-cell">User</div>
+    <div class="grid-cell">IP</div>
+    <div class="grid-cell">Port</div>
+    <div class="grid-cell">Status</div>
+    <div class="grid-cell">Actions</div> <!-- Nuova colonna -->
+
+  </div>
+
+  <!-- Dati dei server -->
+  <!-- Dati dei server -->
+  <div class="grid-body">
+    <div *ngFor="let server of servers; let i = index" class="grid-row">
+      <div class="grid-cell">{{ server.server }}</div>
+      <div class="grid-cell">{{ server.platform }}</div>
+      <div class="grid-cell">{{ server.user }}</div>
+      <div class="grid-cell">{{ server.ip }}</div>
+      <div class="grid-cell">{{ server.port }}</div>
+      <div class="grid-cell">
+        <span class="status-badge"
+              [class.active]="server.is_active"
+              [class.inactive]="!server.is_active">
+          {{ server.is_active ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+      <div class="grid-cell">
+        <button class="delete-btn" (click)="deleteServer(i)">Delete</button>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+
+  <!-- <div *ngIf="!loading && servers.length > 0" class="servers-grid">
+    <div *ngFor="let server of servers" class="server-card">
+      <div class="server-header">
+        <h2>{{ server.server }}</h2>
+        <span
+          class="status-badge"
+          [class.active]="server.is_active"
+          [class.inactive]="!server.is_active">
+          {{ server.is_active ? 'Active' : 'Inactive' }}
+        </span>
+      </div>
+
+      <div class="server-details">
+        <div class="detail-row">
+          <span class="label">Platform:</span>
+          <span class="value">{{ server.platform }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">User:</span>
+          <span class="value">{{ server.user }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">IP:</span>
+          <span class="value">{{ server.ip }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="label">Port:</span>
+          <span class="value">{{ server.port }}</span>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div *ngIf="!loading && servers.length === 0 && !error" class="empty-state">
+    No servers found
+  </div>
+
+  
+</div>

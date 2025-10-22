@@ -1,121 +1,94 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { SupabaseService } from './supabase.service';
-import { AuthService } from './auth.service';
-import { Trader, CreateTraderRequest } from '../models/trader.models';
+import { HttpClient } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
+import { Server } from '../models/server.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TraderService {
-  private tradersSubject: BehaviorSubject<Trader[]> = new BehaviorSubject<Trader[]>([]);
-  public traders$: Observable<Trader[]> = this.tradersSubject.asObservable();
+  private apiUrl = 'http://127.0.0.1:8080'; // URL del backend FastAPI
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private authService: AuthService
-  ) {}
+  constructor(private http: HttpClient) {}
 
-  async loadTraders(): Promise<void> {
-    const currentUser = this.authService.currentUserValue;
-    if (!currentUser) return;
-
-    try {
-      const supabase = this.supabaseService.getClient();
-      const { data, error } = await supabase
-        .from('traders')
-        .select('*')
-        .eq('user_id', currentUser.id)
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        console.error('Error loading traders:', error);
-        return;
+  // ✅ nuovo metodo con dati fake
+  getAllServers2(): Observable<Server[]> {
+    const fakeServers: Server[] = [
+      {
+        id: 1,
+        user: '95991',
+        pwd: 'pwd1',
+        server: 'VTMarkets-Demo',
+        platform: 'MT5',
+        ip: '192.168.0.1',
+        port: 443,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 2,
+        user: 'demo2',
+        pwd: 'pwd2',
+        server: 'Server Two',
+        platform: 'MT4',
+        ip: '192.168.0.2',
+        port: 443,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 3,
+        user: 'demo3',
+        pwd: 'pwd3',
+        server: 'Server Three',
+        platform: 'MT5',
+        ip: '192.168.0.3',
+        port: 443,
+        is_active: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 4,
+        user: 'demo4',
+        pwd: 'pwd4',
+        server: 'Server Four',
+        platform: 'MT4',
+        ip: '192.168.0.4',
+        port: 443,
+        is_active: true,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      },
+      {
+        id: 5,
+        user: 'demo5',
+        pwd: 'pwd5',
+        server: 'Server Five',
+        platform: 'MT5',
+        ip: '192.168.0.5',
+        port: 443,
+        is_active: false,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       }
+  ];
 
-      this.tradersSubject.next(data || []);
-    } catch (error) {
-      console.error('Error loading traders:', error);
-    }
+    // restituisce un Observable simulando la chiamata HTTP
+    return of(fakeServers);
   }
 
-  async createTrader(request: CreateTraderRequest): Promise<{ success: boolean; message: string; trader?: Trader }> {
-    const currentUser = this.authService.currentUserValue;
-    if (!currentUser) {
-      return { success: false, message: 'User not authenticated' };
-    }
-
-    try {
-      const supabase = this.supabaseService.getClient();
-      const { data, error } = await supabase
-        .from('traders')
-        .insert({
-          user_id: currentUser.id,
-          name: request.name,
-          mt5_login: request.mt5_login,
-          mt5_password: request.mt5_password,
-          mt5_server: request.mt5_server,
-          status: 'inactive'
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error('Error creating trader:', error);
-        return { success: false, message: 'Failed to create trader' };
-      }
-
-      await this.loadTraders();
-      return { success: true, message: 'Trader created successfully', trader: data };
-    } catch (error) {
-      console.error('Error creating trader:', error);
-      return { success: false, message: 'An error occurred' };
-    }
+  
+  /** ✅ GET: tutti i server */
+  getAllServers(): Observable<Server[]> {
+    return this.http.get<Server[]>(`${this.apiUrl}/servers`);
   }
 
-  async updateTrader(id: string, updates: Partial<Trader>): Promise<{ success: boolean; message: string }> {
-    try {
-      const supabase = this.supabaseService.getClient();
-      const { error } = await supabase
-        .from('traders')
-        .update(updates)
-        .eq('id', id);
 
-      if (error) {
-        console.error('Error updating trader:', error);
-        return { success: false, message: 'Failed to update trader' };
-      }
-
-      await this.loadTraders();
-      return { success: true, message: 'Trader updated successfully' };
-    } catch (error) {
-      console.error('Error updating trader:', error);
-      return { success: false, message: 'An error occurred' };
-    }
-  }
-
-  async deleteTrader(id: string): Promise<{ success: boolean; message: string }> {
-    try {
-      const supabase = this.supabaseService.getClient();
-      const { error } = await supabase
-        .from('traders')
-        .delete()
-        .eq('id', id);
-
-      if (error) {
-        console.error('Error deleting trader:', error);
-        return { success: false, message: 'Failed to delete trader' };
-      }
-
-      await this.loadTraders();
-      return { success: true, message: 'Trader deleted successfully' };
-    } catch (error) {
-      console.error('Error deleting trader:', error);
-      return { success: false, message: 'An error occurred' };
-    }
-  }
-
-  getTraders(): Trader[] {
-    return this.tradersSubject.value;
+  /** ✅ POST: inserisci un nuovo server */
+  insertServer(server: Partial<Server>): Observable<any> {
+    return this.http.post(this.apiUrl, server);
   }
 }

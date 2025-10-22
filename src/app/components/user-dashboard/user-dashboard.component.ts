@@ -5,17 +5,22 @@ import { AuthService } from '../../services/auth.service';
 import { TraderService } from '../../services/trader.service';
 import { Trader } from '../../models/trader.models';
 import { AddTraderModalComponent } from '../add-trader-modal/add-trader-modal.component';
+import { ServersListComponent } from '../servers-list/servers-list.component';
+
+
 
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
-  imports: [CommonModule, AddTraderModalComponent],
+  imports: [CommonModule, AddTraderModalComponent, ServersListComponent],
+  
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css']
 })
 export class UserDashboardComponent implements OnInit {
   traders: Trader[] = [];
   showAddModal = false;
+  showServersList = false;
   selectedTrader: Trader | null = null;
 
   constructor(
@@ -25,47 +30,56 @@ export class UserDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadTraders();
-    this.traderService.traders$.subscribe(traders => {
-      this.traders = traders;
-    });
+    // this.loadTraders();
+    // this.traderService.traders$.subscribe(traders => {
+    //   this.traders = traders;
+    // });
   }
 
-  async loadTraders() {
-    await this.traderService.loadTraders();
-  }
+  // async loadTraders() {
+  //   await this.traderService.loadTraders();
+  // }
 
   openAddModal() {
     this.showAddModal = true;
+  }
+
+  openServersList() {
+    this.showServersList = true;
   }
 
   closeAddModal() {
     this.showAddModal = false;
   }
 
-  async onTraderAdded() {
-    this.showAddModal = false;
-    await this.loadTraders();
+  closeServersList() {
+    this.showServersList = false;
   }
 
-  async deleteTrader(trader: Trader) {
-    if (!confirm(`Delete trader "${trader.name}"?`)) {
-      return;
-    }
+  // async onTraderAdded() {
+  //   this.showAddModal = false;
+  //   await this.loadTraders();
+  // }
 
-    const result = await this.traderService.deleteTrader(trader.id);
-    if (result.success) {
-      await this.loadTraders();
-    } else {
-      alert(result.message);
-    }
-  }
+  // async deleteTrader(trader: Trader) {
+  //   if (!confirm(`Delete trader "${trader.name}"?`)) {
+  //     return;
+  //   }
+
+  //   const result = await this.traderService.deleteTrader(trader.id);
+  //   if (result.success) {
+  //     await this.loadTraders();
+  //   } else {
+  //     alert(result.message);
+  //   }
+  // }
 
   async toggleTraderStatus(trader: Trader) {
     const newStatus = trader.status === 'active' ? 'inactive' : 'active';
-    await this.traderService.updateTrader(trader.id, { status: newStatus });
+    // await this.traderService.updateTrader(trader.id, { status: newStatus });
   }
 
+  
   goToMT5Dashboard(trader: Trader) {
     this.router.navigate(['/dashboard'], { state: { trader } });
   }

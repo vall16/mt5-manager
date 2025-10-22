@@ -17,10 +17,22 @@
   <div class="traders-section">
     <div class="section-header">
       <h3>My Traders</h3>
-      <button class="add-trader-btn" (click)="openAddModal()">
+      <!-- <button class="add-trader-btn" (click)="openAddModal()">
         <span class="plus-icon">+</span>
         <span>Add Trader</span>
-      </button>
+      </button> -->
+      <div class="header-buttons">
+        <button class="add-server-btn" (click)="openServersList()">
+        <!-- <button class="add-server-btn" (click)="openAddServerModal()"> -->
+          <span class="plus-icon">+</span>
+          <span>Add Server</span>
+        </button>
+        <button class="add-trader-btn" (click)="openAddModal()">
+          <span class="plus-icon">+</span>
+          <span>Add Trader</span>
+        </button>
+      </div>
+
     </div>
 
     <div class="traders-grid">
@@ -32,9 +44,9 @@
               {{ trader.status }}
             </span>
           </div>
-          <button class="delete-btn" (click)="deleteTrader(trader)" title="Delete trader">
+          <!-- <button class="delete-btn" (click)="deleteTrader(trader)" title="Delete trader">
             ×
-          </button>
+          </button> -->
         </div>
 
         <div class="card-body">
@@ -73,6 +85,13 @@
 
 <div class="modal-overlay" *ngIf="showAddModal" (click)="closeAddModal()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <app-add-trader-modal (traderAdded)="onTraderAdded()" (cancel)="closeAddModal()"></app-add-trader-modal>
+    <!-- <app-add-trader-modal (traderAdded)="onTraderAdded()" (cancel)="closeAddModal()"></app-add-trader-modal> -->
+    <app-add-trader-modal></app-add-trader-modal>
+  </div>
+</div>
+<div class="modal-overlay" *ngIf="showServersList" (click)="closeServersList()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <!-- <app-servers-list (traderAdded)="onTraderAdded()" (cancel)="closeAddModal()"></app-servers-list> -->
+     <app-servers-list></app-servers-list>
   </div>
 </div>

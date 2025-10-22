@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { SupabaseService } from './supabase.service';
+import { HttpClient } from '@angular/common/http';
 
 interface User {
   id: string;
   username: string;
+}
+
+interface LoginResponse {
+  success: boolean;
+  user?: User;
+  message?: string;
 }
 
 @Injectable({
@@ -15,10 +21,9 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
-  constructor(
-    private supabaseService: SupabaseService,
-    private router: Router
-  ) {
+  private apiUrl = 'http://127.0.0.1:8080'; // URL del backend FastAPI
+
+  constructor(private http: HttpClient, private router: Router) {
     const storedUser = localStorage.getItem('currentUser');
     this.currentUserSubject = new BehaviorSubject<User | null>(
       storedUser ? JSON.parse(storedUser) : null
@@ -32,38 +37,20 @@ export class AuthService {
 
   async login(username: string, password: string): Promise<{ success: boolean; message: string }> {
     try {
-      const supabase = this.supabaseService.getClient();
+      const response = await this.http
+        .post<LoginResponse>(`${this.apiUrl}/login`, { username, password })
+        .toPromise();
 
-      const { data, error } = await supabase.rpc('verify_user_login', {
-        input_username: username,
-        input_password: password
-      });
-
-      if (error) {
-        return { success: false, message: 'Login failed' };
-      }
-
-      if (data && data.length > 0) {
-        const user = {
-          id: data[0].id,
-          username: data[0].username
-        };
-
-        localStorage.setItem('currentUser', JSON.stringify(user));
-        this.currentUserSubject.next(user);
-
-        await supabase
-          .from('users')
-          .update({ last_login: new Date().toISOString() })
-          .eq('id', user.id);
-
+      if (response && response.success && response.user) {
+        localStorage.setItem('currentUser', JSON.stringify(response.user));
+        this.currentUserSubject.next(response.user);
         return { success: true, message: 'Login successful' };
       }
 
-      return { success: false, message: 'Invalid credentials' };
-    } catch (error) {
-      console.error('Login error:', error);
-      return { success: false, message: 'An error occurred' };
+      return { success: false, message: response?.message || 'Invalid credentials' };
+    } catch (err: any) {
+      console.error('Login error:', err);
+      return { success: false, message: err.error?.message || 'Login failed' };
     }
   }
 
