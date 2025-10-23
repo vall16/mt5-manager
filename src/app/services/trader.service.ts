@@ -11,70 +11,88 @@ export class TraderService {
 
   constructor(private http: HttpClient) {}
 
+  
+
   // ✅ nuovo metodo con dati fake
   getAllServers2(): Observable<Server[]> {
     const fakeServers: Server[] = [
-      {
-        id: 1,
-        user: '95991',
-        pwd: 'pwd1',
-        server: 'VTMarkets-Demo',
-        platform: 'MT5',
-        ip: '192.168.0.1',
-        port: 443,
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 2,
-        user: 'demo2',
-        pwd: 'pwd2',
-        server: 'Server Two',
-        platform: 'MT4',
-        ip: '192.168.0.2',
-        port: 443,
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 3,
-        user: 'demo3',
-        pwd: 'pwd3',
-        server: 'Server Three',
-        platform: 'MT5',
-        ip: '192.168.0.3',
-        port: 443,
-        is_active: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 4,
-        user: 'demo4',
-        pwd: 'pwd4',
-        server: 'Server Four',
-        platform: 'MT4',
-        ip: '192.168.0.4',
-        port: 443,
-        is_active: true,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      },
-      {
-        id: 5,
-        user: 'demo5',
-        pwd: 'pwd5',
-        server: 'Server Five',
-        platform: 'MT5',
-        ip: '192.168.0.5',
-        port: 443,
-        is_active: false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-  ];
+  {
+    id: 1,
+    user: '95991',
+    pwd: 'pwd1',
+    server: 'VTMarkets-Demo',
+    platform: 'MT5',
+    ip: '192.168.0.1',
+    port: 443,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    path: 'C:\\Program Files\\MetaTrader 5\\terminal64.exe',
+    login: '95991',
+    password: 'pwd1'
+  },
+  {
+    id: 2,
+    user: 'demo2',
+    pwd: 'pwd2',
+    server: 'Server Two',
+    platform: 'MT4',
+    ip: '192.168.0.2',
+    port: 443,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    path: 'C:\\Program Files\\MetaTrader 4\\terminal.exe',
+    login: 'demo2',
+    password: 'pwd2'
+  },
+  {
+    id: 3,
+    user: 'demo3',
+    pwd: 'pwd3',
+    server: 'Server Three',
+    platform: 'MT5',
+    ip: '192.168.0.3',
+    port: 443,
+    is_active: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    path: 'C:\\MetaTrader5\\terminal64.exe',
+    login: 'demo3',
+    password: 'pwd3'
+  },
+  {
+    id: 4,
+    user: 'demo4',
+    pwd: 'pwd4',
+    server: 'Server Four',
+    platform: 'MT4',
+    ip: '192.168.0.4',
+    port: 443,
+    is_active: true,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    path: 'D:\\Trading\\MT4\\terminal.exe',
+    login: 'demo4',
+    password: 'pwd4'
+  },
+  {
+    id: 5,
+    user: 'demo5',
+    pwd: 'pwd5',
+    server: 'Server Five',
+    platform: 'MT5',
+    ip: '192.168.0.5',
+    port: 443,
+    is_active: false,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    path: 'D:\\MetaTrader5\\terminal64.exe',
+    login: 'demo5',
+    password: 'pwd5'
+  }
+];
+
 
     // restituisce un Observable simulando la chiamata HTTP
     return of(fakeServers);
@@ -91,4 +109,5 @@ export class TraderService {
   insertServer(server: Partial<Server>): Observable<any> {
     return this.http.post(this.apiUrl, server);
   }
+
 }
