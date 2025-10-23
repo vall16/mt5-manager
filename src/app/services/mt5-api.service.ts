@@ -145,16 +145,7 @@ export class Mt5ApiService {
   //   return this.http.post<ServerCheckResponse>(`${this.baseUrl}/check-server`, data);
   // }
 
-  checkServer(server: Server): Observable<any> {
-    const body = {
-      server: server.server,
-      login: server.login,
-      password: server.password,
-      port: server.port,
-      path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
-    };
-    return this.http.post(`${this.baseUrl}/check-server`, body);
-  }
+  
 
 
 }

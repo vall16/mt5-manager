@@ -16,16 +16,6 @@ export class ServersListComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  // newServer: Partial<Server> = {
-  //   server: '',
-  //   platform: '',
-  //   user: '',
-  //   pwd: '',
-  //   ip: '',
-  //   port: 0,
-  //   is_active: true,
-  // };
-
   showAddForm = false;
 
 newServer: Partial<Server> = {
@@ -96,12 +86,30 @@ newServer: Partial<Server> = {
     }
   }
 
+  // checkServer(index: number) {
+  // if (confirm(`Are you sure you want to test server "${this.servers[index].server}"?`)) {
+  //   this.servers.splice(index, 1);
+  // }
+
   checkServer(index: number) {
-  if (confirm(`Are you sure you want to test server "${this.servers[index].server}"?`)) {
-    this.servers.splice(index, 1);
-  }
+  const server = this.servers[index];
+
+  this.traderService.checkServer(server).subscribe({
+    next: (res) => {
+      if (res.status === 'success') {
+        alert(`✅ Connessione riuscita a ${server.server}`);
+      } else {
+        alert(`❌ Connessione fallita: ${res.message}`);
+      }
+    },
+    error: (err) => {
+      alert(`⚠️ Errore nel test: ${err.message}`);
+    }
+  });
+}
+
 }
 
 
 
-}
+

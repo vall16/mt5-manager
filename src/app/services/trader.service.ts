@@ -18,7 +18,7 @@ export class TraderService {
     const fakeServers: Server[] = [
   {
     id: 1,
-    user: '95991',
+    user: '959911',
     pwd: 'pwd1',
     server: 'VTMarkets-Demo',
     platform: 'MT5',
@@ -28,8 +28,8 @@ export class TraderService {
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     path: 'C:\\Program Files\\MetaTrader 5\\terminal64.exe',
-    login: '95991',
-    password: 'pwd1'
+    login: '959911',
+    password: 'Qpnldan1@1'
   },
   {
     id: 2,
@@ -108,6 +108,17 @@ export class TraderService {
   /** ✅ POST: inserisci un nuovo server */
   insertServer(server: Partial<Server>): Observable<any> {
     return this.http.post(this.apiUrl, server);
+  }
+
+  checkServer(server: Server): Observable<any> {
+    const body = {
+      server: server.server,
+      login: server.login,
+      password: server.password,
+      port: server.port,
+      path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+    };
+    return this.http.post(`${this.apiUrl}/check-server`, body);
   }
 
 }
