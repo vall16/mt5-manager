@@ -12,8 +12,23 @@ import {
   OrderResult,
   Deal,
   DealsResponse,
-  MarginInfo
+  MarginInfo,
 } from '../models/mt5.models';
+import {Server} from '../models/server.model'
+
+export interface ServerCheckRequest {
+  server: string;
+  login: number;
+  password: string;
+  port?: number; // opzionale
+  path: string;
+}
+
+export interface ServerCheckResponse {
+  status: 'success' | 'error';
+  message: string;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -124,4 +139,22 @@ export class Mt5ApiService {
   getDiagnostic(symbol: string): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/diagnostic/${symbol}`);
   }
+
+    // fa il test di esistenza del server
+  // checkServer(data: ServerCheckRequest): Observable<ServerCheckResponse> {
+  //   return this.http.post<ServerCheckResponse>(`${this.baseUrl}/check-server`, data);
+  // }
+
+  checkServer(server: Server): Observable<any> {
+    const body = {
+      server: server.server,
+      login: server.login,
+      password: server.password,
+      port: server.port,
+      path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+    };
+    return this.http.post(`${this.baseUrl}/check-server`, body);
+  }
+
+
 }

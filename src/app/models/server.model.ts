@@ -9,4 +9,8 @@ export interface Server {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  path:string;
+  login:string;
+  password:string;
+
 }

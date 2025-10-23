@@ -91,7 +91,13 @@ newServer: Partial<Server> = {
     // }
   }
   deleteServer(index: number) {
-  if (confirm(`Are you sure you want to delete server "${this.servers[index].server}"?`)) {
+    if (confirm(`Are you sure you want to delete server "${this.servers[index].server}"?`)) {
+      this.servers.splice(index, 1);
+    }
+  }
+
+  checkServer(index: number) {
+  if (confirm(`Are you sure you want to test server "${this.servers[index].server}"?`)) {
     this.servers.splice(index, 1);
   }
 }
