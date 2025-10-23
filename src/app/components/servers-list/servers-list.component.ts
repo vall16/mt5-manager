@@ -14,6 +14,9 @@ import { FormsModule } from '@angular/forms';
 export class ServersListComponent implements OnInit {
   servers: Server[] = [];
   loading = true;
+  isLoading = false;
+  testingIndex: number | null = null;
+
   error: string | null = null;
 
   showAddForm = false;
@@ -92,17 +95,29 @@ newServer: Partial<Server> = {
   // }
 
   checkServer(index: number) {
+    
+
   const server = this.servers[index];
+  this.testingIndex = index; // 🔥 attiva loader solo per questo server
+
 
   this.traderService.checkServer(server).subscribe({
     next: (res) => {
+      
+      this.testingIndex = null; // 🔥 disattiva loader
+
       if (res.status === 'success') {
+        
         alert(`✅ Connessione riuscita a ${server.server}`);
+
       } else {
+        
         alert(`❌ Connessione fallita: ${res.message}`);
       }
     },
     error: (err) => {
+      this.testingIndex = null; // 🔥 disattiva loader anche in caso di errore
+
       alert(`⚠️ Errore nel test: ${err.message}`);
     }
   });

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Server } from '../models/server.model';
+import { Trader } from '../models/trader.models';
 
 @Injectable({
   providedIn: 'root',
@@ -121,4 +122,45 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/check-server`, body);
   }
 
+  loadTraders(): Observable<Trader[]> {
+    const traders: Trader[] = [
+      {
+        id: 1,
+        name: 'Trader Alpha',
+        server_master: 'ICMarkets-Live01',
+        server_slave: 'ICMarkets-Demo02',
+        strategy: 'Scalping',
+        balance: 12000,
+        status: 'active',
+        created_at: '2025-10-23T09:00:00Z'
+      },
+      {
+        id: 2,
+        name: 'Trader Beta',
+        server_master: 'VTMarkets-Demo',
+        server_slave: 'Eightcap-Demo',
+        strategy: 'Swing',
+        balance: 8500,
+        status: 'inactive',
+        created_at: '2025-10-22T15:30:00Z'
+      },
+      {
+        id: 3,
+        name: 'Trader Gamma',
+        server_master: 'Pepperstone-Live03',
+        server_slave: 'Exness-Demo',
+        strategy: 'Trend Following',
+        balance: 25600,
+        status: 'active',
+        created_at: '2025-10-20T10:15:00Z'
+      }
+    ];
+
+    // simula chiamata HTTP
+    return of(traders);
+  }
 }
+
+  
+
+

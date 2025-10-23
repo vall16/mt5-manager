@@ -22,6 +22,8 @@ export class UserDashboardComponent implements OnInit {
   showAddModal = false;
   showServersList = false;
   selectedTrader: Trader | null = null;
+  loading: boolean=false;
+  error: string="";
 
   constructor(
     public authService: AuthService,
@@ -30,15 +32,30 @@ export class UserDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // this.loadTraders();
-    // this.traderService.traders$.subscribe(traders => {
-    //   this.traders = traders;
-    // });
+    this.loadTraders();
+    
   }
 
-  // async loadTraders() {
-  //   await this.traderService.loadTraders();
-  // }
+  async loadTraders() {
+    this.loading = true;
+    this.error = '';
+
+    this.traderService.loadTraders().subscribe({
+      next: (res: Trader[]) => {
+        this.traders = res;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error('Errore nel caricamento traders:', err);
+        this.error = 'Errore durante il caricamento dei traders';
+        this.loading = false;
+      }
+    });
+  }
+
+
+
+  
 
   openAddModal() {
     this.showAddModal = true;
