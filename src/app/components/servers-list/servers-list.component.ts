@@ -76,11 +76,20 @@ newServer: Partial<Server> = {
   }
 
   
-  deleteServer(index: number) {
-    if (confirm(`Are you sure you want to delete server "${this.servers[index].server}"?`)) {
-      this.servers.splice(index, 1);
-    }
+  deleteServer(server: Server) {
+  if (!confirm(`Sei sicuro di voler eliminare il server "${server.server}"?`)) {
+    return;
   }
+
+  this.traderService.deleteServer(server.id!).subscribe({
+    next: () => {
+      console.log('✅ Server eliminato');
+      this.loadServers(); // ricarica la lista aggiornata
+    },
+    error: (err) => console.error('❌ Errore durante la cancellazione:', err)
+  });
+}
+
 
   // checkServer(index: number) {
   // if (confirm(`Are you sure you want to test server "${this.servers[index].server}"?`)) {

@@ -90,7 +90,7 @@
 
   </div>
 
-  <!-- Dati dei server -->
+  
   <!-- Dati dei server -->
   <div class="grid-body">
     <div *ngFor="let server of servers; let i = index" class="grid-row">
@@ -108,7 +108,7 @@
         </span>
       </div>
       <div class="grid-cell">
-        <button class="delete-btn" (click)="deleteServer(i)">Delete</button>
+        <button class="delete-btn" (click)="deleteServer(server)">Delete</button>
       </div>
       <div class="grid-cell">
         <button class="delete-btn" (click)="checkServer(i)" [disabled]="testingIndex === i">Test</button>

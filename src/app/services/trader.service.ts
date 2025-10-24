@@ -111,6 +111,11 @@ export class TraderService {
   return this.http.post(`${this.apiUrl}/servers`, server);
 }
 
+  deleteServer(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/servers/${id}`);
+  }
+
+
 
   checkServer(server: Server): Observable<any> {
     const body = {
