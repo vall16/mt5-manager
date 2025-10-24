@@ -44,7 +44,8 @@ newServer: Partial<Server> = {
     this.loading = true;
     this.error = null;
 
-    this.traderService.getAllServers2().subscribe({
+    // this.traderService.getAllServers2().subscribe({
+    this.traderService.getAllServers().subscribe({
       next: (data) => {
         this.servers = data;
         this.loading = false;
@@ -57,32 +58,24 @@ newServer: Partial<Server> = {
     });
   }
 
-  // addServer(): void {
-  //   this.traderService.insertServer(this.newServer).subscribe({
-  //     next: () => {
-  //       this.loadServers();  // ricarica la lista dopo l'inserimento
-  //       this.newServer = { server: '', platform: '', user: '', pwd: '', ip: '', port: 0, is_active: true };
-  //     },
-  //     error: (err) => {
-  //       console.error('Error adding server:', err);
-  //       this.error = err.message || 'Failed to add server';
-  //     },
-  //   });
-  // }
+  addServer(): void {
+    this.traderService.insertServer(this.newServer).subscribe({
+      next: () => {
+        this.loadServers();  // ricarica la lista dopo l'inserimento
+        this.newServer = { server: '', platform: '', user: '', pwd: '', ip: '', port: 0, is_active: true };
+      },
+      error: (err) => {
+        console.error('Error adding server:', err);
+        this.error = err.message || 'Failed to add server';
+      },
+    });
+  }
 
  toggleAddForm() {
     this.showAddForm = !this.showAddForm;
   }
 
-  addServer() {
-    // if (this.newServer.server && this.newServer.user) {
-    //   this.servers.push({ ...this.newServer });
-    //   this.newServer = { server: '', platform: '', user: '', ip: '', port: 0, is_active: false };
-    //   this.showAddForm = false;
-    // } else {
-    //   alert('Please fill at least Server and User');
-    // }
-  }
+  
   deleteServer(index: number) {
     if (confirm(`Are you sure you want to delete server "${this.servers[index].server}"?`)) {
       this.servers.splice(index, 1);

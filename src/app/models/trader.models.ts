@@ -17,14 +17,26 @@ export interface CreateTraderRequest {
   mt5_server: string;
 }
 
+// export interface Trader {
+//   id: number;
+//   name: string;
+//   server_master: string;
+//   server_slave: string;
+//   strategy: string;
+//   balance: number;
+//   status: 'active' | 'inactive';
+//   created_at?: string;
+// }
+
 export interface Trader {
-  id: number;
+  id?: number;
   name: string;
-  server_master: string;
-  server_slave: string;
-  strategy: string;
-  balance: number;
   status: 'active' | 'inactive';
+  server_master_id?: number; // id del Server
+  server_slave_id?: number;  // id del Server
   created_at?: string;
+  balance: number;
+  strategy: string;
 }
+
 

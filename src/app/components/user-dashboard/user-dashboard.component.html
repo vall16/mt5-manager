@@ -50,19 +50,37 @@
         </div>
 
         <div class="card-body">
-          <!-- <div class="detail-row">
-            <span class="label">Login:</span>
-            <span class="value">{{ trader.mt5_login }}</span>
-          </div> -->
-          <!-- <div class="detail-row">
-            <span class="label">Server:</span>
-            <span class="value">{{ trader.mt5_server }}</span>
-          </div> -->
-          <div class="detail-row">
-            <span class="label">Created:</span>
-            <span class="value">{{ trader.created_at | date:'short' }}</span>
-          </div>
-        </div>
+      <div class="detail-row">
+      <span class="label">Master Server:</span>
+      <!-- <span class="value">
+        {{ getServerNameById(trader.server_master_id) || '-' }}
+      </span> -->
+      <select [(ngModel)]="trader.server_master_id">
+        <option *ngFor="let server of servers" [value]="server.id">
+          {{ server.server }}
+        </option>
+      </select>
+
+    </div>
+    <div class="detail-row">
+      <span class="label">Slave Server:</span>
+      <!-- <span class="value">
+        {{ getServerNameById(trader.server_slave_id) || '-' }}
+      </span> -->
+      <select [(ngModel)]="trader.server_slave_id">
+        <option *ngFor="let server of servers" [value]="server.id">
+          {{ server.server }}
+        </option>
+      </select>
+    </div>
+
+
+  <div class="detail-row">
+    <span class="label">Created:</span>
+    <span class="value">{{ trader.created_at | date:'short' }}</span>
+  </div>
+</div>
+
 
         <div class="card-actions">
           <button class="action-btn primary" (click)="goToMT5Dashboard(trader)">
@@ -80,6 +98,7 @@
         <p>Click the "Add Trader" button to create your first MT5 trading account</p>
       </div>
     </div>
+
   </div>
 </div>
 
