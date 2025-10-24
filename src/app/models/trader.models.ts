@@ -1,14 +1,3 @@
-// export interface Trader {
-//   id: string;
-//   user_id: string;
-//   name: string;
-//   mt5_login: string;
-//   mt5_password: string;
-//   mt5_server: string;
-//   status: 'active' | 'inactive' | 'error';
-//   created_at: string;
-//   updated_at: string;
-// }
 
 export interface CreateTraderRequest {
   name: string;
@@ -31,12 +20,17 @@ export interface CreateTraderRequest {
 export interface Trader {
   id?: number;
   name: string;
-  status: 'active' | 'inactive';
-  server_master_id?: number; // id del Server
-  server_slave_id?: number;  // id del Server
+  status: 'active' | 'inactive';  // is_active diventa status
+  server_master_id?: number;      // riferimento al server master
+  server_slave_id?: number;       // riferimento al server slave
+  sl?: number;                    // Stop Loss
+  tp?: number;                    // Take Profit
+  tsl?: number;                   // Trailing Stop Loss
+  moltiplicatore?: number;        // fattore di copia
+  fix_lot?: number;               // lotto fisso (opzionale)
   created_at?: string;
-  balance: number;
-  strategy: string;
+  updated_at?: string;
 }
+
 
 

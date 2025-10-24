@@ -66,6 +66,7 @@
   <input type="text" placeholder="Platform" [(ngModel)]="newServer.platform">
   <input type="text" placeholder="User" [(ngModel)]="newServer.user">
   <input type="text" placeholder="IP" [(ngModel)]="newServer.ip">
+  <input type="text" placeholder="Pssw" [(ngModel)]="newServer.pwd">
   <input type="number" placeholder="Port" [(ngModel)]="newServer.port">
   <label class="chk">
     <input type="checkbox" [(ngModel)]="newServer.is_active"> Active
@@ -97,7 +98,7 @@
       <div class="grid-cell">{{ server.server }}</div>
       <div class="grid-cell">{{ server.platform }}</div>
       <div class="grid-cell">{{ server.user }}</div>
-      <div class="grid-cell">{{ server.password }}</div>
+      <div class="grid-cell">{{ server.pwd }}</div>
       <div class="grid-cell">{{ server.ip }}</div>
       <div class="grid-cell">{{ server.port }}</div>
       <div class="grid-cell">

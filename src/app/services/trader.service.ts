@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Server } from '../models/server.model';
 import { Trader } from '../models/trader.models';
 
@@ -128,15 +128,15 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/check-server`, body);
   }
 
-  loadTraders(): Observable<Trader[]> {
+  loadTraders_old(): Observable<Trader[]> {
   const traders: Trader[] = [
     {
       id: 1,
       name: 'Trader Alpha',
       server_master_id: 1, // VTMarkets-Demo
       server_slave_id: 2,  // Eightcap-Demo
-      strategy: 'Scalping',
-      balance: 12000,
+      // strategy: 'Scalping',
+      // balance: 12000,
       status: 'active',
       created_at: '2025-10-23T09:00:00Z'
     },
@@ -145,8 +145,8 @@ export class TraderService {
       name: 'Trader Beta',
       server_master_id: 3, // Pepperstone-Live03
       server_slave_id: 4,  // Exness-Demo
-      strategy: 'Swing',
-      balance: 8500,
+      // strategy: 'Swing',
+      // balance: 8500,
       status: 'inactive',
       created_at: '2025-10-22T15:30:00Z'
     },
@@ -155,8 +155,8 @@ export class TraderService {
       name: 'Trader Gamma',
       server_master_id: 5, // ICMarkets-Live01
       server_slave_id: 6,  // ICMarkets-Demo02
-      strategy: 'Trend Following',
-      balance: 25600,
+      // strategy: 'Trend Following',
+      // balance: 25600,
       status: 'active',
       created_at: '2025-10-20T10:15:00Z'
     }
@@ -165,6 +165,33 @@ export class TraderService {
   // Simula chiamata HTTP
   return of(traders);
 }
+
+loadTraders(): Observable<Trader[]> {
+  return this.http.get<Trader[]>(`${this.apiUrl}/traders`).pipe(
+    map(traders => traders.map(trader => ({
+      id: trader.id,
+      name: trader.name,
+      status: trader.status ? 'active' : 'inactive',
+      server_master_id: trader.server_master_id, // oppure trader.master_server_id se già numerico
+      server_slave_id: trader.server_slave_id,  // oppure trader.slave_server_id
+      sl: trader.sl,
+      tp: trader.tp,
+      tsl: trader.tsl,
+      moltiplicatore: trader.moltiplicatore,
+      fix_lot: trader.fix_lot,
+      created_at: trader.created_at,
+      updated_at: trader.updated_at
+    })))
+  );
+}
+insertTrader(trader: Trader): Observable<Trader> {
+    return this.http.post<Trader>(`${this.apiUrl}/traders`, trader);
+  }
+
+  updateTrader(trader: Trader): Observable<Trader> {
+    return this.http.put<Trader>(`${this.apiUrl}/traders/${trader.id}`, trader);
+  }
+
 
 }
 

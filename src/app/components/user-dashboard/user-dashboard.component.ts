@@ -23,6 +23,10 @@ import { FormsModule } from '@angular/forms';
 export class UserDashboardComponent implements OnInit {
   traders: Trader[] = [];
   servers: Server[] = [];
+  // newTrader: Partial<Trader> = {}; // Oggetto per la nuova card
+  newTrader: Partial<Trader> & { master_server_id?: number; slave_server_id?: number } = {};
+
+
 
   showAddModal = false;
   showServersList = false;
@@ -64,6 +68,28 @@ loadServers() {
     });
   }
 
+  addTrader(): void {
+    // Validazione minima
+    if (!this.newTrader.name || !this.newTrader.server_master_id || !this.newTrader.server_slave_id) {
+      alert('Please fill in all required fields (Name, Master, Slave).');
+      return;
+    }
+
+    // Imposta lo status di default
+    this.newTrader.status = 'active';
+    this.newTrader.created_at = new Date().toISOString();
+
+    this.traderService.insertTrader(this.newTrader as Trader).subscribe({
+      next: (createdTrader: Trader) => {
+        this.traders.push(createdTrader); // Aggiunge alla lista in tempo reale
+        this.newTrader = {}; // Reset della form
+      },
+      error: (err: any) => {
+        console.error('Error adding trader:', err);
+        alert('Failed to add trader. See console for details.');
+      }
+    });
+  }
 
 
   

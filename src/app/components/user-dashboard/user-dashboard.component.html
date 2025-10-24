@@ -17,10 +17,7 @@
   <div class="traders-section">
     <div class="section-header">
       <h3>My Traders</h3>
-      <!-- <button class="add-trader-btn" (click)="openAddModal()">
-        <span class="plus-icon">+</span>
-        <span>Add Trader</span>
-      </button> -->
+      
       <div class="header-buttons">
         <button class="add-server-btn" (click)="openServersList()">
         <!-- <button class="add-server-btn" (click)="openAddServerModal()"> -->
@@ -44,45 +41,56 @@
               {{ trader.status }}
             </span>
           </div>
-          <!-- <button class="delete-btn" (click)="deleteTrader(trader)" title="Delete trader">
-            ×
-          </button> -->
+          
         </div>
 
-        <div class="card-body">
+    <div class="card-body">
       <div class="detail-row">
       <span class="label">Master Server:</span>
-      <!-- <span class="value">
-        {{ getServerNameById(trader.server_master_id) || '-' }}
-      </span> -->
+      
       <select [(ngModel)]="trader.server_master_id">
         <option *ngFor="let server of servers" [value]="server.id">
           {{ server.server }}
         </option>
       </select>
 
-    </div>
-    <div class="detail-row">
-      <span class="label">Slave Server:</span>
-      <!-- <span class="value">
-        {{ getServerNameById(trader.server_slave_id) || '-' }}
-      </span> -->
-      <select [(ngModel)]="trader.server_slave_id">
-        <option *ngFor="let server of servers" [value]="server.id">
-          {{ server.server }}
-        </option>
-      </select>
-    </div>
-
-
-  <div class="detail-row">
-    <span class="label">Created:</span>
-    <span class="value">{{ trader.created_at | date:'short' }}</span>
-  </div>
-</div>
-
-
-        <div class="card-actions">
+      </div>
+      <div class="detail-row">
+        <span class="label">Slave Server:</span>
+      
+        <select [(ngModel)]="trader.server_slave_id">
+          <option *ngFor="let server of servers" [value]="server.id">
+            {{ server.server }}
+          </option>
+        </select>
+      </div>
+      <!-- Trading parameters -->
+      <div class="detail-row">
+        <span class="label">SL:</span>
+        <span class="value">{{ trader.sl }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">TP:</span>
+        <span class="value">{{ trader.tp }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">TSL:</span>
+        <span class="value">{{ trader.tsl }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Multiplier:</span>
+        <span class="value">{{ trader.moltiplicatore }}</span>
+      </div>
+      <div class="detail-row" *ngIf="trader.fix_lot">
+        <span class="label">Fixed Lot:</span>
+        <span class="value">{{ trader.fix_lot }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="label">Created:</span>
+        <span class="value">{{ trader.created_at | date:'short' }}</span>
+      </div>
+      </div>
+      <div class="card-actions">
           <button class="action-btn primary" (click)="goToMT5Dashboard(trader)">
             Open Dashboard
           </button>
@@ -91,6 +99,57 @@
           </button>
         </div>
       </div>
+      <!-- Nuova Card per aggiungere un trader -->
+  <div class="trader-card add-trader-card">
+    <div class="card-header">
+      <h4>Add New Trader</h4>
+    </div>
+
+    <div class="card-body">
+      <div class="detail-row">
+        <span class="label">Name:</span>
+        <input type="text" [(ngModel)]="newTrader.name" placeholder="Trader Name" />
+      </div>
+      <div class="detail-row">
+        <span class="label">Master Server:</span>
+        <select [(ngModel)]="newTrader.master_server_id">
+          <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
+        </select>
+      </div>
+      <div class="detail-row">
+        <span class="label">Slave Server:</span>
+        <select [(ngModel)]="newTrader.slave_server_id">
+          <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
+        </select>
+      </div>
+      <div class="detail-row">
+        <span class="label">SL:</span>
+        <input type="number" [(ngModel)]="newTrader.sl" placeholder="Stop Loss" />
+      </div>
+      <div class="detail-row">
+        <span class="label">TP:</span>
+        <input type="number" [(ngModel)]="newTrader.tp" placeholder="Take Profit" />
+      </div>
+      <div class="detail-row">
+        <span class="label">TSL:</span>
+        <input type="number" [(ngModel)]="newTrader.tsl" placeholder="Trailing SL" />
+      </div>
+      <div class="detail-row">
+        <span class="label">Multiplier:</span>
+        <input type="number" [(ngModel)]="newTrader.moltiplicatore" placeholder="Multiplier" />
+      </div>
+      <div class="detail-row">
+        <span class="label">Fixed Lot:</span>
+        <input type="number" [(ngModel)]="newTrader.fix_lot" placeholder="Optional" />
+      </div>
+    </div>
+
+    <div class="card-actions">
+      <button class="action-btn primary" (click)="addTrader()">Add Trader</button>
+    </div>
+  </div>
+
+
 
       <div class="empty-state" *ngIf="traders.length === 0">
         <div class="empty-icon">📊</div>
