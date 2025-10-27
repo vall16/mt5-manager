@@ -362,3 +362,11 @@
   transform: scale(1.02);
   background: #eef4ff;
 }
+.label.master {
+  font-weight: 600;
+  color: #1e90ff; /* blu per il master */
+}
+.label.slave {
+  font-weight: 600;
+  color: #ff4500; /* rosso/arancione per il slave */
+}

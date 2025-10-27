@@ -2,43 +2,7 @@
   
   <div class="header">
     <h1>Trading Servers</h1>
-    <!-- <button class="close-btn" (click)="onClose()">✖</button> -->
-     <!-- FORM per aggiungere un server -->
-  <!-- <div class="add-server-form">
-    <h3>Add New Server</h3>
-    <form (ngSubmit)="addServer()" #serverForm="ngForm">
-      <div class="form-row">
-        <label>Server:</label>
-        <input type="text" [(ngModel)]="newServer.server" name="server" required />
-      </div>
-      <div class="form-row">
-        <label>Platform:</label>
-        <input type="text" [(ngModel)]="newServer.platform" name="platform" required />
-      </div>
-      <div class="form-row">
-        <label>User:</label>
-        <input type="text" [(ngModel)]="newServer.user" name="user" required />
-      </div>
-      <div class="form-row">
-        <label>Password:</label>
-        <input type="password" [(ngModel)]="newServer.pwd" name="pwd" required />
-      </div>
-      <div class="form-row">
-        <label>IP:</label>
-        <input type="text" [(ngModel)]="newServer.ip" name="ip" required />
-      </div>
-      <div class="form-row">
-        <label>Port:</label>
-        <input type="number" [(ngModel)]="newServer.port" name="port" required />
-      </div>
-      <div class="form-row">
-        <label>Active:</label>
-        <input type="checkbox" [(ngModel)]="newServer.is_active" name="is_active" />
-      </div>
-
-      <button type="submit" [disabled]="serverForm.invalid">Add Server</button>
-    </form>
-  </div> -->
+    
 
   <hr />
 
@@ -54,26 +18,34 @@
     {{ error }}
   </div>
 
-  <div class="servers-header">
   
+
+<div class="servers-header">
   <button class="add-btn" (click)="toggleAddForm()">
-    {{ showAddForm ? '✖' : '+' }}
+    {{ showAddForm ? '✖ Close' : '+ Add Server' }}
   </button>
 </div>
 
-<div *ngIf="showAddForm" class="add-server-row">
-  <input type="text" placeholder="Server" [(ngModel)]="newServer.server">
-  <input type="text" placeholder="Platform" [(ngModel)]="newServer.platform">
-  <input type="text" placeholder="User" [(ngModel)]="newServer.user">
-  <input type="text" placeholder="IP" [(ngModel)]="newServer.ip">
-  <input type="text" placeholder="Pssw" [(ngModel)]="newServer.pwd">
-  <input type="number" placeholder="Port" [(ngModel)]="newServer.port">
-  <label class="chk">
-    <input type="checkbox" [(ngModel)]="newServer.is_active"> Active
-  </label>
-  <button class="save-btn" (click)="addServer()">Save</button>
-</div>
+<div *ngIf="showAddForm" class="add-server-card animate-in">
+  <h3>Add New Server</h3>
+  <div class="form-grid">
+    <input type="text" placeholder="Server Name" [(ngModel)]="newServer.server">
+    <input type="text" placeholder="Platform" [(ngModel)]="newServer.platform">
+    <input type="text" placeholder="User" [(ngModel)]="newServer.user">
+    <input type="password" placeholder="Password" [(ngModel)]="newServer.pwd">
+    <input type="text" placeholder="IP Address" [(ngModel)]="newServer.ip">
+    <input type="number" placeholder="Port" [(ngModel)]="newServer.port">
+    <label class="chk">
+      <input type="checkbox" [(ngModel)]="newServer.is_active">
+      Active
+    </label>
+  </div>
 
+  <div class="form-actions">
+    <button class="save-btn" (click)="addServer()">💾 Save</button>
+    <button class="cancel-btn" (click)="toggleAddForm()">Cancel</button>
+  </div>
+</div>
 
 <!-- </div> -->
  <div *ngIf="!loading && servers.length > 0" class="servers-grid-container">
@@ -86,8 +58,8 @@
     <div class="grid-cell">Password</div>
     <div class="grid-cell">IP</div>
     <div class="grid-cell">Port</div>
-    <div class="grid-cell">Status</div>
-    <div class="grid-cell">Actions</div> <!-- Nuova colonna -->
+    <!-- <div class="grid-cell">Status</div>
+    <div class="grid-cell">Actions</div>  -->
 
   </div>
 

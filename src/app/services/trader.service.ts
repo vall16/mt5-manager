@@ -12,8 +12,6 @@ export class TraderService {
 
   constructor(private http: HttpClient) {}
 
-  
-
   // ✅ nuovo metodo con dati fake
 //   getAllServers2(): Observable<Server[]> {
 //     const fakeServers: Server[] = [
@@ -166,7 +164,7 @@ export class TraderService {
 //   return of(traders);
 // }
 
-loadTraders(): Observable<Trader[]> {
+  loadTraders(): Observable<Trader[]> {
   return this.http.get<Trader[]>(`${this.apiUrl}/traders`).pipe(
     tap(rawTraders => {
       console.log('📥 Traders ricevuti dal backend:', rawTraders);
@@ -187,13 +185,18 @@ loadTraders(): Observable<Trader[]> {
       updated_at: trader.updated_at
     })))
   );
-}
-insertTrader(trader: Trader): Observable<Trader> {
+  }
+
+  insertTrader(trader: Trader): Observable<Trader> {
     return this.http.post<Trader>(`${this.apiUrl}/traders`, trader);
   }
 
   updateTrader(trader: Trader): Observable<Trader> {
     return this.http.put<Trader>(`${this.apiUrl}/traders/${trader.id}`, trader);
+  }
+
+  deleteTrader(traderId: number) {
+  return this.http.delete<{ success: boolean; message?: string }>(`http://127.0.0.1:8080/traders/${traderId}`);
   }
 
 

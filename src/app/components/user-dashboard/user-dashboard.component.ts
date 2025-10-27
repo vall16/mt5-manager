@@ -47,17 +47,11 @@ newTrader: NewTrader = {
   ) {}
 
   ngOnInit() {
-    // this.loadTraders();
-    // this.loadServers();
 
     this.loadServersAndTraders();
 
-
-    
   }
-// loadServers() {
-//   this.traderService.getAllServers().subscribe(res => this.servers = res);
-// }
+
 
     loadServersAndTraders() {
       this.traderService.getAllServers().subscribe({
@@ -138,6 +132,30 @@ newTrader: NewTrader = {
     });
   }
 
+// All'interno di UserDashboardComponent
+async deleteTrader(trader: Trader) {
+  if (!trader.id) {
+    alert('Trader ID missing.');
+    return;
+  }
+
+  // Conferma con l'utente
+  const confirmed = confirm(`Sei sicuro di voler eliminare il trader "${trader.name}"?`);
+  if (!confirmed) return;
+
+  // Chiamata al service per eliminare il trader
+  this.traderService.deleteTrader(trader.id).subscribe({
+    next: (res: any) => {
+      // Aggiorna la lista locali dei traders senza ricaricare tutto
+      this.traders = this.traders.filter(t => t.id !== trader.id);
+      alert(`Trader "${trader.name}" eliminato con successo.`);
+    },
+    error: (err: any) => {
+      console.error('Errore eliminazione trader:', err);
+      alert(`Errore durante l'eliminazione del trader "${trader.name}".`);
+    }
+  });
+}
 
   
 

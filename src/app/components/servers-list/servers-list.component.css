@@ -97,6 +97,12 @@ h1 {
   border-bottom: 1px solid #f0f0f0;
 }
 
+.servers-header {
+  display: flex;
+  justify-content: flex-end; /* o center se vuoi centrarlo */
+  margin: 30px 0 20px 0; /* spazio sopra e sotto */
+}
+
 .server-header h2 {
   font-size: 20px;
   font-weight: 600;
@@ -258,7 +264,8 @@ h1 {
 
 .grid-row {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 0.8fr 1fr;
+  /* imposta la larghezza delle colonne */
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
   border-bottom: 1px solid #eee;
   padding: 8px;
 }
@@ -338,3 +345,110 @@ h1 {
   background-color: #999;
   cursor: not-allowed;
 }
+
+.add-btn {
+  background: #0078d7;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+.add-btn:hover {
+  background: #005fa3;
+  transform: scale(1.03);
+}
+
+/* Card contenitore */
+.add-server-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  padding: 20px 25px;
+  margin: 20px 0;
+  animation: fadeIn 0.3s ease;
+}
+
+.add-server-card h3 {
+  margin-top: 0;
+  font-size: 1.3em;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 8px;
+  margin-bottom: 15px;
+}
+
+/* Griglia input */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.form-grid input[type="text"],
+.form-grid input[type="number"],
+.form-grid input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: 0.2s;
+}
+.form-grid input:focus {
+  border-color: #0078d7;
+  outline: none;
+  box-shadow: 0 0 4px rgba(0, 120, 215, 0.4);
+}
+
+.chk {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* Pulsanti azione */
+.form-actions {
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.save-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.save-btn:hover {
+  background: #218838;
+}
+
+.cancel-btn {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  color: #555;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.cancel-btn:hover {
+  background: #e2e2e2;
+}
+
+/* Animazione di apparizione */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
