@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TraderService } from '../../services/trader.service';
-import { Trader } from '../../models/trader.models';
+import { NewTrader, Trader } from '../../models/trader.models';
 import { AddTraderModalComponent } from '../add-trader-modal/add-trader-modal.component';
 import { ServersListComponent } from '../servers-list/servers-list.component';
 import { Server } from '../../models/server.model';
@@ -24,7 +24,12 @@ export class UserDashboardComponent implements OnInit {
   traders: Trader[] = [];
   servers: Server[] = [];
   // newTrader: Partial<Trader> = {}; // Oggetto per la nuova card
-  newTrader: Partial<Trader> & { master_server_id?: number; slave_server_id?: number } = {};
+  // newTrader: Partial<Trader> & { master_server_id?: number; slave_server_id?: number } = {};
+newTrader: NewTrader = {
+  name: '',
+  status: 'active'
+};
+
 
 
 
@@ -42,14 +47,38 @@ export class UserDashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadTraders();
-    this.loadServers();
+    // this.loadTraders();
+    // this.loadServers();
+
+    this.loadServersAndTraders();
+
 
     
   }
-loadServers() {
-  this.traderService.getAllServers().subscribe(res => this.servers = res);
-}
+// loadServers() {
+//   this.traderService.getAllServers().subscribe(res => this.servers = res);
+// }
+
+    loadServersAndTraders() {
+      this.traderService.getAllServers().subscribe({
+        next: (serversData: Server[]) => {
+          
+          console.log(serversData);
+          this.servers = serversData;
+
+          // Solo dopo che servers è pronto, carico i traders
+          this.traderService.loadTraders().subscribe({
+            next: (tradersData: Trader[]) => {
+              console.log(tradersData);
+              this.traders = tradersData;
+            },
+            error: (err) => console.error('Errore caricamento traders:', err)
+          });
+        },
+        error: (err) => console.error('Errore caricamento servers:', err)
+      });
+    }
+
 
   async loadTraders() {
     this.loading = true;
@@ -70,7 +99,7 @@ loadServers() {
 
   addTrader(): void {
     // Validazione minima
-    if (!this.newTrader.name || !this.newTrader.server_master_id || !this.newTrader.server_slave_id) {
+    if (!this.newTrader.name || !this.newTrader.master_server_id || !this.newTrader.slave_server_id) {
       alert('Please fill in all required fields (Name, Master, Slave).');
       return;
     }
@@ -79,15 +108,33 @@ loadServers() {
     this.newTrader.status = 'active';
     this.newTrader.created_at = new Date().toISOString();
 
-    this.traderService.insertTrader(this.newTrader as Trader).subscribe({
+    // Prepara payload per il backend
+  const payload = {
+    name: this.newTrader.name,
+    status: 'active',
+    master_server_id: Number(this.newTrader.master_server_id),
+    slave_server_id: Number(this.newTrader.slave_server_id),
+    sl: this.newTrader.sl ?? null,
+    tp: this.newTrader.tp ?? null,
+    tsl: this.newTrader.tsl ?? null,
+    moltiplicatore: this.newTrader.moltiplicatore ?? null,
+    fix_lot: this.newTrader.fix_lot ?? null
+  };
+
+
+  console.log('Payload:', payload); // Controllo rapido del JSON inviato
+
+
+    this.traderService.insertTrader(payload as Trader).subscribe({
       next: (createdTrader: Trader) => {
         this.traders.push(createdTrader); // Aggiunge alla lista in tempo reale
-        this.newTrader = {}; // Reset della form
+        // this.newTrader = {}; // Reset della form
       },
       error: (err: any) => {
         console.error('Error adding trader:', err);
         alert('Failed to add trader. See console for details.');
       }
+      
     });
   }
 

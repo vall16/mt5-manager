@@ -47,19 +47,18 @@
     <div class="card-body">
       <div class="detail-row">
       <span class="label">Master Server:</span>
-      
-      <select [(ngModel)]="trader.server_master_id">
-        <option *ngFor="let server of servers" [value]="server.id">
-          {{ server.server }}
-        </option>
+    
+      <select *ngIf="servers?.length" [(ngModel)]="trader.master_server_id">
+        <option *ngFor="let server of servers" [ngValue]="server.id">{{ server.server }}</option>
       </select>
+
 
       </div>
       <div class="detail-row">
         <span class="label">Slave Server:</span>
       
-        <select [(ngModel)]="trader.server_slave_id">
-          <option *ngFor="let server of servers" [value]="server.id">
+        <select [(ngModel)]="trader.slave_server_id">
+          <option *ngFor="let server of servers" [ngValue]="server.id">
             {{ server.server }}
           </option>
         </select>

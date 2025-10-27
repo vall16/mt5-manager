@@ -21,8 +21,8 @@ export interface Trader {
   id?: number;
   name: string;
   status: 'active' | 'inactive';  // is_active diventa status
-  server_master_id?: number;      // riferimento al server master
-  server_slave_id?: number;       // riferimento al server slave
+  master_server_id?: number;      // riferimento al server master
+  slave_server_id?: number;       // riferimento al server slave
   sl?: number;                    // Stop Loss
   tp?: number;                    // Take Profit
   tsl?: number;                   // Trailing Stop Loss
@@ -31,6 +31,23 @@ export interface Trader {
   created_at?: string;
   updated_at?: string;
 }
+
+export interface NewTrader {
+  
+  name: string;
+  status: 'active' | 'inactive';  // is_active diventa status
+  master_server_id?: number;      // riferimento al server master
+  slave_server_id?: number;       // riferimento al server slave
+  sl?: number;                    // Stop Loss
+  tp?: number;                    // Take Profit
+  tsl?: number;                   // Trailing Stop Loss
+  moltiplicatore?: number;        // fattore di copia
+  fix_lot?: number;               // lotto fisso (opzionale)
+  created_at?: string;
+  updated_at?: string;
+}
+
+
 
 
 
