@@ -351,3 +351,14 @@
     grid-template-columns: 1fr;
   }
 }
+.add-trader-card {
+  border: 2px dashed #007bff;
+  opacity: 0.9;
+  background: #f9fbff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.add-trader-card:hover {
+  transform: scale(1.02);
+  background: #eef4ff;
+}

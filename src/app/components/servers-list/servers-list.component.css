@@ -311,3 +311,30 @@ h1 {
   50% { opacity: 0.6; }
 }
 
+.action-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.action-btn.primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.action-btn.secondary {
+  background-color: #dc3545;
+  color: white;
+}
+
+.action-btn:hover {
+  transform: scale(1.03);
+}
+
+.action-btn:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}

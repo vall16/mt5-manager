@@ -55,7 +55,7 @@
   </div>
 
   <div class="servers-header">
-  <!-- <h2>Servers</h2> -->
+  
   <button class="add-btn" (click)="toggleAddForm()">
     {{ showAddForm ? '✖' : '+' }}
   </button>
@@ -109,10 +109,10 @@
         </span>
       </div>
       <div class="grid-cell">
-        <button class="delete-btn" (click)="deleteServer(server)">Delete</button>
+        <button class="action-btn secondary" (click)="deleteServer(server)">Delete</button>
       </div>
       <div class="grid-cell">
-        <button class="delete-btn" (click)="checkServer(i)" [disabled]="testingIndex === i">Test</button>
+        <button class="action-btn primary" (click)="checkServer(i)" [disabled]="testingIndex === i">Test</button>
         <!-- Loader solo per il server cliccato -->
         <div *ngIf="testingIndex === i" class="loader-with-spinner">
           <div class="spinner"></div>
