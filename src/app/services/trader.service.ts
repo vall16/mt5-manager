@@ -201,7 +201,19 @@ export class TraderService {
 
   copyOrders(traderId: number) {
   return this.http.post(`/traders/${traderId}/copy_orders`, {});
-}
+  }
+
+  /** PUT: aggiorna solo i server di un trader */
+  updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
+    return this.http.put<Trader>(`${this.apiUrl}/traders/${id}/servers`, {
+      master_server_id: masterId,
+      slave_server_id: slaveId
+    });
+  }
+
+
+
+
 
 }
 

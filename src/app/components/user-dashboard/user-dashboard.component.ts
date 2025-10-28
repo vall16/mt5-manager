@@ -182,6 +182,22 @@ async deleteTrader(trader: Trader) {
   });
 }
 
+saveTrader(trader: Trader) {
+  this.traderService.updateTraderServers(trader.id!, trader.master_server_id!, trader.slave_server_id!)
+    .subscribe({
+      next: (updatedTrader) => {
+        trader.master_server_id = updatedTrader.master_server_id;
+        trader.slave_server_id = updatedTrader.slave_server_id;
+        alert(`Trader "${trader.name}" aggiornato con successo!`);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Errore durante l\'aggiornamento del trader');
+      }
+    });
+}
+
+
 
   openAddModal() {
     this.showAddModal = true;
