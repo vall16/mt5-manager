@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+// import { EventEmitter, Output } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
@@ -39,6 +41,9 @@ newTrader: NewTrader = {
   loading: boolean=false;
   error: string="";
   serverService: any;
+
+  // @Output() serverAdded = new EventEmitter<void>(); // <=== AGGIUNTO
+
 
   constructor(
     public authService: AuthService,
@@ -121,8 +126,16 @@ newTrader: NewTrader = {
 
     this.traderService.insertTrader(payload as Trader).subscribe({
       next: (createdTrader: Trader) => {
+
+        const name = createdTrader.name;
         this.traders.push(createdTrader); // Aggiunge alla lista in tempo reale
-        // this.newTrader = {}; // Reset della form
+        // ✅ 1. Reset form
+        this.newTrader = { name: '', status: 'active' };
+        this.loadTraders();
+        alert(`Trader aggiunto con successo!`);
+
+
+
       },
       error: (err: any) => {
         console.error('Error adding trader:', err);
@@ -157,7 +170,18 @@ async deleteTrader(trader: Trader) {
   });
 }
 
-  
+  copyOrders(trader: Trader) {
+  this.traderService.copyOrders(trader.id!).subscribe({
+    next: (res: any) => {
+      alert(`Copied ${res.copied_orders} orders for trader ${trader.name}`);
+    },
+    error: (err: any) => {
+      console.error(err);
+      alert('Error copying orders');
+    }
+  });
+}
+
 
   openAddModal() {
     this.showAddModal = true;

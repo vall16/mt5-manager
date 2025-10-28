@@ -199,6 +199,9 @@ export class TraderService {
   return this.http.delete<{ success: boolean; message?: string }>(`http://127.0.0.1:8080/traders/${traderId}`);
   }
 
+  copyOrders(traderId: number) {
+  return this.http.post(`/traders/${traderId}/copy_orders`, {});
+}
 
 }
 

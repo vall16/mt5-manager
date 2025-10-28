@@ -93,12 +93,16 @@
       </div>
       </div>
       <div class="card-actions">
-          <button class="action-btn primary" (click)="goToMT5Dashboard(trader)">
+          <button class="action-btn secondary" (click)="goToMT5Dashboard(trader)">
             Open Dashboard
           </button>
           <button class="action-btn secondary" (click)="toggleTraderStatus(trader)">
             {{ trader.status === 'active' ? 'Deactivate' : 'Activate' }}
           </button>
+          <button class="action-btn primary" (click)="copyOrders(trader)">
+            Copy Orders
+          </button>
+
         </div>
       </div>
       <!-- Nuova Card per aggiungere un trader -->
