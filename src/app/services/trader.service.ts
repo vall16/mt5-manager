@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, of, tap } from 'rxjs';
+import { map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
 import { Trader } from '../models/trader.models';
 
@@ -116,53 +116,20 @@ export class TraderService {
 
 
   checkServer(server: Server): Observable<any> {
+    if (!server.server || !server.user || !server.pwd || !server.port) {
+    return throwError(() => new Error('Server, login, password e port sono obbligatori'));
+  }
+
     const body = {
       server: server.server,
-      login: server.login,
-      password: server.password,
+      login: server.user,
+      password: server.pwd,
       port: server.port,
       path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
     };
     return this.http.post(`${this.apiUrl}/check-server`, body);
   }
 
-//   loadTraders_old(): Observable<Trader[]> {
-//   const traders: Trader[] = [
-//     {
-//       id: 1,
-//       name: 'Trader Alpha',
-//       // server_master_id: 1, // VTMarkets-Demo
-//       // server_slave_id: 2,  // Eightcap-Demo
-//       // strategy: 'Scalping',
-//       // balance: 12000,
-//       status: 'active',
-//       created_at: '2025-10-23T09:00:00Z'
-//     },
-//     {
-//       id: 2,
-//       name: 'Trader Beta',
-//       // server_master_id: 3, // Pepperstone-Live03
-//       // server_slave_id: 4,  // Exness-Demo
-//       // strategy: 'Swing',
-//       // balance: 8500,
-//       status: 'inactive',
-//       created_at: '2025-10-22T15:30:00Z'
-//     },
-//     {
-//       id: 3,
-//       name: 'Trader Gamma',
-//       // server_master_id: 5, // ICMarkets-Live01
-//       // server_slave_id: 6,  // ICMarkets-Demo02
-//       // strategy: 'Trend Following',
-//       // balance: 25600,
-//       status: 'active',
-//       created_at: '2025-10-20T10:15:00Z'
-//     }
-//   ];
-
-//   // Simula chiamata HTTP
-//   return of(traders);
-// }
 
   loadTraders(): Observable<Trader[]> {
   return this.http.get<Trader[]>(`${this.apiUrl}/traders`).pipe(
