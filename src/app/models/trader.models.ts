@@ -47,6 +47,16 @@ export interface NewTrader {
   updated_at?: string;
 }
 
+export interface BuyRequest {
+  symbol: string;
+  lot: number;
+  sl_point?: number;
+  tp_point?: number;
+  magic?: number;
+  comment?: string;
+}
+
+
 
 
 

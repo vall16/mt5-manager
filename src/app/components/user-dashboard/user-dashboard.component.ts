@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { TraderService } from '../../services/trader.service';
-import { NewTrader, Trader } from '../../models/trader.models';
+import { NewTrader, Trader,BuyRequest } from '../../models/trader.models';
 import { AddTraderModalComponent } from '../add-trader-modal/add-trader-modal.component';
 import { ServersListComponent } from '../servers-list/servers-list.component';
 import { Server } from '../../models/server.model';
@@ -173,7 +173,8 @@ async deleteTrader(trader: Trader) {
   copyOrders(trader: Trader) {
   this.traderService.copyOrders(trader.id!).subscribe({
     next: (res: any) => {
-      alert(`Copied ${res.copied_orders} orders for trader ${trader.name}`);
+      // alert(trader.id);
+      // alert(`Copied ${res.copied_orders} orders for trader ${trader.name}`);
     },
     error: (err: any) => {
       console.error(err);
@@ -206,6 +207,25 @@ saveTrader(trader: Trader) {
   openServersList() {
     this.showServersList = true;
   }
+
+  openBuyPosition() {
+    
+    const order: BuyRequest = {
+      symbol: 'EURUSD',
+      lot: 0.1,
+      sl_point: 50,  // 50 punti stop loss
+      tp_point: 100, // 100 punti take profit
+      magic: 123456,
+      comment: 'Ordine da Angular'
+    };
+
+    this.traderService.openBuyOrder(order).subscribe({
+      next: (res: any) => console.log('Ordine aperto:', res),
+      error: (err: any) => console.error('Errore ordine:', err)
+    });
+  }
+
+  
 
   closeAddModal() {
     this.showAddModal = false;

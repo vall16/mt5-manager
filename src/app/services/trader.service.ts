@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
-import { Trader } from '../models/trader.models';
+import { BuyRequest, Trader } from '../models/trader.models';
 
 @Injectable({
   providedIn: 'root',
@@ -97,6 +97,10 @@ export class TraderService {
 //     return of(fakeServers);
 //   }
 
+  openBuyOrder(req: BuyRequest): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/order/buy`, req);
+  }
+
   
   /** ✅ GET: tutti i server */
   getAllServers(): Observable<Server[]> {
@@ -166,9 +170,14 @@ export class TraderService {
   return this.http.delete<{ success: boolean; message?: string }>(`http://127.0.0.1:8080/traders/${traderId}`);
   }
 
+
+
   copyOrders(traderId: number) {
-  return this.http.post(`/traders/${traderId}/copy_orders`, {});
-  }
+    // alert(`${this.apiUrl}/traders/${traderId}/copy_orders`)
+  return this.http.post(`${this.apiUrl}/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
+}
+
+  
 
   /** PUT: aggiorna solo i server di un trader */
   updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
