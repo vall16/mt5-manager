@@ -116,9 +116,23 @@
           <!-- <button class="action-btn secondary" (click)="toggleTraderStatus(trader)">
             {{ trader.status === 'active' ? 'Deactivate' : 'Activate' }}
           </button> -->
-          <button class="action-btn primary" (click)="copyOrders(trader)">
+          <!-- <button class="action-btn primary" (click)="copyOrders(trader)">
             Copy Orders
+          </button> -->
+          <!-- <button class="action-btn primary" (click)="copyOrders(trader)">
+            <span *ngIf="trader.copying" class="spinner"></span>
+            <span *ngIf="!trader.copying">📤 Copy Orders</span>
+          </button> -->
+          <button class="action-btn primary" (click)="copyOrders(trader)" [disabled]="trader.copying">
+            <ng-container *ngIf="!trader.copying">
+              📤 Copy Orders
+            </ng-container>
+            <ng-container *ngIf="trader.copying">
+              <span class="button-spinner"></span> Copying...
+            </ng-container>
           </button>
+
+
 
         </div>
       </div>

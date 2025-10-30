@@ -170,18 +170,63 @@ async deleteTrader(trader: Trader) {
   });
 }
 
-  copyOrders(trader: Trader) {
-  this.traderService.copyOrders(trader.id!).subscribe({
+  // copyOrders(trader: Trader) {
+  // this.traderService.copyOrders(trader.id!).subscribe({
+  //   next: (res: any) => {
+  //     // alert(trader.id);
+  //     // alert(`Copied ${res.copied_orders} orders for trader ${trader.name}`);
+  //   },
+  //   error: (err: any) => {
+  //     console.error(err);
+  //     alert('Error copying orders');
+  //   }
+  // });
+  // }
+
+//   copyOrders(trader: Trader) {
+//   if (!trader.id) return;
+
+//   // Mostra spinner sul pulsante
+//   trader.copying = true;
+
+//   this.traderService.copyOrders(trader.id).subscribe({
+//     next: (res: any) => {
+//       trader.copying = false;
+
+//       // Mostra alert o toast con il risultato
+//       if (res?.copied_orders != null) {
+//         alert(`✅ Copied ${res.copied_orders} orders for trader "${trader.name}"`);
+//       } else {
+//         alert(`✅ Orders copied for trader "${trader.name}"`);
+//       }
+//     },
+//     error: (err: any) => {
+//       trader.copying = false;
+//       console.error(err);
+//       alert(`❌ Error copying orders for trader "${trader.name}"`);
+//     }
+//   });
+// }
+
+copyOrders(trader: Trader) {
+  if (!trader.id) return;
+
+  trader.copying = true;  // mostra spinner e disabilita button
+
+  this.traderService.copyOrders(trader.id).subscribe({
     next: (res: any) => {
-      // alert(trader.id);
-      // alert(`Copied ${res.copied_orders} orders for trader ${trader.name}`);
+      trader.copying = false;
+      alert(`✅ Copied ${res?.copied_orders || 0} orders for trader "${trader.name}"`);
     },
     error: (err: any) => {
+      trader.copying = false;
       console.error(err);
-      alert('Error copying orders');
+      alert(`❌ Error copying orders for trader "${trader.name}"`);
     }
   });
 }
+
+
 
 saveTrader(trader: Trader) {
   this.traderService.updateTraderServers(trader.id!, trader.master_server_id!, trader.slave_server_id!)

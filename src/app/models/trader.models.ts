@@ -30,6 +30,7 @@ export interface Trader {
   fix_lot?: number;               // lotto fisso (opzionale)
   created_at?: string;
   updated_at?: string;
+  copying?: boolean;  
 }
 
 export interface NewTrader {
