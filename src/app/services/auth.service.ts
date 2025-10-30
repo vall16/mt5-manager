@@ -38,7 +38,7 @@ export class AuthService {
   async login(username: string, password: string): Promise<{ success: boolean; message: string }> {
     try {
       const response = await this.http
-        .post<LoginResponse>(`${this.apiUrl}/login`, { username, password })
+        .post<LoginResponse>(`${this.apiUrl}/db/login`, { username, password })
         .toPromise();
 
       if (response && response.success && response.user) {

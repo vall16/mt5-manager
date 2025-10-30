@@ -140,12 +140,6 @@ export class Mt5ApiService {
     return this.http.get<any>(`${this.baseUrl}/diagnostic/${symbol}`);
   }
 
-    // fa il test di esistenza del server
-  // checkServer(data: ServerCheckRequest): Observable<ServerCheckResponse> {
-  //   return this.http.post<ServerCheckResponse>(`${this.baseUrl}/check-server`, data);
-  // }
-
-  
 
 
 }

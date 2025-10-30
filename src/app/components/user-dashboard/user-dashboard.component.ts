@@ -10,6 +10,7 @@ import { AddTraderModalComponent } from '../add-trader-modal/add-trader-modal.co
 import { ServersListComponent } from '../servers-list/servers-list.component';
 import { Server } from '../../models/server.model';
 import { FormsModule } from '@angular/forms';
+import { catchError, finalize, of, switchMap } from 'rxjs';
 
 
 
@@ -41,6 +42,7 @@ newTrader: NewTrader = {
   loading: boolean=false;
   error: string="";
   serverService: any;
+  errorMessage: string | undefined;
 
   // @Output() serverAdded = new EventEmitter<void>(); // <=== AGGIUNTO
 
@@ -58,27 +60,67 @@ newTrader: NewTrader = {
   }
 
 
-    loadServersAndTraders() {
-      this.traderService.getAllServers().subscribe({
-        next: (serversData: Server[]) => {
+    // loadServersAndTraders() {
+    //   this.traderService.getAllServers().subscribe({
+    //     next: (serversData: Server[]) => {
           
-          console.log(serversData);
-          this.servers = serversData;
+    //       console.log(serversData);
+    //       this.servers = serversData;
 
-          // Solo dopo che servers è pronto, carico i traders
-          this.traderService.loadTraders().subscribe({
-            next: (tradersData: Trader[]) => {
-              console.log(tradersData);
-              this.traders = tradersData;
-            },
-            error: (err) => console.error('Errore caricamento traders:', err)
-          });
-        },
-        error: (err) => console.error('Errore caricamento servers:', err)
-      });
+    //       // Solo dopo che servers è pronto, carico i traders
+    //       this.traderService.loadTraders().subscribe({
+    //         next: (tradersData: Trader[]) => {
+    //           console.log(tradersData);
+    //           this.traders = tradersData;
+    //         },
+    //         error: (err) => console.error('Errore caricamento traders:', err)
+    //       });
+    //     },
+    //     error: (err) => console.error('Errore caricamento servers:', err)
+    //   });
+    // }
+
+
+    loadServersAndTraders() {
+  this.loading = true; // flag di caricamento opzionale
+
+  this.traderService.getAllServers().pipe(
+    catchError(err => {
+      console.error('Errore caricamento servers:', err);
+      this.errorMessage = 'Impossibile caricare i server.';
+      return of([] as Server[]); // ritorna array vuoto per continuare
+    }),
+    switchMap((serversData: Server[]) => {
+      this.servers = serversData;
+      if (!serversData.length) {
+        console.warn('Nessun server trovato.');
+      }
+
+      return this.traderService.loadTraders().pipe(
+        catchError(err => {
+          console.error('Errore caricamento traders:', err);
+          this.errorMessage = 'Impossibile caricare i trader.';
+          return of([] as Trader[]);
+        })
+      );
+    }),
+    finalize(() => {
+      this.loading = false;
+    })
+  ).subscribe({
+    next: (tradersData: Trader[]) => {
+      this.traders = tradersData;
+      if (!tradersData.length) {
+        console.warn('Nessun trader trovato.');
+      }
+    },
+    error: (err) => {
+      // Qui non dovrebbe più arrivare nulla perché catchError intercetta tutto
+      console.error('Errore imprevisto:', err);
+      this.errorMessage = 'Errore imprevisto durante il caricamento.';
     }
-
-
+  });
+}
   async loadTraders() {
     this.loading = true;
     this.error = '';

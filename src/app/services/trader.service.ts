@@ -104,17 +104,17 @@ export class TraderService {
   
   /** ✅ GET: tutti i server */
   getAllServers(): Observable<Server[]> {
-    return this.http.get<Server[]>(`${this.apiUrl}/servers`);
+    return this.http.get<Server[]>(`${this.apiUrl}/db/servers`);
   }
 
 
   // /** ✅ POST: inserisci un nuovo server */
   insertServer(server: Partial<Server>): Observable<any> {
-  return this.http.post(`${this.apiUrl}/servers`, server);
+  return this.http.post(`${this.apiUrl}/db/servers`, server);
 }
 
   deleteServer(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/servers/${id}`);
+    return this.http.delete(`${this.apiUrl}/db/servers/${id}`);
   }
 
 
@@ -131,12 +131,12 @@ export class TraderService {
       port: server.port,
       path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
     };
-    return this.http.post(`${this.apiUrl}/check-server`, body);
+    return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
   }
 
 
   loadTraders(): Observable<Trader[]> {
-  return this.http.get<Trader[]>(`${this.apiUrl}/traders`).pipe(
+  return this.http.get<Trader[]>(`${this.apiUrl}/db/traders`).pipe(
     tap(rawTraders => {
       console.log('📥 Traders ricevuti dal backend:', rawTraders);
     }),
@@ -159,29 +159,29 @@ export class TraderService {
   }
 
   insertTrader(trader: Trader): Observable<Trader> {
-    return this.http.post<Trader>(`${this.apiUrl}/traders`, trader);
+    return this.http.post<Trader>(`${this.apiUrl}/db/traders`, trader);
   }
 
   updateTrader(trader: Trader): Observable<Trader> {
-    return this.http.put<Trader>(`${this.apiUrl}/traders/${trader.id}`, trader);
+    return this.http.put<Trader>(`${this.apiUrl}/db/traders/${trader.id}`, trader);
   }
 
   deleteTrader(traderId: number) {
-  return this.http.delete<{ success: boolean; message?: string }>(`http://127.0.0.1:8080/traders/${traderId}`);
+  return this.http.delete<{ success: boolean; message?: string }>(`http://127.0.0.1:8080/db/traders/${traderId}`);
   }
 
 
 
   copyOrders(traderId: number) {
     // alert(`${this.apiUrl}/traders/${traderId}/copy_orders`)
-  return this.http.post(`${this.apiUrl}/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
+  return this.http.post(`${this.apiUrl}/db/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
 }
 
   
 
   /** PUT: aggiorna solo i server di un trader */
   updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
-    return this.http.put<Trader>(`${this.apiUrl}/traders/${id}/servers`, {
+    return this.http.put<Trader>(`${this.apiUrl}/db/traders/${id}/servers`, {
       master_server_id: masterId,
       slave_server_id: slaveId
     });
