@@ -123,13 +123,17 @@ export class TraderService {
     if (!server.server || !server.user || !server.pwd || !server.port) {
     return throwError(() => new Error('Server, login, password e port sono obbligatori'));
   }
+  console.log('checkServer ->', server);
 
     const body = {
       server: server.server,
       login: server.user,
       password: server.pwd,
       port: server.port,
-      path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+      // path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+      // path: "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
+      path:server.path
+      // path: server.path
     };
     return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
   }

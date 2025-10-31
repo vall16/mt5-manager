@@ -27,6 +27,7 @@ newServer: Partial<Server> = {
   user: '',
   pwd: '',
   ip: '',
+  path:'',
   port: 0,
   is_active: true,
 };
@@ -62,7 +63,7 @@ newServer: Partial<Server> = {
     this.traderService.insertServer(this.newServer).subscribe({
       next: () => {
         this.loadServers();  // ricarica la lista dopo l'inserimento
-        this.newServer = { server: '', platform: '', user: '', pwd: '', ip: '', port: 0, is_active: true };
+        this.newServer = { server: '', platform: '', user: '', pwd: '', ip: '',path:'', port: 0, is_active: true };
       },
       error: (err) => {
         console.error('Error adding server:', err);

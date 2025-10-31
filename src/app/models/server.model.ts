@@ -5,11 +5,11 @@ export interface Server {
   server: string;
   platform: string;
   ip: string;
+  path:string;
   port: number;
   is_active: boolean;
   created_at: string;
   updated_at: string;
-  path:string;
   login:string;
   password:string;
 
