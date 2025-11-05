@@ -98,34 +98,42 @@ newServer: Partial<Server> = {
   //   this.servers.splice(index, 1);
   // }
 
-  checkServer(index: number) {
-    
-
-  const server = this.servers[index];
-  this.testingIndex = index; // 🔥 attiva loader solo per questo server
-
-
-  this.traderService.checkServer(server).subscribe({
-    next: (res) => {
+    checkServer(index: number) {
       
-      this.testingIndex = null; // 🔥 disattiva loader
 
-      if (res.status === 'success') {
-        
-        alert(`✅ Connessione riuscita a ${server.server}`);
+    const server = this.servers[index];
+    this.testingIndex = index; // 🔥 attiva loader solo per questo server
 
-      } else {
+
+    this.traderService.checkServer(server).subscribe({
+      next: (res) => {
         
-        alert(`❌ Connessione fallita: ${res.message}`);
+        this.testingIndex = null; // 🔥 disattiva loader
+
+        if (res.status === 'success') {
+          
+          alert(`✅ Connessione riuscita a ${server.server}`);
+
+        } else {
+          
+          alert(`❌ Connessione fallita: ${res.message}`);
+        }
+      },
+      error: (err) => {
+        this.testingIndex = null; // 🔥 disattiva loader anche in caso di errore
+
+        alert(`⚠️ Errore nel test: ${err.message}`);
       }
-    },
-    error: (err) => {
-      this.testingIndex = null; // 🔥 disattiva loader anche in caso di errore
+    });
+  }
 
-      alert(`⚠️ Errore nel test: ${err.message}`);
-    }
-  });
-}
+
+  startServer(server: Server) {
+    this.traderService.startServer(server).subscribe({
+      next: (res: any) => console.log('✅ Server avviato:', res),
+      error: (err: any) => console.error('❌ Errore avvio server:', err)
+    });
+  }
 
 }
 

@@ -189,6 +189,11 @@ export class TraderService {
     });
   }
 
+  startServer(server: Server): Observable<any> {
+    return this.http.post(`${this.apiUrl}/mt5/start_server`, server);
+  }
+
+
 
 
 
