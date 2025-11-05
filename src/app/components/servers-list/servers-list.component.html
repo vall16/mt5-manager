@@ -30,6 +30,7 @@
   <h3>Add New Server</h3>
   <div class="form-grid">
     <input type="text" placeholder="Server Name" [(ngModel)]="newServer.server">
+    <input type="text" placeholder="Server Alias" [(ngModel)]="newServer.server_alias">
     <input type="text" placeholder="Platform" [(ngModel)]="newServer.platform">
     <input type="text" placeholder="User" [(ngModel)]="newServer.user">
     <input type="password" placeholder="Password" [(ngModel)]="newServer.pwd">
@@ -54,6 +55,7 @@
   <!-- Intestazioni -->
   <div class="grid-header">
     <div class="grid-cell">Server</div>
+    <div class="grid-cell">Server_Alias</div>
     <div class="grid-cell">Platform</div>
     <div class="grid-cell">User</div>
     <div class="grid-cell">Password</div>
@@ -70,6 +72,7 @@
   <div class="grid-body">
     <div *ngFor="let server of servers; let i = index" class="grid-row">
       <div class="grid-cell">{{ server.server }}</div>
+      <div class="grid-cell">{{ server.server_alias }}</div>
       <div class="grid-cell">{{ server.platform }}</div>
       <div class="grid-cell">{{ server.user }}</div>
       <div class="grid-cell">{{ server.pwd }}</div>

@@ -126,14 +126,12 @@ export class TraderService {
   console.log('checkServer ->', server);
 
     const body = {
-      server: server.server,
-      login: server.user,
-      password: server.pwd,
+      // server: server.server,
+      // login: server.user,
+      // password: server.pwd,
       port: server.port,
-      // path: server.path || "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
-      // path: "C:\\Program Files\\MetaTrader 5\\terminal64.exe"
-      path:server.path
-      // path: server.path
+      host: server.ip
+      // path:server.path
     };
     return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
   }

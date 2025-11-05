@@ -23,6 +23,7 @@ export class ServersListComponent implements OnInit {
 
 newServer: Partial<Server> = {
   server: '',
+  server_alias: '',
   platform: '',
   user: '',
   pwd: '',
@@ -63,7 +64,7 @@ newServer: Partial<Server> = {
     this.traderService.insertServer(this.newServer).subscribe({
       next: () => {
         this.loadServers();  // ricarica la lista dopo l'inserimento
-        this.newServer = { server: '', platform: '', user: '', pwd: '', ip: '',path:'', port: 0, is_active: true };
+        this.newServer = { server: '', server_alias:'',platform: '', user: '', pwd: '', ip: '',path:'', port: 0, is_active: true };
       },
       error: (err) => {
         console.error('Error adding server:', err);

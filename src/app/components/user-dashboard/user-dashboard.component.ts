@@ -92,6 +92,8 @@ newTrader: NewTrader = {
     }),
     switchMap((serversData: Server[]) => {
       this.servers = serversData;
+      console.log('Servers ricevuti dal backend:', JSON.stringify(serversData, null, 2));
+
       if (!serversData.length) {
         console.warn('Nessun server trovato.');
       }
@@ -274,6 +276,8 @@ saveTrader(trader: Trader) {
   this.traderService.updateTraderServers(trader.id!, trader.master_server_id!, trader.slave_server_id!)
     .subscribe({
       next: (updatedTrader) => {
+        console.log('📤 Trader inviato per update:', trader);
+
         trader.master_server_id = updatedTrader.master_server_id;
         trader.slave_server_id = updatedTrader.slave_server_id;
         alert(`Trader "${trader.name}" aggiornato con successo!`);

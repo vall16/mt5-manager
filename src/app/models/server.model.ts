@@ -3,6 +3,7 @@ export interface Server {
   user: string;
   pwd: string;
   server: string;
+  server_alias:string;
   platform: string;
   ip: string;
   path:string;
