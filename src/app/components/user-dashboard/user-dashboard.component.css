@@ -307,13 +307,14 @@
 .modal-content {
   background: white;
   border-radius: 12px;
-  /* max-width: 500px;
-  width: 100%; */
-  max-width: 900px; /* aumentato da 500px a 900px */
+  width: 100%; 
+  max-width: 1200px; /* aumentato da 500px a 900px */
   width: 90%;       
   max-height: 90vh;
   overflow-y: auto;
 }
+
+
 
 /* .loader {
   margin-top: 10px;

@@ -26,16 +26,7 @@
 
         </button>
 
-        <!-- <button class="add-server-btn" (click)="openBuyPosition()">
-       
-          <span class="plus-icon">+</span>
-          <span>Add Pos</span> -->
-          
-        <!-- </button> -->
-        <!-- <button class="add-trader-btn" (click)="openAddModal()">
-          <span class="plus-icon">+</span>
-          <span>Add Trader</span>
-        </button> -->
+        
       </div>
 
     </div>
@@ -113,16 +104,7 @@
           <button class="action-btn secondary" (click)="goToMT5Dashboard(trader)">
             Open Dashboard
           </button>
-          <!-- <button class="action-btn secondary" (click)="toggleTraderStatus(trader)">
-            {{ trader.status === 'active' ? 'Deactivate' : 'Activate' }}
-          </button> -->
-          <!-- <button class="action-btn primary" (click)="copyOrders(trader)">
-            Copy Orders
-          </button> -->
-          <!-- <button class="action-btn primary" (click)="copyOrders(trader)">
-            <span *ngIf="trader.copying" class="spinner"></span>
-            <span *ngIf="!trader.copying">📤 Copy Orders</span>
-          </button> -->
+          
           <button class="action-btn primary" (click)="copyOrders(trader)" [disabled]="trader.copying">
             <ng-container *ngIf="!trader.copying">
               📤 Copy Orders
