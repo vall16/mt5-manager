@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
-import { BuyRequest, Trader } from '../models/trader.models';
+import { BuyRequest, CopyOrdersResponse, Trader } from '../models/trader.models';
 
 @Injectable({
   providedIn: 'root',
@@ -173,13 +173,26 @@ export class TraderService {
   }
 
 
+  // originale
+  // copyOrders(traderId: number) {
+  //   return this.http.post(`${this.apiUrl}/db/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
+  // }
+
+
+  // copyOrders(traderId: number) {
+  // return this.http.post<{ logs: string[] }>(
+  //   `${this.apiUrl}/db/traders/${traderId}/copy_orders`,
+  //   {}
+  // );
 
   copyOrders(traderId: number) {
-    // alert(`${this.apiUrl}/traders/${traderId}/copy_orders`)
-  return this.http.post(`${this.apiUrl}/db/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
+  return this.http.post<CopyOrdersResponse>(
+    `${this.apiUrl}/db/traders/${traderId}/copy_orders`,
+    {}
+  );
   }
 
-  
+
 
   /** PUT: aggiorna solo i server di un trader */
   updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
@@ -192,10 +205,6 @@ export class TraderService {
   startServer(server: Server): Observable<any> {
     return this.http.post(`${this.apiUrl}/mt5/start_server`, server);
   }
-
-
-
-
 
 
 }

@@ -6,6 +6,12 @@ export interface CreateTraderRequest {
   mt5_server: string;
 }
 
+export interface CopyOrdersResponse {
+  logs: string[];
+  message?: string;
+}
+
+
 
 export interface Trader {
   id?: number;
@@ -26,6 +32,7 @@ export interface Trader {
   autoCopying?: boolean;
   copyInterval?: number;
   copying?: boolean;
+  logs?: string[];   
 
 }
 

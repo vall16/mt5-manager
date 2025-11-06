@@ -126,6 +126,18 @@
               {{ trader.autoCopying ? '⏹ Stop Auto Copy' : '🔁 Start Auto Copy' }}
             </button>
           </div>
+          <!-- logs -->
+          <div class="log-container" *ngIf="trader.logs?.length">
+          <!-- <div class="log-container"> -->
+            <h5>Execution Log</h5>
+            <div class="log-box">
+              <div *ngFor="let line of trader.logs">
+                {{ line }}
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
       <!-- Nuova Card per aggiungere un trader -->

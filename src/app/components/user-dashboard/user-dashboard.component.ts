@@ -249,20 +249,38 @@ async deleteTrader(trader: Trader) {
   }
 
 
+// copyOrders(trader: Trader) {
+//   if (!trader.id) return;
+
+//   trader.copying = true;  // mostra spinner e disabilita button
+
+//   this.traderService.copyOrders(trader.id).subscribe({
+//     next: (res: any) => {
+//       trader.copying = false;
+//       alert(`✅ Copied ${res?.copied_orders || 0} orders for trader "${trader.name}"`);
+//     },
+//     error: (err: any) => {
+//       trader.copying = false;
+//       console.error(err);
+//       alert(`❌ Error copying orders for trader "${trader.name}"`);
+//     }
+//   });
+// }
+
 copyOrders(trader: Trader) {
-  if (!trader.id) return;
+  trader.copying = true;
+  // 🔹 Reset dei log precedenti prima di iniziare
+  trader.logs = [];
 
-  trader.copying = true;  // mostra spinner e disabilita button
-
-  this.traderService.copyOrders(trader.id).subscribe({
-    next: (res: any) => {
+  this.traderService.copyOrders(trader.id!).subscribe({
+    next: (res) => {
       trader.copying = false;
-      alert(`✅ Copied ${res?.copied_orders || 0} orders for trader "${trader.name}"`);
+      trader.logs = res.logs || [];   // 👈 assegna i log qui
+      console.log("Logs ricevuti:", trader.logs);
     },
-    error: (err: any) => {
+    error: (err) => {
       trader.copying = false;
-      console.error(err);
-      alert(`❌ Error copying orders for trader "${trader.name}"`);
+      console.error("Errore copyOrders:", err);
     }
   });
 }
