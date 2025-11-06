@@ -287,22 +287,66 @@ copyOrders(trader: Trader) {
 
 
 
-saveTrader(trader: Trader) {
-  this.traderService.updateTraderServers(trader.id!, trader.master_server_id!, trader.slave_server_id!)
-    .subscribe({
-      next: (updatedTrader) => {
-        console.log('📤 Trader inviato per update:', trader);
+// saveTrader(trader: Trader) {
+//   this.traderService.updateTraderServers(trader.id!, trader.master_server_id!, trader.slave_server_id!)
+//     .subscribe({
+//       next: (updatedTrader) => {
+//         console.log('📤 Trader inviato per update:', trader);
 
-        trader.master_server_id = updatedTrader.master_server_id;
-        trader.slave_server_id = updatedTrader.slave_server_id;
-        alert(`Trader "${trader.name}" aggiornato con successo!`);
-      },
-      error: (err) => {
-        console.error(err);
-        alert('Errore durante l\'aggiornamento del trader');
-      }
-    });
+//         trader.master_server_id = updatedTrader.master_server_id;
+//         trader.slave_server_id = updatedTrader.slave_server_id;
+//         alert(`Trader "${trader.name}" aggiornato con successo!`);
+//       },
+//       error: (err) => {
+//         console.error(err);
+//         alert('Errore durante l\'aggiornamento del trader');
+//       }
+//     });
+// }
+
+saveTrader(trader: Trader) {
+  console.log('🛠️ [SAVE TRADER] Avvio aggiornamento trader');
+  console.log('──────────────────────────────────────────');
+  console.log('📤 Dati inviati:', {
+    id: trader.id,
+    master_server_id: trader.master_server_id,
+    slave_server_id: trader.slave_server_id,
+    sl: trader.sl,
+    tp: trader.tp,
+    tsl: trader.tsl,
+    moltiplicatore: trader.moltiplicatore
+  });
+  console.log('──────────────────────────────────────────');
+
+  this.traderService.updateTraderServers(
+    trader.id!,
+    trader.master_server_id ?? null,
+    trader.slave_server_id ?? null,
+    trader.sl ?? null,
+    trader.tp ?? null,
+    trader.tsl ?? null,
+    trader.moltiplicatore ?? null
+  ).subscribe({
+    next: (updatedTrader) => {
+      console.log('✅ [UPDATE OK] Trader aggiornato dal backend:', updatedTrader);
+
+      // aggiorna i valori locali
+      trader.master_server_id = updatedTrader.master_server_id;
+      trader.slave_server_id = updatedTrader.slave_server_id;
+      trader.sl = updatedTrader.sl;
+      trader.tp = updatedTrader.tp;
+      trader.tsl = updatedTrader.tsl;
+      trader.moltiplicatore = updatedTrader.moltiplicatore;
+
+      alert(`Trader "${trader.name}" aggiornato con successo!`);
+    },
+    error: (err) => {
+      console.error('❌ [UPDATE ERROR] Errore durante l\'aggiornamento trader:', err);
+      alert('Errore durante l\'aggiornamento del trader');
+    }
+  });
 }
+
 
 
 

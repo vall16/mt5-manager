@@ -71,11 +71,13 @@
       <!-- Trading parameters -->
       <div class="detail-row">
         <span class="label">SL (Stop Loss) :</span>
-        <span class="value">{{ trader.sl }}</span>
+        <!-- <span class="value">{{ trader.sl }}</span> -->
+        <input type="number" [(ngModel)]="trader.sl" placeholder="Stop Loss" />
       </div>
       <div class="detail-row">
         <span class="label">TP (Take Profit)::</span>
-        <span class="value">{{ trader.tp }}</span>
+        <!-- <span class="value">{{ trader.tp }}</span> -->
+        <input type="number" [(ngModel)]="trader.tp" placeholder="Take Profit" />
       </div>
       <div class="detail-row">
         <span class="label">TSL (Trailing Stop Loss):</span>
@@ -83,7 +85,8 @@
       </div>
       <div class="detail-row">
         <span class="label">Multiplier:</span>
-        <span class="value">{{ trader.moltiplicatore }}</span>
+        <!-- <span class="value">{{ trader.moltiplicatore }}</span> -->
+        <input type="number" [(ngModel)]="trader.moltiplicatore" placeholder="Moltiplicatore" />
       </div>
       <div class="detail-row" *ngIf="trader.fix_lot">
         <span class="label">Fixed Lot:</span>

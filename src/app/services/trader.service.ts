@@ -195,12 +195,32 @@ export class TraderService {
 
 
   /** PUT: aggiorna solo i server di un trader */
-  updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
+  // updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
+  //   return this.http.put<Trader>(`${this.apiUrl}/db/traders/${id}/servers`, {
+  //     master_server_id: masterId,
+  //     slave_server_id: slaveId
+  //   });
+  // }
+
+  updateTraderServers(
+    id: number,
+    masterId: number | null,
+    slaveId: number | null,
+    sl?: number | null,
+    tp?: number | null,
+    tsl?: number | null,
+    moltiplicatore?: number | null
+  ) {
     return this.http.put<Trader>(`${this.apiUrl}/db/traders/${id}/servers`, {
       master_server_id: masterId,
-      slave_server_id: slaveId
+      slave_server_id: slaveId,
+      sl: sl,
+      tp: tp,
+      tsl: tsl,
+      moltiplicatore: moltiplicatore
     });
-  }
+}
+
 
   startServer(server: Server): Observable<any> {
     return this.http.post(`${this.apiUrl}/mt5/start_server`, server);
