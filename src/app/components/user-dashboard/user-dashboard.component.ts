@@ -11,8 +11,7 @@ import { ServersListComponent } from '../servers-list/servers-list.component';
 import { Server } from '../../models/server.model';
 import { FormsModule } from '@angular/forms';
 import { catchError, finalize, of, switchMap } from 'rxjs';
-
-
+import { interval, Subscription } from 'rxjs';
 
 
 @Component({
@@ -26,14 +25,13 @@ import { catchError, finalize, of, switchMap } from 'rxjs';
 export class UserDashboardComponent implements OnInit {
   traders: Trader[] = [];
   servers: Server[] = [];
-  // newTrader: Partial<Trader> = {}; // Oggetto per la nuova card
-  // newTrader: Partial<Trader> & { master_server_id?: number; slave_server_id?: number } = {};
-newTrader: NewTrader = {
-  name: '',
-  status: 'active'
-};
+  private copySubscriptions: { [key: number]: Subscription } = {}; // Mappa traderId → Subscription
 
-
+  
+  newTrader: NewTrader = {
+    name: '',
+    status: 'active'
+  };
 
 
   showAddModal = false;
@@ -214,43 +212,42 @@ async deleteTrader(trader: Trader) {
   });
 }
 
-  // copyOrders(trader: Trader) {
-  // this.traderService.copyOrders(trader.id!).subscribe({
-  //   next: (res: any) => {
-  //     // alert(trader.id);
-  //     // alert(`Copied ${res.copied_orders} orders for trader ${trader.name}`);
-  //   },
-  //   error: (err: any) => {
-  //     console.error(err);
-  //     alert('Error copying orders');
-  //   }
-  // });
-  // }
+  toggleAutoCopy(trader: Trader) {
+    if (!trader.id) return;
 
-//   copyOrders(trader: Trader) {
-//   if (!trader.id) return;
+    if (trader.autoCopying) {
+      // 🔴 Ferma
+      this.stopAutoCopy(trader);
+    } else {
+      // 🟢 Avvia
+      const seconds = trader.copyInterval || 5; // default 5s se non impostato
+      trader.autoCopying = true;
+      console.log(`🔁 Avvio auto-copy per ${trader.name} ogni ${seconds}s`);
 
-//   // Mostra spinner sul pulsante
-//   trader.copying = true;
+      this.copySubscriptions[trader.id] = interval(seconds * 1000).subscribe(() => {
+        this.traderService.copyOrders(trader.id!).subscribe({
+          next: (res) => console.log(`✅ Copia automatica OK per ${trader.name}`),
+          error: (err) => console.error(`❌ Errore auto-copy ${trader.name}:`, err)
+        });
+      });
+    }
+  }
 
-//   this.traderService.copyOrders(trader.id).subscribe({
-//     next: (res: any) => {
-//       trader.copying = false;
+  stopAutoCopy(trader: Trader) {
+    const sub = this.copySubscriptions[trader.id!];
+    if (sub) {
+      sub.unsubscribe();
+      delete this.copySubscriptions[trader.id!];
+      trader.autoCopying = false;
+      console.log(`⏹ Auto-copy fermato per ${trader.name}`);
+    }
+  }
 
-//       // Mostra alert o toast con il risultato
-//       if (res?.copied_orders != null) {
-//         alert(`✅ Copied ${res.copied_orders} orders for trader "${trader.name}"`);
-//       } else {
-//         alert(`✅ Orders copied for trader "${trader.name}"`);
-//       }
-//     },
-//     error: (err: any) => {
-//       trader.copying = false;
-//       console.error(err);
-//       alert(`❌ Error copying orders for trader "${trader.name}"`);
-//     }
-//   });
-// }
+  ngOnDestroy() {
+    // 🔒 Stoppa tutti gli auto-copy quando si lascia la pagina
+    Object.values(this.copySubscriptions).forEach(sub => sub.unsubscribe());
+  }
+
 
 copyOrders(trader: Trader) {
   if (!trader.id) return;

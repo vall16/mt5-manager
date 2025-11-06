@@ -177,7 +177,7 @@ export class TraderService {
   copyOrders(traderId: number) {
     // alert(`${this.apiUrl}/traders/${traderId}/copy_orders`)
   return this.http.post(`${this.apiUrl}/db/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
-}
+  }
 
   
 

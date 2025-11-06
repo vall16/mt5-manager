@@ -67,9 +67,6 @@
           </option>
         </select>
 
-        
-
-
       </div>
       <!-- Trading parameters -->
       <div class="detail-row">
@@ -113,62 +110,73 @@
               <span class="button-spinner"></span> Copying...
             </ng-container>
           </button>
-
-
-
+          <!-- 🔁 AUTO COPY SECTION -->
+          <div class="auto-copy-section">
+            <input
+              type="number"
+              min="1"
+              [(ngModel)]="trader.copyInterval"
+              placeholder="Interval (sec)"
+              style="width: 120px; margin-right: 6px;"
+            />
+            <button
+              class="action-btn tertiary"
+              (click)="toggleAutoCopy(trader)"
+            >
+              {{ trader.autoCopying ? '⏹ Stop Auto Copy' : '🔁 Start Auto Copy' }}
+            </button>
+          </div>
         </div>
       </div>
       <!-- Nuova Card per aggiungere un trader -->
-  <div class="trader-card add-trader-card">
-    <div class="card-header">
-      <h4>Add New Trader</h4>
-    </div>
+      <div class="trader-card add-trader-card">
+        <div class="card-header">
+          <h4>Add New Trader</h4>
+        </div>
 
-    <div class="card-body">
-      <div class="detail-row">
-        <span class="label">Name:</span>
-        <input type="text" [(ngModel)]="newTrader.name" placeholder="Trader Name" />
-      </div>
-      <div class="detail-row">
-        <span class="label">Master Server:</span>
-        <select [(ngModel)]="newTrader.master_server_id">
-          <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
-        </select>
-      </div>
-      <div class="detail-row">
-        <span class="label">Slave Server:</span>
-        <select [(ngModel)]="newTrader.slave_server_id">
-          <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
-        </select>
-      </div>
-      <div class="detail-row">
-        <span class="label">SL:</span>
-        <input type="number" [(ngModel)]="newTrader.sl" placeholder="Stop Loss" />
-      </div>
-      <div class="detail-row">
-        <span class="label">TP:</span>
-        <input type="number" [(ngModel)]="newTrader.tp" placeholder="Take Profit" />
-      </div>
-      <div class="detail-row">
-        <span class="label">TSL:</span>
-        <input type="number" [(ngModel)]="newTrader.tsl" placeholder="Trailing SL" />
-      </div>
-      <div class="detail-row">
-        <span class="label">Multiplier:</span>
-        <input type="number" [(ngModel)]="newTrader.moltiplicatore" placeholder="Multiplier" />
-      </div>
-      <div class="detail-row">
-        <span class="label">Fixed Lot:</span>
-        <input type="number" [(ngModel)]="newTrader.fix_lot" placeholder="Optional" />
-      </div>
-    </div>
+        <div class="card-body">
+          <div class="detail-row">
+            <span class="label">Name:</span>
+            <input type="text" [(ngModel)]="newTrader.name" placeholder="Trader Name" />
+          </div>
+          <div class="detail-row">
+            <span class="label">Master Server:</span>
+            <select [(ngModel)]="newTrader.master_server_id">
+              <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
+            </select>
+          </div>
+          <div class="detail-row">
+            <span class="label">Slave Server:</span>
+            <select [(ngModel)]="newTrader.slave_server_id">
+              <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
+            </select>
+          </div>
+          <div class="detail-row">
+            <span class="label">SL:</span>
+            <input type="number" [(ngModel)]="newTrader.sl" placeholder="Stop Loss" />
+          </div>
+          <div class="detail-row">
+            <span class="label">TP:</span>
+            <input type="number" [(ngModel)]="newTrader.tp" placeholder="Take Profit" />
+          </div>
+          <div class="detail-row">
+            <span class="label">TSL:</span>
+            <input type="number" [(ngModel)]="newTrader.tsl" placeholder="Trailing SL" />
+          </div>
+          <div class="detail-row">
+            <span class="label">Multiplier:</span>
+            <input type="number" [(ngModel)]="newTrader.moltiplicatore" placeholder="Multiplier" />
+          </div>
+          <div class="detail-row">
+            <span class="label">Fixed Lot:</span>
+            <input type="number" [(ngModel)]="newTrader.fix_lot" placeholder="Optional" />
+          </div>
+        </div>
 
-    <div class="card-actions">
-      <button class="action-btn primary" (click)="addTrader()">Add Trader</button>
-    </div>
-  </div>
-
-
+        <div class="card-actions">
+          <button class="action-btn primary" (click)="addTrader()">Add Trader</button>
+        </div>
+      </div>
 
       <div class="empty-state" *ngIf="traders.length === 0">
         <div class="empty-icon">📊</div>
