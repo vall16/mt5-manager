@@ -16,6 +16,8 @@ export class ServersListComponent implements OnInit {
   loading = true;
   isLoading = false;
   testingIndex: number | null = null;
+  startingIndex: number | null = null;
+
 
   error: string | null = null;
 
@@ -128,12 +130,28 @@ newServer: Partial<Server> = {
   }
 
 
-  startServer(server: Server) {
-    this.traderService.startServer(server).subscribe({
-      next: (res: any) => console.log('✅ Server avviato:', res),
-      error: (err: any) => console.error('❌ Errore avvio server:', err)
-    });
-  }
+  // startServer(server: Server) {
+  //   this.traderService.startServer(server).subscribe({
+  //     next: (res: any) => console.log('✅ Server avviato:', res),
+  //     error: (err: any) => console.error('❌ Errore avvio server:', err)
+  //   });
+  // }
+
+  startServer(server: Server, index: number) {
+  this.startingIndex = index;
+
+  this.traderService.startServer(server).subscribe({
+    next: (res: any) => {
+      console.log('✅ Server avviato:', res);
+      this.startingIndex = null; // spegne lo spinner
+    },
+    error: (err: any) => {
+      console.error('❌ Errore avvio server:', err);
+      this.startingIndex = null; // spegne lo spinner anche in caso di errore
+    }
+  });
+}
+
 
 }
 

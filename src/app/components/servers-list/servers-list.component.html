@@ -97,9 +97,24 @@
           <span class="animated-text">Connecting<span class="dots"></span></span>
         </div>
       </div>
-      <div class="grid-cell">
+      <!-- <div class="grid-cell">
         <button class="action-btn primary" (click)="startServer(server)">▶️ Start </button>
       </div>
+       -->
+      <div class="grid-cell">
+        <button class="action-btn primary" 
+                (click)="startServer(server, i)"
+                [disabled]="startingIndex === i">
+          ▶️ Start
+        </button>
+
+      <!-- Loader solo per il server cliccato -->
+        <div *ngIf="startingIndex === i" class="loader-with-spinner">
+          <div class="spinner"></div>
+          <span class="animated-text">Starting<span class="dots"></span></span>
+        </div>
+      </div>
+
     </div>
   </div>
 
