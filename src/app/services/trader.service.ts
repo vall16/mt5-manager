@@ -173,18 +173,6 @@ export class TraderService {
   }
 
 
-  // originale
-  // copyOrders(traderId: number) {
-  //   return this.http.post(`${this.apiUrl}/db/traders/${traderId}/copy_orders`, {}, { observe: 'response' });
-  // }
-
-
-  // copyOrders(traderId: number) {
-  // return this.http.post<{ logs: string[] }>(
-  //   `${this.apiUrl}/db/traders/${traderId}/copy_orders`,
-  //   {}
-  // );
-
   copyOrders(traderId: number) {
   return this.http.post<CopyOrdersResponse>(
     `${this.apiUrl}/db/traders/${traderId}/copy_orders`,
@@ -192,15 +180,6 @@ export class TraderService {
   );
   }
 
-
-
-  /** PUT: aggiorna solo i server di un trader */
-  // updateTraderServers(id: number, masterId: number | null, slaveId: number | null) {
-  //   return this.http.put<Trader>(`${this.apiUrl}/db/traders/${id}/servers`, {
-  //     master_server_id: masterId,
-  //     slave_server_id: slaveId
-  //   });
-  // }
 
   updateTraderServers(
     id: number,

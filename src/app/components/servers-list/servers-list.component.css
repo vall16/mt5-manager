@@ -220,22 +220,7 @@ h1 {
   margin-right: 8px;
 }
 
-/* .status-badge {
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-weight: 600;
-  font-size: 0.85em;
-} */
 
-/* .status-badge.active {
-  background-color: #c8f7c5;
-  color: #2d8a34;
-}
-
-.status-badge.inactive {
-  background-color: #f8d7da;
-  color: #842029;
-} */
 .servers-grid-container {
   display: grid;
   grid-template-rows: auto 1fr;
@@ -458,3 +443,65 @@ h1 {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* nuove */
+/* ✨ Miglioramenti estetici grid dei server */
+
+/* Alternanza colori righe */
+.grid-body .grid-row:nth-child(odd) {
+  background: linear-gradient(90deg, #f9fbff, #f3f7ff);
+}
+
+.grid-body .grid-row:nth-child(even) {
+  background: #ffffff;
+}
+
+/* Hover più moderno e morbido */
+.grid-body .grid-row:hover {
+  background: linear-gradient(90deg, #e8f1ff, #dcecff);
+  box-shadow: inset 0 0 6px rgba(0, 123, 255, 0.15);
+  transform: scale(1.002);
+  transition: all 0.25s ease;
+}
+
+/* Bordo superiore evidenziato per separazione visiva */
+.grid-header {
+  background: linear-gradient(90deg, #e9efff, #f7faff);
+  border-bottom: 2px solid #bcd0ff;
+  color: #003366;
+}
+
+/* Testo più leggibile e pulito */
+.grid-cell {
+  font-size: 14px;
+  color: #222;
+  font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+/* Animazione fade-in alla comparsa righe */
+.grid-row {
+  animation: fadeInRow 0.4s ease;
+}
+@keyframes fadeInRow {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effetto glow per server attivi */
+.status-badge.active {
+  background-color: #c8f7c5;
+  color: #1d6b24;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+}
+
+/* Badge inattivo più elegante */
+.status-badge.inactive {
+  background-color: #ffe0e0;
+  color: #8a1f1f;
+  box-shadow: 0 0 5px rgba(244, 67, 54, 0.2);
+}

@@ -164,13 +164,13 @@
           <div class="detail-row">
             <span class="label">Master Server:</span>
             <select [(ngModel)]="newTrader.master_server_id">
-              <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
+              <option *ngFor="let server of servers" [value]="server.id">{{ server.server_alias }}</option>
             </select>
           </div>
           <div class="detail-row">
             <span class="label">Slave Server:</span>
             <select [(ngModel)]="newTrader.slave_server_id">
-              <option *ngFor="let server of servers" [value]="server.id">{{ server.server }}</option>
+              <option *ngFor="let server of servers" [value]="server.id">{{ server.server_alias }}</option>
             </select>
           </div>
           <div class="detail-row">
