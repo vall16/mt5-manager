@@ -339,6 +339,8 @@ saveTrader(trader: Trader) {
       trader.moltiplicatore = updatedTrader.moltiplicatore;
 
       alert(`Trader "${trader.name}" aggiornato con successo!`);
+      this.loadTraders(); // 🔁 Ricarica la lista aggiornata
+
     },
     error: (err) => {
       console.error('❌ [UPDATE ERROR] Errore durante l\'aggiornamento trader:', err);

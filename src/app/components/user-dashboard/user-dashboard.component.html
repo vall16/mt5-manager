@@ -63,30 +63,7 @@
         </div>
 
       <!-- Trading parameters -->
-      <!-- <div class="detail-row">
-        <span class="label">SL (Stop Loss) :</span>
-        <!-- <span class="value">{{ trader.sl }}</span> -->
-        <!-- <input type="number" [(ngModel)]="trader.sl" placeholder="Stop Loss" />
-      </div>
-      <div class="detail-row">
-        <span class="label">TP (Take Profit)::</span>
-        <!-- <span class="value">{{ trader.tp }}</span> -->
-        <!-- <input type="number" [(ngModel)]="trader.tp" placeholder="Take Profit" />
-      </div>
-      <div class="detail-row">
-        <span class="label">TSL (Trailing Stop Loss):</span>
-        <span class="value">{{ trader.tsl }}</span>
-      </div> -->
-      <!-- <div class="detail-row">
-        <span class="label">Multiplier:</span>
-        <! <span class="value">{{ trader.moltiplicatore }}</span> -->
-        <!-- <input type="number" [(ngModel)]="trader.moltiplicatore" placeholder="Moltiplicatore" />
-      </div>
-      <div class="detail-row" *ngIf="trader.fix_lot">
-        <span class="label">Fixed Lot:</span>
-        <span class="value">{{ trader.fix_lot }}</span>
-      </div>  -->
-
+      
       <div class="trading-params-section">
         <div class="param-card param-sl">
           <h6>SL (Stop Loss)</h6>
@@ -122,40 +99,53 @@
             Open Dashboard
           </button>
           
-          <button class="action-btn primary" (click)="copyOrders(trader)" [disabled]="trader.copying">
-            <ng-container *ngIf="!trader.copying">
-              📤 Copy Orders
-            </ng-container>
-            <ng-container *ngIf="trader.copying">
-              <span class="button-spinner"></span> Copying...
-            </ng-container>
-          </button>
-          <!-- 🔁 AUTO COPY SECTION -->
-          <div class="auto-copy-section">
-            <input
-              type="number"
-              min="1"
-              [(ngModel)]="trader.copyInterval"
-              placeholder="Interval (sec)"
-              style="width: 120px; margin-right: 6px;"
-            />
-            <button
-              class="action-btn tertiary"
-              (click)="toggleAutoCopy(trader)"
-            >
-              {{ trader.autoCopying ? '⏹ Stop Auto Copy' : '🔁 Start Auto Copy' }}
-            </button>
-          </div>
-          <!-- logs -->
-          <div class="log-container" *ngIf="trader.logs?.length">
-          <!-- <div class="log-container"> -->
-            <h5>Execution Log</h5>
-            <div class="log-box">
-              <div *ngFor="let line of trader.logs">
-                {{ line }}
-              </div>
-            </div>
-          </div>
+          <div class="card-actions">
+  
+
+  <!-- Sezione Copy + Auto Copy unificata -->
+  <div class="copy-section">
+    <h5>Trade Replication</h5>
+
+    <div class="copy-controls">
+      <button
+        class="action-btn primary"
+        (click)="copyOrders(trader)"
+        [disabled]="trader.copying"
+      >
+        <ng-container *ngIf="!trader.copying">
+          📤 Copy Orders
+        </ng-container>
+        <ng-container *ngIf="trader.copying">
+          <span class="button-spinner"></span> Copying...
+        </ng-container>
+      </button>
+
+      <div class="auto-copy-controls">
+        <input
+          type="number"
+          min="1"
+          [(ngModel)]="trader.copyInterval"
+          placeholder="Interval (sec)"
+          class="interval-input"
+        />
+        <button
+          class="action-btn tertiary"
+          (click)="toggleAutoCopy(trader)"
+        >
+          {{ trader.autoCopying ? '⏹ Stop Auto Copy' : '🔁 Start Auto Copy' }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Log sezione -->
+  <div class="log-container" *ngIf="trader.logs?.length">
+    <h5>Execution Log</h5>
+    <div class="log-box">
+      <div *ngFor="let line of trader.logs">{{ line }}</div>
+    </div>
+  </div>
+</div>
 
 
         </div>
