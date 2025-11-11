@@ -505,3 +505,24 @@ h1 {
   color: #8a1f1f;
   box-shadow: 0 0 5px rgba(244, 67, 54, 0.2);
 }
+.runtime-badge {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.runtime-badge.online {
+  background: #28a745;
+  color: white;
+}
+
+.runtime-badge.offline {
+  background: #dc3545;
+  color: white;
+}
+
+.runtime-badge.starting {
+  background: #ffc107;
+  color: black;
+}

@@ -318,6 +318,10 @@ saveTrader(trader: Trader) {
   });
   console.log('──────────────────────────────────────────');
 
+  // Aggiorna created_at con il time corrente
+  trader.created_at = new Date().toISOString();
+
+
   this.traderService.updateTraderServers(
     trader.id!,
     trader.master_server_id ?? null,

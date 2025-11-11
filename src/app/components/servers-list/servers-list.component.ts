@@ -23,19 +23,17 @@ export class ServersListComponent implements OnInit {
 
   showAddForm = false;
 
-newServer: Partial<Server> = {
-  server: '',
-  server_alias: '',
-  platform: '',
-  user: '',
-  pwd: '',
-  ip: '',
-  path:'',
-  port: 0,
-  is_active: true,
-};
-
-
+  newServer: Partial<Server> = {
+    server: '',
+    server_alias: '',
+    platform: '',
+    user: '',
+    pwd: '',
+    ip: '',
+    path:'',
+    port: 0,
+    is_active: true,
+  };
 
   constructor(private traderService: TraderService) {}   // ✅ inietta TraderService
 
@@ -95,10 +93,6 @@ newServer: Partial<Server> = {
 }
 
 
-  // checkServer(index: number) {
-  // if (confirm(`Are you sure you want to test server "${this.servers[index].server}"?`)) {
-  //   this.servers.splice(index, 1);
-  // }
 
     checkServer(index: number) {
       
@@ -115,10 +109,14 @@ newServer: Partial<Server> = {
         if (res.status === 'success') {
           
           alert(`✅ Connessione riuscita a ${server.server}`);
+          this.servers[index].runtimeStatus = "online";
+
 
         } else {
           
           alert(`❌ Connessione fallita: ${res.message}`);
+          this.servers[index].runtimeStatus = "offline";
+
         }
       },
       error: (err) => {
@@ -129,13 +127,6 @@ newServer: Partial<Server> = {
     });
   }
 
-
-  // startServer(server: Server) {
-  //   this.traderService.startServer(server).subscribe({
-  //     next: (res: any) => console.log('✅ Server avviato:', res),
-  //     error: (err: any) => console.error('❌ Errore avvio server:', err)
-  //   });
-  // }
 
   startServer(server: Server, index: number) {
   this.startingIndex = index;

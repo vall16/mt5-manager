@@ -83,9 +83,19 @@
         <span class="status-badge"
               [class.active]="server.is_active"
               [class.inactive]="!server.is_active">
-          {{ server.is_active ? 'Active' : 'Inactive' }}
+          {{ server.is_active ? 'Enabled' : 'Disabled' }}
         </span>
       </div>
+      <div class="grid-cell">
+        <span class="runtime-badge"
+              [class.online]="server.runtimeStatus === 'online'"
+              [class.offline]="server.runtimeStatus === 'offline'"
+              
+              >
+          {{ server.runtimeStatus | uppercase }}
+        </span>
+      </div>
+
       <div class="grid-cell">
         <button class="action-btn secondary" (click)="deleteServer(server)">Delete</button>
       </div>

@@ -13,5 +13,7 @@ export interface Server {
   updated_at: string;
   login:string;
   password:string;
+  runtimeStatus?: 'online' | 'offline'; // ✅ nuovo campo opzionale
+
 
 }
