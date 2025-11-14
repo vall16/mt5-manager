@@ -610,3 +610,9 @@
   margin-top: 6px;
 }
 
+.small-error {
+  font-size: 11px;     /* riduci il font */
+  margin-top: 4px;
+  
+  opacity: 0.8;
+}
