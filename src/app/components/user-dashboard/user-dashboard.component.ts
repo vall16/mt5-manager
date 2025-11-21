@@ -25,6 +25,9 @@ import { interval, Subscription } from 'rxjs';
 export class UserDashboardComponent implements OnInit {
   traders: Trader[] = [];
   servers: Server[] = [];
+  // ✅ Aggiungi questa proprietà
+  signal: string | null = null;
+
   private copySubscriptions: { [key: number]: Subscription } = {}; // Mappa traderId → Subscription
 
   
@@ -230,6 +233,8 @@ async deleteTrader(trader: Trader) {
           error: (err) => console.error(`❌ Errore auto-copy ${trader.name}:`, err)
         });
       });
+
+
     }
   }
 

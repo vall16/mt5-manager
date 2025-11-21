@@ -117,22 +117,16 @@
       </button>
 
       <div class="auto-copy-controls">
-        <!-- <input
+        
+        <input
           type="number"
           min="1"
+          required
           [(ngModel)]="trader.copyInterval"
+          #intervalCtrl="ngModel"
           placeholder="Interval (sec)"
           class="interval-input"
-        /> -->
-        <input
-    type="number"
-    min="1"
-    required
-    [(ngModel)]="trader.copyInterval"
-    #intervalCtrl="ngModel"
-    placeholder="Interval (sec)"
-    class="interval-input"
-  />
+        />
 
 
         <!--  Messaggio di validazione -->
@@ -148,14 +142,24 @@
           {{ trader.autoCopying ? '⏹ Stop Auto Copy' : '🔁 Start Auto Copy' }}
         </button>
 
-
-        <!-- <button
-          class="action-btn tertiary"
-          (click)="toggleAutoCopy(trader)"
-        >
-          {{ trader.autoCopying ? '⏹ Stop Auto Copy' : '🔁 Start Auto Copy' }}
-        </button> -->
+        <!-- ============================ -->
+        <!-- NUOVO PULSANTE LISTEN + SIGNAL -->
+        <!-- ============================ -->
+        
       </div>
+      <div class="listen-signal-section" style="margin-top: 10px;">
+          <button
+            class="action-btn secondary"
+            disabled
+          >
+            🔊 Listening for BUY signal...
+          </button>
+
+          <div *ngIf="signal">
+            🔹 Current Signal: {{ signal }}
+          </div>
+        </div>
+        
     </div>
   </div>
 
