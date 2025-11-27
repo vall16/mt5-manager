@@ -61,26 +61,6 @@ export class UserDashboardComponent implements OnInit {
   }
 
 
-    // loadServersAndTraders() {
-    //   this.traderService.getAllServers().subscribe({
-    //     next: (serversData: Server[]) => {
-          
-    //       console.log(serversData);
-    //       this.servers = serversData;
-
-    //       // Solo dopo che servers è pronto, carico i traders
-    //       this.traderService.loadTraders().subscribe({
-    //         next: (tradersData: Trader[]) => {
-    //           console.log(tradersData);
-    //           this.traders = tradersData;
-    //         },
-    //         error: (err) => console.error('Errore caricamento traders:', err)
-    //       });
-    //     },
-    //     error: (err) => console.error('Errore caricamento servers:', err)
-    //   });
-    // }
-
 
     loadServersAndTraders() {
   this.loading = true; // flag di caricamento opzionale
@@ -435,4 +415,51 @@ saveTrader(trader: Trader) {
   logout() {
     this.authService.logout();
   }
+
+
+  startListeningForBuy(trader: Trader) {
+  // Toggle ON/OFF
+  trader.listening = !trader.listening;
+
+  // alert(JSON.stringify(trader, null, 2));
+
+
+  if (trader.listening) {
+    // ⭐ START LISTENING
+    this.traderService.startListeningBuy(trader).subscribe({
+      next: (res: any) => {
+        console.log("Polling BUY started:", res);
+      },
+      error: (err: any) => {
+        console.error("Error starting polling:", err);
+        trader.listening = false;
+      }
+    });
+  } else {
+    // ⭐ STOP LISTENING
+    this.traderService.stopListeningBuy().subscribe({
+      next: (res: any) => {
+        console.log("Polling BUY stopped:", res);
+      },
+      error: (err: any) => {
+        console.error("Error stopping polling:", err);
+        trader.listening = true;
+      }
+    });
+  }
+}
+
+  stopListening(trader: Trader) {
+    trader.listening = false;
+
+    trader.logs = trader.logs || [];
+    trader.logs.push("🔴 Listening stopped");
+
+    if (trader._listenInterval) {
+      clearInterval(trader._listenInterval);
+      trader._listenInterval = null;
+    }
+  }
+
+
 }

@@ -616,3 +616,15 @@
   
   opacity: 0.8;
 }
+.listen-btn.active {
+  background-color: #3b82f6;
+  color: white;
+  transform: scale(0.98);
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.4);
+}
+.section-divider {
+  border: 0;
+  height: 1px;
+  background-color: #e0e0e0; /* colore grigio chiaro simile alle card */
+  margin: 15px 0;             /* margine verticale per separare le sezioni */
+}

@@ -31,9 +31,11 @@ export interface Trader {
   // 🔁 Campi locali (non nel DB)
   autoCopying?: boolean;
   copyInterval?: number;
+  customSignalInterval?: number;
   copying?: boolean;
   logs?: string[];   
-
+  listening?: boolean;
+  _listenInterval?: any;   
 }
 
 export interface NewTrader {

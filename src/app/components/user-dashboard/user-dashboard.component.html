@@ -101,7 +101,6 @@
   <!-- Sezione Copy + Auto Copy unificata -->
   <div class="copy-section">
     <h5>Trade Replication</h5>
-
     <div class="copy-controls">
       <button
         class="action-btn primary"
@@ -115,9 +114,7 @@
           <span class="button-spinner"></span> Copying...
         </ng-container>
       </button>
-
       <div class="auto-copy-controls">
-        
         <input
           type="number"
           min="1"
@@ -127,8 +124,6 @@
           placeholder="Interval (sec)"
           class="interval-input"
         />
-
-
         <!--  Messaggio di validazione -->
         <div class="error small-error" *ngIf="intervalCtrl.invalid && intervalCtrl.touched">
           Inserisci un numero valido (≥ 1 secondo)
@@ -143,26 +138,50 @@
         </button>
 
         <!-- ============================ -->
-        <!-- NUOVO PULSANTE LISTEN + SIGNAL -->
+        <!-- NUOVO PULSANTE LISTEN + SIGNAL 
         <!-- ============================ -->
         
       </div>
-      <div class="listen-signal-section" style="margin-top: 10px;">
-          <button
-            class="action-btn secondary"
-            disabled
-          >
-            🔊 Listening for BUY signal...
-          </button>
 
-          <div *ngIf="signal">
-            🔹 Current Signal: {{ signal }}
+      <!-- Divider -->
+      <hr class="section-divider" />
+
+      <h5>Custom Signal</h5>
+      <div class="copy-controls">
+        <!-- Pulsante Listen uguale a Copy Orders -->
+          <button
+            class="action-btn primary"
+            (click)="startListeningForBuy(trader)"
+            [class.active]="trader.customSignalInterval"
+          >
+            {{ trader.listening ? '🔊 Listening...' : 'Listen' }}
+          </button>
+          
+          <div class="auto-copy-controls">
+            <input
+              type="number"
+              min="1"
+              required
+              [(ngModel)]="trader.copyInterval"
+              #intervalCtrl2="ngModel"
+              class="interval-input"
+              placeholder="Interval (sec)"
+            />
+            
+            <div class="error small-error" *ngIf="intervalCtrl2.invalid && intervalCtrl2.touched">
+              Inserisci un numero valido (≥ 1 secondo)
+            </div>
+          
+            <!-- <div *ngIf="signal">
+              🔹 Current Signal: {{ signal }}
+            </div> -->
           </div>
-        </div>
+      </div>
         
     </div>
   </div>
 
+  
   <!-- Log sezione -->
   <div class="log-container" *ngIf="trader.logs?.length">
     <h5>Execution Log</h5>
@@ -200,7 +219,7 @@
           </div>
           <div class="detail-row">
             <span class="label">SL:</span>
-            <input type="number" [(ngModel)]="newTrader.sl" placeholder="Stop Loss" />
+            <input type="number" [(ngModel)]="newTrader.sl" placeholder="Stop Loss in Pip" />
           </div>
           <div class="detail-row">
             <span class="label">TP:</span>
