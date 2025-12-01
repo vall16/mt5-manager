@@ -419,34 +419,35 @@ saveTrader(trader: Trader) {
 
   startListeningForBuy(trader: Trader) {
   // Toggle ON/OFF
-  trader.listening = !trader.listening;
+    trader.listening = !trader.listening;
+  
 
   // alert(JSON.stringify(trader, null, 2));
 
 
-  if (trader.listening) {
-    // ⭐ START LISTENING
-    this.traderService.startListeningBuy(trader).subscribe({
-      next: (res: any) => {
-        console.log("Polling BUY started:", res);
-      },
-      error: (err: any) => {
-        console.error("Error starting polling:", err);
-        trader.listening = false;
-      }
-    });
-  } else {
-    // ⭐ STOP LISTENING
-    this.traderService.stopListeningBuy().subscribe({
-      next: (res: any) => {
-        console.log("Polling BUY stopped:", res);
-      },
-      error: (err: any) => {
-        console.error("Error stopping polling:", err);
-        trader.listening = true;
-      }
-    });
-  }
+    if (trader.listening) {
+      // ⭐ START LISTENING
+      this.traderService.startListeningBuy(trader).subscribe({
+        next: (res: any) => {
+          console.log("Polling BUY started:", res);
+        },
+        error: (err: any) => {
+          console.error("Error starting polling:", err);
+          trader.listening = false;
+        }
+      });
+    } else {
+      // ⭐ STOP LISTENING
+      this.traderService.stopListeningBuy().subscribe({
+        next: (res: any) => {
+          console.log("Polling BUY stopped:", res);
+        },
+        error: (err: any) => {
+          console.error("Error stopping polling:", err);
+          trader.listening = true;
+        }
+      });
+    }
 }
 
   stopListening(trader: Trader) {

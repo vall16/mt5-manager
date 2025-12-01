@@ -138,26 +138,27 @@ export class TraderService {
 
 
   loadTraders(): Observable<Trader[]> {
-  return this.http.get<Trader[]>(`${this.apiUrl}/db/traders`).pipe(
-    tap(rawTraders => {
-      console.log('📥 Traders ricevuti dal backend:', rawTraders);
-    }),
+    return this.http.get<Trader[]>(`${this.apiUrl}/db/traders`).pipe(
+      tap(rawTraders => {
+        console.log('📥 Traders ricevuti dal backend:', rawTraders);
+      }),
 
-    map(traders => traders.map(trader => ({
-      id: trader.id,
-      name: trader.name,
-      status: trader.status ? 'active' : 'inactive',
-      master_server_id: trader.master_server_id, // oppure trader.master_server_id se già numerico
-      slave_server_id: trader.slave_server_id,  // oppure trader.slave_server_id
-      sl: trader.sl,
-      tp: trader.tp,
-      tsl: trader.tsl,
-      moltiplicatore: trader.moltiplicatore,
-      fix_lot: trader.fix_lot,
-      created_at: trader.created_at,
-      updated_at: trader.updated_at
-    })))
-  );
+      map(traders => traders.map(trader => ({
+        id: trader.id,
+        name: trader.name,
+        status: trader.status ? 'active' : 'inactive',
+        master_server_id: trader.master_server_id, // oppure trader.master_server_id se già numerico
+        slave_server_id: trader.slave_server_id,  // oppure trader.slave_server_id
+        sl: trader.sl,
+        tp: trader.tp,
+        tsl: trader.tsl,
+        moltiplicatore: trader.moltiplicatore,
+        fix_lot: trader.fix_lot,
+        created_at: trader.created_at,
+        updated_at: trader.updated_at,
+        customSignalInterval: trader.customSignalInterval ?? 2   //default 2
+      })))
+    );
   }
 
   insertTrader(trader: Trader): Observable<Trader> {

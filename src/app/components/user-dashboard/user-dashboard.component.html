@@ -162,12 +162,18 @@
               type="number"
               min="1"
               required
-              [(ngModel)]="trader.copyInterval"
+              [(ngModel)]="trader.customSignalInterval"
               #intervalCtrl2="ngModel"
               class="interval-input"
               placeholder="Interval (sec)"
             />
-            
+            <div></div>
+            <select [(ngModel)]="trader.customSignalInterval" class="interval-select">
+              <option value="XAUUSD">sec.</option>
+              <option value="min">min</option>
+              <option value="hour">hour</option>
+            </select>
+
             <div class="error small-error" *ngIf="intervalCtrl2.invalid && intervalCtrl2.touched">
               Inserisci un numero valido (≥ 1 secondo)
             </div>
