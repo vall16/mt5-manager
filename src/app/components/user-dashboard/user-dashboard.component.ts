@@ -27,6 +27,9 @@ export class UserDashboardComponent implements OnInit {
   servers: Server[] = [];
   // ✅ Aggiungi questa proprietà
   signal: string | null = null;
+  slaveSymbols: { [key: number]: any[] } = {}; 
+  // slaveSymbols: { [key: number]: SymbolType[] } = {};slaveSymbols: { [key: number]: SymbolType[] } = {};
+
 
   private copySubscriptions: { [key: number]: Subscription } = {}; // Mappa traderId → Subscription
 
@@ -460,6 +463,39 @@ saveTrader(trader: Trader) {
       clearInterval(trader._listenInterval);
       trader._listenInterval = null;
     }
+  }
+
+  // carico i simboli tradabii dallo slave
+  onSlaveSelected(trader: Trader) {
+    const slaveServer = this.servers.find(s => s.id === trader.slave_server_id);
+    if (!slaveServer) return;
+
+    const slaveApiUrl = `http://${slaveServer.ip}:${slaveServer.port}`;
+    // alert (slaveApiUrl);
+
+    this.traderService.getSlaveSymbols(slaveApiUrl).subscribe({
+      next: (res: any) => {
+        console.log('Symbols from slave:', res);
+        // memorizza i simboli per il trader selezionato
+        this.slaveSymbols[trader.id] = res.symbols;
+      },
+      error: (err) => {
+        console.error('Errore fetching symbols', err);
+        // Log dettagliato
+    if (err.status) {
+      console.error(`Status: ${err.status} ${err.statusText || ''}`);
+    }
+    if (err.error) {
+      console.error('Response body:', err.error);
+    }
+    if (err.message) {
+      console.error('Message:', err.message);
+    }
+    console.error('Full error object:', err);
+
+        this.slaveSymbols[trader.id] = [];
+      }
+    });
   }
 
 

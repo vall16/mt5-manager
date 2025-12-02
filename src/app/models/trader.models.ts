@@ -14,7 +14,8 @@ export interface CopyOrdersResponse {
 
 
 export interface Trader {
-  id?: number;
+  // id?: number;
+  id: number;
   name: string;
   status: 'active' | 'inactive';  // is_active diventa status
   master_server_id?: number;      // riferimento al server master
@@ -64,6 +65,14 @@ export interface BuyRequest {
 
 
 
+export interface SlaveSymbol {
+  symbol: string;   // es. "EURAUD"
+  base: string;     // valuta base, es. "EUR"
+  profit: string;   // valuta di profitto, es. "AUD"
+  spread: number;   // spread in punti, es. 18
+  digits: number;   // numero di decimali, es. 5
+  point: number;    // valore di un punto, es. 0.00001
+}
 
 
 

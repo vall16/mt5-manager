@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
-import { BuyRequest, CopyOrdersResponse, Trader } from '../models/trader.models';
+import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol } from '../models/trader.models';
 
 @Injectable({
   providedIn: 'root',
@@ -175,10 +175,10 @@ export class TraderService {
 
 
   copyOrders(traderId: number) {
-  return this.http.post<CopyOrdersResponse>(
-    `${this.apiUrl}/db/traders/${traderId}/copy_orders`,
-    {}
-  );
+    return this.http.post<CopyOrdersResponse>(
+      `${this.apiUrl}/db/traders/${traderId}/copy_orders`,
+      {}
+    );
   }
 
 
@@ -207,13 +207,67 @@ export class TraderService {
   }
   /** Avvia il listener del BUY nel backend */
   startListeningBuy(trader:Trader): Observable<any> {
-    // return this.http.post(`${this.apiUrl}/trade/start_polling`, {});
+    
     return this.http.post(`${this.apiUrl}/trade/start_polling`, trader);
   }
 
   stopListeningBuy(): Observable<any> {
     return this.http.post(`${this.apiUrl}/trade/stop_polling`, {});
   }
+
+  // Recupera simboli attivi dallo slave
+  // getSlaveSymbols(slaveApiUrl: string): Observable<any> {
+  //   // Assumendo che slaveApiUrl = "http://127.0.0.1:9001"
+  //   return this.http.get(`${slaveApiUrl}/symbols/active`);
+  // }
+
+  // getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {
+  //   // Restituisce un oggetto con proprietà `symbols` contenente l'array tipizzato
+  //   return this.http.get<{ symbols: SlaveSymbol[] }>(`${slaveApiUrl}/symbols/active`);
+  // }
+
+  getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {
+
+  const url = `${slaveApiUrl}/symbols/active`;
+  console.log("🔵 [getSlaveSymbols] Chiamo URL:", url);
+
+  return this.http.get<{ symbols: SlaveSymbol[] }>(url).pipe(
+
+    tap({
+      next: (res: any) => {
+        console.log("🟢 [getSlaveSymbols] SUCCESS");
+        console.log("🟢 Response type:", typeof res);
+        console.log("🟢 Response object:", res);
+        if (res?.symbols) {
+          console.log("🟢 Symbols count:", res.symbols.length);
+        }
+      },
+      error: (err) => {
+        console.error("🔴 [getSlaveSymbols] ERROR!");
+
+        console.error("🔴 Error name:", err.name);
+        console.error("🔴 Error message:", err.message);
+        console.error("🔴 Error status:", err.status);
+        console.error("🔴 Error statusText:", err.statusText);
+
+        console.error("🔴 Error URL:", err.url);
+
+        // Corpo della risposta o ProgressEvent
+        console.error("🔴 Error error:", err.error);
+        if (err.error instanceof ProgressEvent) {
+          console.error("🔴 Error is ProgressEvent → CORS o connessione rifiutata");
+        }
+
+        // JSON stringify
+        try {
+          console.error("🔴 Error JSON:", JSON.stringify(err));
+        } catch (e) {
+          console.error("🔴 Cannot stringify error:", e);
+        }
+      }
+    })
+  );
+}
 
 
 }

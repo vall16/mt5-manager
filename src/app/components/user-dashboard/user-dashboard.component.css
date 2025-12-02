@@ -628,3 +628,12 @@
   background-color: #e0e0e0; /* colore grigio chiaro simile alle card */
   margin: 15px 0;             /* margine verticale per separare le sezioni */
 }
+.server-card select,
+.interval-select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+}
