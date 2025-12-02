@@ -430,6 +430,15 @@ saveTrader(trader: Trader) {
 
     if (trader.listening) {
       // ⭐ START LISTENING
+      console.log("Intervallo custom:", trader.customSignalInterval);
+      console.log("Simbolo selezionato:", trader.selectedSymbol);
+
+      if (!trader.selectedSymbol) {
+        alert("Seleziona un simbolo prima di avviare il listening!");
+        return;
+      }
+
+
       this.traderService.startListeningBuy(trader).subscribe({
         next: (res: any) => {
           console.log("Polling BUY started:", res);

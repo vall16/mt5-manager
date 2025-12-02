@@ -33,6 +33,8 @@ export interface Trader {
   autoCopying?: boolean;
   copyInterval?: number;
   customSignalInterval?: number;
+  // simbolo di ascolto per il custom signal
+  selectedSymbol?: string;   
   copying?: boolean;
   logs?: string[];   
   listening?: boolean;

@@ -172,18 +172,11 @@
             <ng-container *ngIf="trader.id != null">
 
 
-              <select [(ngModel)]="trader.customSignalInterval" class="interval-select" (click)="onSlaveSelected(trader)"   >
-                <!-- <option value="XAUUSD">sec.</option>
-                <option value="min">min</option>
-                <option value="hour">hour</option> -->
+              <select [(ngModel)]="trader.selectedSymbol" class="interval-select" (click)="onSlaveSelected(trader)"   >
+                
                 <option *ngFor="let sym of slaveSymbols[trader.id] || []" [value]="sym.symbol">{{ sym.symbol }}</option>
               </select>
-              <!-- <div *ngIf="slaveSymbols[trader.id]?.length">
-                <label>Tradable Symbols:</label>
-                <select [(ngModel)]="trader.symbol">
-                  <option *ngFor="let sym of slaveSymbols[trader.id]" [value]="sym.symbol">{{ sym.symbol }}</option>
-                </select>
-              </div> -->
+              
             </ng-container>  
 
             <div class="error small-error" *ngIf="intervalCtrl2.invalid && intervalCtrl2.touched">
