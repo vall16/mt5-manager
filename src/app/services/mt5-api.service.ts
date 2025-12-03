@@ -15,6 +15,7 @@ import {
   MarginInfo,
 } from '../models/mt5.models';
 import {Server} from '../models/server.model'
+import { environment } from '../../environments/environment';
 
 export interface ServerCheckRequest {
   server: string;
@@ -34,7 +35,8 @@ export interface ServerCheckResponse {
   providedIn: 'root'
 })
 export class Mt5ApiService {
-  private readonly baseUrl = 'http://127.0.0.1:8080';
+  // private readonly baseUrl = 'http://127.0.0.1:8080';
+  private baseUrl = environment.apiUrl; // URL del backend FastAPI
 
   constructor(private http: HttpClient) {}
 

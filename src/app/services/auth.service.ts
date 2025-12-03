@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 interface User {
   id: string;
@@ -21,7 +22,8 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
 
-  private apiUrl = 'http://127.0.0.1:8080'; // URL del backend FastAPI
+  // private apiUrl = 'http://127.0.0.1:8080'; // URL del backend FastAPI
+  private apiUrl = environment.apiUrl; // URL del backend FastAPI
 
   constructor(private http: HttpClient, private router: Router) {
     const storedUser = localStorage.getItem('currentUser');

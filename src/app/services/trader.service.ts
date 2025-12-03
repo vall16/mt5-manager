@@ -3,12 +3,17 @@ import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
 import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol } from '../models/trader.models';
+import { environment } from '../../environments/environment';
+
+
+// private apiUrl = environment.apiUrl;
 
 @Injectable({
   providedIn: 'root',
 })
 export class TraderService {
-  private apiUrl = 'http://127.0.0.1:8080'; // URL del backend FastAPI
+  // private apiUrl = 'http://127.0.0.1:8080'; // URL del backend FastAPI
+  private apiUrl = environment.apiUrl; // URL del backend FastAPI
 
   constructor(private http: HttpClient) {}
 
@@ -169,8 +174,9 @@ export class TraderService {
     return this.http.put<Trader>(`${this.apiUrl}/db/traders/${trader.id}`, trader);
   }
 
+
   deleteTrader(traderId: number) {
-  return this.http.delete<{ success: boolean; message?: string }>(`http://127.0.0.1:8080/db/traders/${traderId}`);
+  return this.http.delete<{ success: boolean; message?: string }>(`${this.apiUrl}/db/traders/${traderId}`);
   }
 
 

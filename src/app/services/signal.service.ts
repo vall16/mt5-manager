@@ -3,10 +3,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class SignalService {
-  private apiUrl = 'http://127.0.0.1:8080';
+  // private apiUrl = 'http://127.0.0.1:8080';
+  private apiUrl = environment.apiUrl; // URL del backend FastAPI
 
   constructor(private http: HttpClient) {}
 
