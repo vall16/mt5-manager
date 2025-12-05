@@ -129,19 +129,19 @@ export class ServersListComponent implements OnInit {
 
 
   startServer(server: Server, index: number) {
-  this.startingIndex = index;
+    this.startingIndex = index;
 
-  this.traderService.startServer(server).subscribe({
-    next: (res: any) => {
-      console.log('✅ Server avviato:', res);
-      this.startingIndex = null; // spegne lo spinner
-    },
-    error: (err: any) => {
-      console.error('❌ Errore avvio server:', err);
-      this.startingIndex = null; // spegne lo spinner anche in caso di errore
-    }
-  });
-}
+    this.traderService.startServer(server).subscribe({
+      next: (res: any) => {
+        console.log('✅ Server avviato:', res);
+        this.startingIndex = null; // spegne lo spinner
+      },
+      error: (err: any) => {
+        console.error('❌ Errore avvio server:', err);
+        this.startingIndex = null; // spegne lo spinner anche in caso di errore
+      }
+    });
+  }
 
 
 }
