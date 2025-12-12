@@ -228,58 +228,48 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/trade/stop_polling`, {});
   }
 
-  // Recupera simboli attivi dallo slave
-  // getSlaveSymbols(slaveApiUrl: string): Observable<any> {
-  //   // Assumendo che slaveApiUrl = "http://127.0.0.1:9001"
-  //   return this.http.get(`${slaveApiUrl}/symbols/active`);
-  // }
-
-  // getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {
-  //   // Restituisce un oggetto con proprietà `symbols` contenente l'array tipizzato
-  //   return this.http.get<{ symbols: SlaveSymbol[] }>(`${slaveApiUrl}/symbols/active`);
-  // }
 
   getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {
 
-  const url = `${slaveApiUrl}/symbols/active`;
-  console.log("🔵 [getSlaveSymbols] Chiamo URL:", url);
+    const url = `${slaveApiUrl}/symbols/active`;
+    console.log("🔵 [getSlaveSymbols] Chiamo URL:", url);
 
-  return this.http.get<{ symbols: SlaveSymbol[] }>(url).pipe(
+    return this.http.get<{ symbols: SlaveSymbol[] }>(url).pipe(
 
-    tap({
-      next: (res: any) => {
-        console.log("🟢 [getSlaveSymbols] SUCCESS");
-        console.log("🟢 Response type:", typeof res);
-        console.log("🟢 Response object:", res);
-        if (res?.symbols) {
-          console.log("🟢 Symbols count:", res.symbols.length);
+      tap({
+        next: (res: any) => {
+          console.log("🟢 [getSlaveSymbols] SUCCESS");
+          console.log("🟢 Response type:", typeof res);
+          console.log("🟢 Response object:", res);
+          if (res?.symbols) {
+            console.log("🟢 Symbols count:", res.symbols.length);
+          }
+        },
+        error: (err) => {
+          console.error("🔴 [getSlaveSymbols] ERROR!");
+
+          console.error("🔴 Error name:", err.name);
+          console.error("🔴 Error message:", err.message);
+          console.error("🔴 Error status:", err.status);
+          console.error("🔴 Error statusText:", err.statusText);
+
+          console.error("🔴 Error URL:", err.url);
+
+          // Corpo della risposta o ProgressEvent
+          console.error("🔴 Error error:", err.error);
+          if (err.error instanceof ProgressEvent) {
+            console.error("🔴 Error is ProgressEvent → CORS o connessione rifiutata");
+          }
+
+          // JSON stringify
+          try {
+            console.error("🔴 Error JSON:", JSON.stringify(err));
+          } catch (e) {
+            console.error("🔴 Cannot stringify error:", e);
+          }
         }
-      },
-      error: (err) => {
-        console.error("🔴 [getSlaveSymbols] ERROR!");
-
-        console.error("🔴 Error name:", err.name);
-        console.error("🔴 Error message:", err.message);
-        console.error("🔴 Error status:", err.status);
-        console.error("🔴 Error statusText:", err.statusText);
-
-        console.error("🔴 Error URL:", err.url);
-
-        // Corpo della risposta o ProgressEvent
-        console.error("🔴 Error error:", err.error);
-        if (err.error instanceof ProgressEvent) {
-          console.error("🔴 Error is ProgressEvent → CORS o connessione rifiutata");
-        }
-
-        // JSON stringify
-        try {
-          console.error("🔴 Error JSON:", JSON.stringify(err));
-        } catch (e) {
-          console.error("🔴 Cannot stringify error:", e);
-        }
-      }
-    })
-  );
+      })
+    );
 }
 
 
