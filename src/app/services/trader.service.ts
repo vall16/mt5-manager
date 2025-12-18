@@ -115,14 +115,31 @@ export class TraderService {
 
   // /** ✅ POST: inserisci un nuovo server */
   insertServer(server: Partial<Server>): Observable<any> {
-  return this.http.post(`${this.apiUrl}/db/servers`, server);
-}
+    return this.http.post(`${this.apiUrl}/db/servers`, server);
+  }
 
   deleteServer(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/db/servers/${id}`);
   }
 
 
+
+  // checkServer(server: Server): Observable<any> {
+  //   if (!server.server || !server.user || !server.pwd || !server.port) {
+  //   return throwError(() => new Error('Server, login, password e port sono obbligatori'));
+  // }
+  // console.log('checkServer ->', server);
+
+  //   const body = {
+  //     // server: server.server,
+  //     // login: server.user,
+  //     // password: server.pwd,
+  //     port: server.port,
+  //     host: server.ip
+  //     // path:server.path
+  //   };
+  //   return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
+  // }
 
   checkServer(server: Server): Observable<any> {
     if (!server.server || !server.user || !server.pwd || !server.port) {
@@ -138,7 +155,7 @@ export class TraderService {
       host: server.ip
       // path:server.path
     };
-    return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
+    return this.http.post(`${this.apiUrl}/check-server`, body);
   }
 
 
@@ -176,7 +193,7 @@ export class TraderService {
 
 
   deleteTrader(traderId: number) {
-  return this.http.delete<{ success: boolean; message?: string }>(`${this.apiUrl}/db/traders/${traderId}`);
+    return this.http.delete<{ success: boolean; message?: string }>(`${this.apiUrl}/db/traders/${traderId}`);
   }
 
 
@@ -211,12 +228,6 @@ export class TraderService {
   startServer(server: Server): Observable<any> {
     return this.http.post(`${this.apiUrl}/mt5/start_server`, server);
   }
-
-  // startServer(server: Server): Observable<any> {
-  //   const url = `http://${server.ip}:${server.port}/mt5/start_server`;
-  //   alert(url)
-  //   return this.http.post(url, server);
-  // }
 
   /** Avvia il listener del BUY nel backend */
   startListeningBuy(trader:Trader): Observable<any> {
