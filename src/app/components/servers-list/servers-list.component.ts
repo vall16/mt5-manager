@@ -106,7 +106,7 @@ export class ServersListComponent implements OnInit {
         
         this.testingIndex = null; // 🔥 disattiva loader
 
-        if (res.status === 'success') {
+        if (res.status === 'ok') {
           
           alert(`✅ Connessione riuscita a ${server.server}`);
           this.servers[index].runtimeStatus = "online";

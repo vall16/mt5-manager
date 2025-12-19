@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
-import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol } from '../models/trader.models';
+import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol, CheckServerResponse } from '../models/trader.models';
 import { environment } from '../../environments/environment';
 
 
@@ -140,22 +140,40 @@ export class TraderService {
   //   };
   //   return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
   // }
+ 
 
-  checkServer(server: Server): Observable<any> {
-    if (!server.server || !server.user || !server.pwd || !server.port) {
-    return throwError(() => new Error('Server, login, password e port sono obbligatori'));
-  }
-  console.log('checkServer ->', server);
+  // checkServer(server: Server): Observable<any> {
+  //   if (!server.server || !server.user || !server.pwd || !server.port) {
+  //   return throwError(() => new Error('Server, login, password e port sono obbligatori'));
+  // }
+  //  console.log('checkServer ->', server);
+
+  //   const body = {
+  //     // server: server.server,
+  //     // login: server.user,
+  //     // password: server.pwd,
+  //     port: server.port,
+  //     host: server.ip
+  //     // path:server.path
+  //   };
+  //   return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
+  // }
+
+  checkServer(server: Server): Observable<CheckServerResponse> {
+    // Per il check bastano IP e Porta dell'agente
+    if (!server.ip || !server.port) {
+      return throwError(() => new Error('IP e Porta dell\'agente sono obbligatori per il check'));
+    }
+
+    console.log('📡 Eseguo check salute su agente ->', `${server.ip}:${server.port}`);
 
     const body = {
-      // server: server.server,
-      // login: server.user,
-      // password: server.pwd,
-      port: server.port,
-      host: server.ip
-      // path:server.path
+      host: server.ip,
+      port: server.port
     };
-    return this.http.post(`${this.apiUrl}/check-server`, body);
+
+    // Tipizziamo il post così sappiamo esattamente cosa aspettarci (status, connected, ecc.)
+    return this.http.post<CheckServerResponse>(`${this.apiUrl}/mt5/check-server`, body);
   }
 
 

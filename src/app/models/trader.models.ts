@@ -11,6 +11,19 @@ export interface CopyOrdersResponse {
   message?: string;
 }
 
+// per il test del server mt5
+ export interface CheckServerResponse {
+    status: 'ok' | 'ko';
+    message: string;
+    mt5_version?: string;
+    connected?: boolean;
+    terminal?: {
+      name: string;
+      company: string;
+      path: string;
+    };
+}
+
 
 
 export interface Trader {
