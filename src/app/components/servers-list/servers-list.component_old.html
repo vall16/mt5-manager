@@ -1,0 +1,154 @@
+<div class="container">
+  
+  <div class="header">
+    <h1>Trading Servers</h1>
+    
+
+  <hr />
+
+  
+  </div>
+
+
+  <div *ngIf="loading" class="loading">
+    Loading servers...
+  </div>
+
+  <div *ngIf="error" class="error">
+    {{ error }}
+  </div>
+
+  
+
+<div class="servers-header">
+  <button class="add-btn" (click)="toggleAddForm()">
+    {{ showAddForm ? '✖ Close' : '+ Add Server' }}
+  </button>
+</div>
+
+<div *ngIf="showAddForm" class="add-server-card animate-in">
+  <h3>Add New Server</h3>
+  <div class="form-grid">
+    <input type="text" placeholder="Server Name" [(ngModel)]="newServer.server">
+    <input type="text" placeholder="Server Alias" [(ngModel)]="newServer.server_alias">
+    <input type="text" placeholder="Platform" [(ngModel)]="newServer.platform">
+    <input type="text" placeholder="User" [(ngModel)]="newServer.user">
+    <input type="password" placeholder="Password" [(ngModel)]="newServer.pwd">
+    <input type="text" placeholder="IP Address" [(ngModel)]="newServer.ip">
+    <input type="text" placeholder="path" [(ngModel)]="newServer.path">
+    <input type="number" placeholder="Port" [(ngModel)]="newServer.port">
+    <label class="chk">
+      <input type="checkbox" [(ngModel)]="newServer.is_active">
+      Active
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <button class="save-btn" (click)="addServer()">💾 Save</button>
+    <button class="cancel-btn" (click)="toggleAddForm()">Cancel</button>
+  </div>
+</div>
+
+<!-- </div> -->
+ <div *ngIf="!loading && servers.length > 0" class="servers-grid-container">
+
+  <!-- Intestazioni -->
+  <div class="grid-header">
+    <div class="grid-cell">Server</div>
+    <div class="grid-cell">Server_Alias</div>
+    <div class="grid-cell">Platform</div>
+    <div class="grid-cell">User</div>
+    <div class="grid-cell">Password</div>
+    <div class="grid-cell">IP</div>
+    <div class="grid-cell">Port</div>
+    <div class="grid-cell">Path</div>
+    
+
+  </div>
+
+  
+  <!-- Dati dei server -->
+  <div class="grid-body">
+    <div *ngFor="let server of servers; let i = index" class="grid-row">
+      <div class="grid-cell">{{ server.server }}</div>
+      
+      <!-- <div class="grid-cell"><b>{{ server.server_alias }}</b></div> -->
+      <!-- ALIAS -->
+    <div class="grid-cell">
+      <ng-container *ngIf="editingIndex !== i">
+        <b>{{ server.server_alias }}</b>
+      </ng-container>
+      <ng-container *ngIf="editingIndex === i">
+        <input class="edit-input"
+               [(ngModel)]="server.server_alias"
+               placeholder="Alias">
+      </ng-container>
+    </div>
+
+
+      <div class="grid-cell">{{ server.platform }}</div>
+      <div class="grid-cell">{{ server.user }}</div>
+      <div class="grid-cell">{{ server.pwd }}</div>
+      <div class="grid-cell">{{ server.ip }}</div>
+      <div class="grid-cell">{{ server.port }}</div>
+      <div class="grid-cell">{{ server.path }}</div>
+      <div class="grid-cell">
+        <span class="status-badge"
+              [class.active]="server.is_active"
+              [class.inactive]="!server.is_active">
+          {{ server.is_active ? 'Enabled' : 'Disabled' }}
+        </span>
+      </div>
+      <div class="grid-cell">
+        <span class="runtime-badge"
+              [class.online]="server.runtimeStatus === 'online'"
+              [class.offline]="server.runtimeStatus === 'offline'"
+              
+              >
+          {{ server.runtimeStatus | uppercase }}
+        </span>
+      </div>
+
+      <div class="grid-cell">
+        <button class="action-btn secondary" (click)="deleteServer(server)">Delete</button>
+      </div>
+      <div class="grid-cell">
+        <button class="action-btn primary" (click)="checkServer(i)" [disabled]="testingIndex === i">Test</button>
+        <!-- Loader solo per il server cliccato -->
+        <div *ngIf="testingIndex === i" class="loader-with-spinner">
+          <div class="spinner"></div>
+          <span class="animated-text">Connecting<span class="dots"></span></span>
+        </div>
+      </div>
+      
+      <div class="grid-cell">
+        <button class="action-btn primary" 
+                (click)="startServer(server, i)"
+                [disabled]="startingIndex === i">
+          ▶️ Start
+        </button>
+
+      <!-- Loader solo per il server cliccato -->
+        <div *ngIf="startingIndex === i" class="loader-with-spinner">
+          <div class="spinner"></div>
+          <span class="animated-text">Starting<span class="dots"></span></span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+  <div *ngIf="!loading && servers.length === 0 && !error" class="empty-state">
+    No servers found
+  </div>
+
+  
+</div>
+
+<!-- Loader -->
+  <div *ngIf="isLoading" class="loader">
+    Testing...
+  </div>

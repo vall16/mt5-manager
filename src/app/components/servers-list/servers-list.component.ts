@@ -1,27 +1,29 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Server } from '../../models/server.model';
-import { TraderService } from '../../services/trader.service'; // ✅ importa il servizio corretto
 import { FormsModule } from '@angular/forms';
+import { Server } from '../../models/server.model';
+import { TraderService } from '../../services/trader.service';
 
 @Component({
   selector: 'app-servers-list',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './servers-list.component.html',
   styleUrls: ['./servers-list.component.css']
 })
 export class ServersListComponent implements OnInit {
+
   servers: Server[] = [];
   loading = true;
-  isLoading = false;
-  testingIndex: number | null = null;
-  startingIndex: number | null = null;
-
-
   error: string | null = null;
 
   showAddForm = false;
+
+  testingIndex: number | null = null;
+  startingIndex: number | null = null;
+  editingIndex: number | null = null;
+
+  backupServer: Server | null = null;
 
   newServer: Partial<Server> = {
     server: '',
@@ -30,122 +32,121 @@ export class ServersListComponent implements OnInit {
     user: '',
     pwd: '',
     ip: '',
-    path:'',
+    path: '',
     port: 0,
-    is_active: true,
+    is_active: true
   };
 
-  constructor(private traderService: TraderService) {}   // ✅ inietta TraderService
+  constructor(private traderService: TraderService) {}
 
-
-  async ngOnInit() {
-    await this.loadServers();
+  ngOnInit(): void {
+    this.loadServers();
   }
 
+  // ---------------- LOAD ----------------
   loadServers(): void {
     this.loading = true;
-    this.error = null;
-
-    // this.traderService.getAllServers2().subscribe({
     this.traderService.getAllServers().subscribe({
-      next: (data) => {
+      next: data => {
         this.servers = data;
         this.loading = false;
       },
-      error: (err) => {
-        console.error('Error loading servers:', err);
+      error: err => {
         this.error = err.message || 'Failed to load servers';
         this.loading = false;
       }
     });
   }
 
-  addServer(): void {
-    this.traderService.insertServer(this.newServer).subscribe({
-      next: () => {
-        this.loadServers();  // ricarica la lista dopo l'inserimento
-        this.newServer = { server: '', server_alias:'',platform: '', user: '', pwd: '', ip: '',path:'', port: 0, is_active: true };
-      },
-      error: (err) => {
-        console.error('Error adding server:', err);
-        this.error = err.message || 'Failed to add server';
-      },
-    });
-  }
-
- toggleAddForm() {
+  // ---------------- ADD ----------------
+  toggleAddForm(): void {
     this.showAddForm = !this.showAddForm;
   }
 
-  
-  deleteServer(server: Server) {
-  if (!confirm(`Sei sicuro di voler eliminare il server "${server.server}"?`)) {
-    return;
+  addServer(): void {
+    this.traderService.insertServer(this.newServer).subscribe({
+      next: () => {
+        this.toggleAddForm();
+        this.newServer = {
+          server: '',
+          server_alias: '',
+          platform: '',
+          user: '',
+          pwd: '',
+          ip: '',
+          path: '',
+          port: 0,
+          is_active: true
+        };
+        this.loadServers();
+      },
+      error: err => alert(err.message)
+    });
   }
 
-  this.traderService.deleteServer(server.id!).subscribe({
-    next: () => {
-      console.log('✅ Server eliminato');
-      this.loadServers(); // ricarica la lista aggiornata
-    },
-    error: (err) => console.error('❌ Errore durante la cancellazione:', err)
-  });
-}
+  // ---------------- DELETE ----------------
+  deleteServer(server: Server): void {
+    if (!confirm(`Eliminare il server "${server.server}"?`)) return;
 
+    this.traderService.deleteServer(server.id!).subscribe({
+      next: () => this.loadServers(),
+      error: err => alert(err.message)
+    });
+  }
 
-
-    checkServer(index: number) {
-      
-
+  // ---------------- TEST ----------------
+  checkServer(index: number): void {
     const server = this.servers[index];
-    this.testingIndex = index; // 🔥 attiva loader solo per questo server
-
+    this.testingIndex = index;
 
     this.traderService.checkServer(server).subscribe({
-      next: (res) => {
-        
-        this.testingIndex = null; // 🔥 disattiva loader
-
-        if (res.status === 'ok') {
-          
-          alert(`✅ Connessione riuscita a ${server.server}`);
-          this.servers[index].runtimeStatus = "online";
-
-
-        } else {
-          
-          alert(`❌ Connessione fallita: ${res.message}`);
-          this.servers[index].runtimeStatus = "offline";
-
-        }
+      next: res => {
+        this.testingIndex = null;
+        this.servers[index].runtimeStatus = res.status === 'ok' ? 'online' : 'offline';
       },
-      error: (err) => {
-        this.testingIndex = null; // 🔥 disattiva loader anche in caso di errore
-
-        alert(`⚠️ Errore nel test: ${err.message}`);
+      error: () => {
+        this.testingIndex = null;
+        this.servers[index].runtimeStatus = 'offline';
       }
     });
   }
 
-
-  startServer(server: Server, index: number) {
+  // ---------------- START ----------------
+  startServer(server: Server, index: number): void {
     this.startingIndex = index;
 
     this.traderService.startServer(server).subscribe({
-      next: (res: any) => {
-        console.log('✅ Server avviato:', res);
-        this.startingIndex = null; // spegne lo spinner
-      },
-      error: (err: any) => {
-        console.error('❌ Errore avvio server:', err);
-        this.startingIndex = null; // spegne lo spinner anche in caso di errore
-      }
+      next: () => this.startingIndex = null,
+      error: () => this.startingIndex = null
     });
   }
 
+  // ---------------- EDIT ----------------
+  startEdit(index: number): void {
+    this.editingIndex = index;
+    this.backupServer = JSON.parse(JSON.stringify(this.servers[index]));
+  }
 
+  cancelEdit(): void {
+    if (this.editingIndex === null || !this.backupServer) return;
+
+    this.servers[this.editingIndex] =
+      JSON.parse(JSON.stringify(this.backupServer));
+
+    this.editingIndex = null;
+    this.backupServer = null;
+  }
+
+  saveEdit(server: Server): void {
+    this.traderService.updateServer(server).subscribe({
+      next: () => {
+        this.editingIndex = null;
+        this.backupServer = null;
+      },
+      error: err => {
+        alert('Errore salvataggio: ' + err.message);
+        this.cancelEdit();
+      }
+    });
+  }
 }
-
-
-
-

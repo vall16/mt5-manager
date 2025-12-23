@@ -247,6 +247,10 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/mt5/start_server`, server);
   }
 
+  updateServer(server: Server): Observable<any> {
+   return this.http.put(`${this.apiUrl}/servers/${server.id}`, server);
+  }
+
   /** Avvia il listener del BUY nel backend */
   startListeningBuy(trader:Trader): Observable<any> {
     
