@@ -88,7 +88,11 @@
 
         <!-- PASSWORD -->
         <div class="grid-cell">
-          <ng-container *ngIf="editingIndex !== i">••••••••</ng-container>
+          <ng-container *ngIf="editingIndex !== i">
+            {{ server.pwd }}
+          </ng-container>
+
+          
           <ng-container *ngIf="editingIndex === i">
             <input type="password" class="edit-input" [(ngModel)]="server.pwd">
           </ng-container>

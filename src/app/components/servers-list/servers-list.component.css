@@ -1,3 +1,35 @@
+.container {
+  max-width: 1800px; /* aumenta da es. 1200px a 1400px */
+  width: 95%;         /* occupa quasi tutta la larghezza disponibile */
+  margin: 0 auto;     /* centra il container */
+  padding: 20px;      /* spazio interno */
+  box-sizing: border-box;
+}
+
+/* ---------------- ADD SERVER ---------------- */
+.add-server-card {
+  width: 95%;                /* quasi tutta la larghezza */
+  max-width: 1200px;         /* limite massimo per grandi schermi */
+  margin: 15px auto;          /* centrata */
+  padding: 20px 25px;         /* più spazio interno */
+  border-radius: 12px;        /* angoli arrotondati */
+  background: #ffffff;        /* sfondo bianco */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1); /* ombra delicata */
+  font-size: 13px;            /* leggermente più piccolo per far entrare i dati */
+  transition: all 0.3s ease-in-out;
+  border: 1px solid #e5e7eb; /* bordo leggero */
+}
+/* Titolo */
+.add-server-card h3 {
+  margin-bottom: 15px;
+  font-size: 18px;
+  color: #1f2937;
+  font-weight: 600;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 8px;
+}
+
+
 /* ---------------- GRID ---------------- */
 .servers-grid-container {
   margin-top: 20px;
@@ -28,7 +60,7 @@
 }
 
 .grid-cell {
-  font-size: 14px;
+  font-size: 12px;
 }
 
 /* ---------------- EDIT ---------------- */
@@ -107,11 +139,31 @@
 }
 
 /* ---------------- FORM ---------------- */
-.form-grid {
+/* .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
+} */
+
+/* Grid del form */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonne per distribuire meglio i campi */
+  gap: 12px;
+  margin-top: 10px;
 }
+/* Input fields */
+.form-grid input[type="text"],
+.form-grid input[type="password"],
+.form-grid input[type="number"] {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 13px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+
 
 .form-actions {
   margin-top: 15px;
