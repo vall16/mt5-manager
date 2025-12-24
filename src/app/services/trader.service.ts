@@ -43,42 +43,6 @@ export class TraderService {
   }
 
 
-
-  // checkServer(server: Server): Observable<any> {
-  //   if (!server.server || !server.user || !server.pwd || !server.port) {
-  //   return throwError(() => new Error('Server, login, password e port sono obbligatori'));
-  // }
-  // console.log('checkServer ->', server);
-
-  //   const body = {
-  //     // server: server.server,
-  //     // login: server.user,
-  //     // password: server.pwd,
-  //     port: server.port,
-  //     host: server.ip
-  //     // path:server.path
-  //   };
-  //   return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
-  // }
- 
-
-  // checkServer(server: Server): Observable<any> {
-  //   if (!server.server || !server.user || !server.pwd || !server.port) {
-  //   return throwError(() => new Error('Server, login, password e port sono obbligatori'));
-  // }
-  //  console.log('checkServer ->', server);
-
-  //   const body = {
-  //     // server: server.server,
-  //     // login: server.user,
-  //     // password: server.pwd,
-  //     port: server.port,
-  //     host: server.ip
-  //     // path:server.path
-  //   };
-  //   return this.http.post(`${this.apiUrl}/mt5/check-server`, body);
-  // }
-
   checkServer(server: Server): Observable<CheckServerResponse> {
     // Per il check bastano IP e Porta dell'agente
     if (!server.ip || !server.port) {
@@ -177,19 +141,7 @@ export class TraderService {
 
   /** Avvia il listener del BUY nel backend */
   startListeningBuy(trader: Trader, signal: string): Observable<any> {
-    // Prepara il payload da inviare
-    // const payload = {
-    //   traderId: trader.id,
-    //   masterServerId: trader.master_server_id,
-    //   slaveServerId: trader.slave_server_id,
-    //   selectedSymbol: trader.selectedSymbol,
-    //   customSignalInterval: trader.customSignalInterval,
-    //   sl: trader.sl,
-    //   tp: trader.tp,
-    //   tsl: trader.tsl,
-    //   moltiplicatore: trader.moltiplicatore,
-    //   selectedSignal: signal // <-- aggiunto il segnale
-    // };
+    
     trader.selectedSignal =signal
 
     return this.http.post(`${this.apiUrl}/trade/start_polling`, trader);

@@ -49,11 +49,11 @@ export class UserDashboardComponent implements OnInit {
   errorMessage: string | undefined;
 
   availableSignals = [
-  { value: 'XAUUSD_BASE', label: 'XAUUSD Base' },
-  { value: 'XAUUSD_TREND_GUARD', label: 'XAUUSD Trend Guard' },
-  { value: 'XAUUSD_VOLATILITY', label: 'XAUUSD Volatility' },
-  { value: 'XAUUSD_SCALP', label: 'XAUUSD Scalp' }
+  { value: 'BASE', label: 'XAUUSD Base' },
+  { value: 'TRENDGUARD_XAU', label: 'XAUUSD Trend Guard' },
+  { value: 'SUPER', label: 'XAUUSD Super' } // corrisponde a check_signal_super
 ];
+
 
 
   // @Output() serverAdded = new EventEmitter<void>(); // <=== AGGIUNTO
