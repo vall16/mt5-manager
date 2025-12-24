@@ -48,6 +48,14 @@ export class UserDashboardComponent implements OnInit {
   serverService: any;
   errorMessage: string | undefined;
 
+  availableSignals = [
+  { value: 'XAUUSD_BASE', label: 'XAUUSD Base' },
+  { value: 'XAUUSD_TREND_GUARD', label: 'XAUUSD Trend Guard' },
+  { value: 'XAUUSD_VOLATILITY', label: 'XAUUSD Volatility' },
+  { value: 'XAUUSD_SCALP', label: 'XAUUSD Scalp' }
+];
+
+
   // @Output() serverAdded = new EventEmitter<void>(); // <=== AGGIUNTO
 
 
@@ -96,6 +104,14 @@ export class UserDashboardComponent implements OnInit {
   ).subscribe({
     next: (tradersData: Trader[]) => {
       this.traders = tradersData;
+
+      // ✅ DEFAULT SIGNAL SEMPRE IL PRIMO
+      this.traders.forEach(trader => {
+        if (!trader.selectedSignal) {
+          trader.selectedSignal = this.availableSignals[0].value;
+        }
+      });
+
       if (!tradersData.length) {
         console.warn('Nessun trader trovato.');
       }
@@ -420,28 +436,73 @@ saveTrader(trader: Trader) {
   }
 
 
-  startListeningForBuy(trader: Trader) {
-  // Toggle ON/OFF
-    trader.listening = !trader.listening;
+//   startListeningForBuy_origi(trader: Trader) {
+//   // Toggle ON/OFF
+//     trader.listening = !trader.listening;
   
+//   // alert(JSON.stringify(trader, null, 2));
 
-  // alert(JSON.stringify(trader, null, 2));
 
+//     if (trader.listening) {
+//       // ⭐ START LISTENING
+//       console.log("Intervallo custom:", trader.customSignalInterval);
+//       console.log("Simbolo selezionato:", trader.selectedSymbol);
+
+//       if (!trader.selectedSymbol) {
+//         alert("Seleziona un simbolo prima di avviare il listening!");
+//         return;
+//       }
+
+
+//       this.traderService.startListeningBuy(trader).subscribe({
+//         next: (res: any) => {
+//           console.log("Polling BUY started:", res);
+//         },
+//         error: (err: any) => {
+//           console.error("Error starting polling:", err);
+//           trader.listening = false;
+//         }
+//       });
+//     } else {
+//       // ⭐ STOP LISTENING
+//       this.traderService.stopListeningBuy().subscribe({
+//         next: (res: any) => {
+//           console.log("Polling BUY stopped:", res);
+//         },
+//         error: (err: any) => {
+//           console.error("Error stopping polling:", err);
+//           trader.listening = true;
+//         }
+//       });
+//     }
+// }
+
+  startListeningForBuy(trader: Trader) {
+  // Verifica che sia stato selezionato un segnale
+    if (!trader.selectedSignal) {
+      alert("Seleziona un segnale prima di avviare il listening!");
+      return;
+    }
+
+    // Toggle ON/OFF
+    trader.listening = !trader.listening;
 
     if (trader.listening) {
       // ⭐ START LISTENING
+      console.log("Segnale selezionato:", trader.selectedSignal);
       console.log("Intervallo custom:", trader.customSignalInterval);
       console.log("Simbolo selezionato:", trader.selectedSymbol);
 
       if (!trader.selectedSymbol) {
         alert("Seleziona un simbolo prima di avviare il listening!");
+        trader.listening = false;
         return;
       }
 
-
-      this.traderService.startListeningBuy(trader).subscribe({
+      // Passa anche il segnale selezionato al servizio
+      this.traderService.startListeningBuy(trader, trader.selectedSignal).subscribe({
         next: (res: any) => {
-          console.log("Polling BUY started:", res);
+          console.log("Polling started:", res);
         },
         error: (err: any) => {
           console.error("Error starting polling:", err);
@@ -460,7 +521,7 @@ saveTrader(trader: Trader) {
         }
       });
     }
-}
+  }
 
   stopListening(trader: Trader) {
     trader.listening = false;

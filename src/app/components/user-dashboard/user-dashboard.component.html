@@ -157,6 +157,35 @@
             {{ trader.listening ? '🔊 Listening...' : 'Listen' }}
           </button>
 
+          <!-- SIGNAL SELECT -->
+          
+            <!-- <select
+              [(ngModel)]="trader.selectedSignal"
+              class="signal-select"
+            >
+            <option value="XAUUSD_BASE">SIGNAL: XAUUSD Base</option>
+            <option value="XAUUSD_TREND_GUARD">SIGNAL: XAUUSD Trend Guard</option>
+            <option value="XAUUSD_VOLATILITY">SIGNAL: XAUUSD Volatility</option>
+            <option value="XAUUSD_SCALP">SIGNAL: XAUUSD Scalp</option>
+
+
+            </select> -->
+
+            <select
+              [(ngModel)]="trader.selectedSignal"
+              class="signal-select"
+            >
+              <option
+                *ngFor="let signal of availableSignals"
+                [value]="signal.value"
+              >
+                SIGNAL: {{ signal.label }}
+              </option>
+            </select>
+
+          
+
+
           <div class="auto-copy-controls">
             <input
               type="number"
@@ -189,7 +218,7 @@
           </div>
       </div>
         
-    <!-- </div> -->
+    
   </div>
 
   

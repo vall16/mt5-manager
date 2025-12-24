@@ -100,7 +100,7 @@ export class TraderService {
   loadTraders(): Observable<Trader[]> {
     return this.http.get<Trader[]>(`${this.apiUrl}/db/traders`).pipe(
       tap(rawTraders => {
-        console.log('📥 Traders ricevuti dal backend:', rawTraders);
+        // console.log('📥 Traders ricevuti dal backend:', rawTraders);
       }),
 
       map(traders => traders.map(trader => ({
@@ -170,10 +170,31 @@ export class TraderService {
   
 
   /** Avvia il listener del BUY nel backend */
-  startListeningBuy(trader:Trader): Observable<any> {
+  startListeningBuy_orig(trader:Trader): Observable<any> {
     
     return this.http.post(`${this.apiUrl}/trade/start_polling`, trader);
   }
+
+  /** Avvia il listener del BUY nel backend */
+  startListeningBuy(trader: Trader, signal: string): Observable<any> {
+    // Prepara il payload da inviare
+    // const payload = {
+    //   traderId: trader.id,
+    //   masterServerId: trader.master_server_id,
+    //   slaveServerId: trader.slave_server_id,
+    //   selectedSymbol: trader.selectedSymbol,
+    //   customSignalInterval: trader.customSignalInterval,
+    //   sl: trader.sl,
+    //   tp: trader.tp,
+    //   tsl: trader.tsl,
+    //   moltiplicatore: trader.moltiplicatore,
+    //   selectedSignal: signal // <-- aggiunto il segnale
+    // };
+    trader.selectedSignal =signal
+
+    return this.http.post(`${this.apiUrl}/trade/start_polling`, trader);
+  }
+
 
   stopListeningBuy(): Observable<any> {
     return this.http.post(`${this.apiUrl}/trade/stop_polling`, {});

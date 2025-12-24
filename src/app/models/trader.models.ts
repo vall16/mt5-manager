@@ -45,6 +45,8 @@ export interface Trader {
   // 🔁 Campi locali (non nel DB)
   autoCopying?: boolean;
   copyInterval?: number;
+  selectedSignal?: string;
+
   customSignalInterval?: number;
   // simbolo di ascolto per il custom signall
   selectedSymbol?: string;   

@@ -16,6 +16,13 @@
 .add-server-btn:hover, .add-trader-btn:hover {
   background-color: #1c6cd9;
 }
+.signal-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin: 8px 0 14px;
+  max-width: 220px;
+}
+
 
 
 .user-dashboard {
@@ -629,7 +636,8 @@
   margin: 15px 0;             /* margine verticale per separare le sezioni */
 }
 .server-card select,
-.interval-select {
+.interval-select,
+.signal-select {
   width: 100%;
   padding: 6px 8px;
   border-radius: 6px;
@@ -637,3 +645,14 @@
   font-size: 14px;
   background-color: #fff;
 }
+
+/* .server-card select,
+.interval-select,
+.signal-select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  background-color: #fff;
+} */
