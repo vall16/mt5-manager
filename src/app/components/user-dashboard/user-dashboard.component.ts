@@ -436,47 +436,6 @@ saveTrader(trader: Trader) {
   }
 
 
-//   startListeningForBuy_origi(trader: Trader) {
-//   // Toggle ON/OFF
-//     trader.listening = !trader.listening;
-  
-//   // alert(JSON.stringify(trader, null, 2));
-
-
-//     if (trader.listening) {
-//       // ⭐ START LISTENING
-//       console.log("Intervallo custom:", trader.customSignalInterval);
-//       console.log("Simbolo selezionato:", trader.selectedSymbol);
-
-//       if (!trader.selectedSymbol) {
-//         alert("Seleziona un simbolo prima di avviare il listening!");
-//         return;
-//       }
-
-
-//       this.traderService.startListeningBuy(trader).subscribe({
-//         next: (res: any) => {
-//           console.log("Polling BUY started:", res);
-//         },
-//         error: (err: any) => {
-//           console.error("Error starting polling:", err);
-//           trader.listening = false;
-//         }
-//       });
-//     } else {
-//       // ⭐ STOP LISTENING
-//       this.traderService.stopListeningBuy().subscribe({
-//         next: (res: any) => {
-//           console.log("Polling BUY stopped:", res);
-//         },
-//         error: (err: any) => {
-//           console.error("Error stopping polling:", err);
-//           trader.listening = true;
-//         }
-//       });
-//     }
-// }
-
   startListeningForBuy(trader: Trader) {
   // Verifica che sia stato selezionato un segnale
     if (!trader.selectedSignal) {
@@ -499,8 +458,8 @@ saveTrader(trader: Trader) {
         return;
       }
 
-      // Passa anche il segnale selezionato al servizio
-      this.traderService.startListeningBuy(trader, trader.selectedSignal).subscribe({
+      // Passa anche il segnale selezionato al servizioo
+      this.traderService.startListening(trader, trader.selectedSignal).subscribe({
         next: (res: any) => {
           console.log("Polling started:", res);
         },
@@ -509,9 +468,18 @@ saveTrader(trader: Trader) {
           trader.listening = false;
         }
       });
-    } else {
+      } else {
       // ⭐ STOP LISTENING
-      this.traderService.stopListeningBuy().subscribe({
+      // this.traderService.stopListeningBuy().subscribe({
+      //   next: (res: any) => {
+      //     console.log("Polling BUY stopped:", res);
+      //   },
+      //   error: (err: any) => {
+      //     console.error("Error stopping polling:", err);
+      //     trader.listening = true;
+      //   }
+      // });
+      this.traderService.stopListening(trader).subscribe({
         next: (res: any) => {
           console.log("Polling BUY stopped:", res);
         },
@@ -520,20 +488,21 @@ saveTrader(trader: Trader) {
           trader.listening = true;
         }
       });
+
     }
   }
 
-  stopListening(trader: Trader) {
-    trader.listening = false;
+  // stopListening(trader: Trader) {
+  //   trader.listening = false;
 
-    trader.logs = trader.logs || [];
-    trader.logs.push("🔴 Listening stopped");
+  //   trader.logs = trader.logs || [];
+  //   trader.logs.push("🔴 Listening stopped");
 
-    if (trader._listenInterval) {
-      clearInterval(trader._listenInterval);
-      trader._listenInterval = null;
-    }
-  }
+  //   if (trader._listenInterval) {
+  //     clearInterval(trader._listenInterval);
+  //     trader._listenInterval = null;
+  //   }
+  // }
 
   // carico i simboli tradabii dallo slave
   onSlaveSelected(trader: Trader) {

@@ -139,8 +139,8 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/trade/start_polling`, trader);
   }
 
-  /** Avvia il listener del BUY nel backend */
-  startListeningBuy(trader: Trader, signal: string): Observable<any> {
+  /** Avvia il listener nel backend (MULTI)*/
+  startListening(trader: Trader, signal: string): Observable<any> {
     
     trader.selectedSignal =signal
 
@@ -148,9 +148,15 @@ export class TraderService {
   }
 
 
-  stopListeningBuy(): Observable<any> {
-    return this.http.post(`${this.apiUrl}/trade/stop_polling`, {});
+  // stopListeningBuy(): Observable<any> {
+  //   return this.http.post(`${this.apiUrl}/trade/stop_polling`, {});
+  // }
+
+  // stoppa il listening nel BE (MULTI)
+  stopListening(trader: Trader) {
+    return this.http.post(`${this.apiUrl}/trade/stop_polling`, { trader_id: trader.id });
   }
+
 
 
   getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {
