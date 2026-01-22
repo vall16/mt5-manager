@@ -64,7 +64,7 @@ export class TraderService {
   loadTraders(): Observable<Trader[]> {
     return this.http.get<Trader[]>(`${this.apiUrl}/db/traders`).pipe(
       tap(rawTraders => {
-        // console.log('📥 Traders ricevuti dal backend:', rawTraders);
+        console.log('📥 Traders ricevuti dal backend:', rawTraders);
       }),
 
       map(traders => traders.map(trader => ({
@@ -80,7 +80,11 @@ export class TraderService {
         fix_lot: trader.fix_lot,
         created_at: trader.created_at,
         updated_at: trader.updated_at,
-        customSignalInterval: trader.customSignalInterval ?? 2   //default 2
+
+        custom_signal_interval: trader.custom_signal_interval ?? 2,   //default 2
+        selected_signal: trader.selected_signal,
+        selected_symbol: trader.selected_symbol
+
       })))
     );
   }
@@ -114,7 +118,14 @@ export class TraderService {
     sl?: number | null,
     tp?: number | null,
     tsl?: number | null,
-    moltiplicatore?: number | null
+    moltiplicatore?: number | null,
+
+    // 🆕 nuovi parametri
+    selected_signal?: string | null,
+    custom_signal_interval?: number | null,
+    selected_symbol?: string | null,
+    // copyInterval?: number | null
+
   ) {
     return this.http.put<Trader>(`${this.apiUrl}/db/traders/${id}/servers`, {
       master_server_id: masterId,
@@ -122,9 +133,16 @@ export class TraderService {
       sl: sl,
       tp: tp,
       tsl: tsl,
-      moltiplicatore: moltiplicatore
+      moltiplicatore: moltiplicatore,
+
+      // 🆕 campi custom signal
+      selected_signal: selected_signal,
+      custom_signal_interval: custom_signal_interval,
+      selected_symbol: selected_symbol,
+      // copy_interval: copyInterval
+
     });
-}
+  }
 
 
   startServer(server: Server): Observable<any> {
@@ -142,7 +160,7 @@ export class TraderService {
   /** Avvia il listener nel backend (MULTI)*/
   startListening(trader: Trader, signal: string): Observable<any> {
     
-    trader.selectedSignal =signal
+    trader.selected_signal =signal
 
     return this.http.post(`${this.apiUrl}/trade/start_polling`, trader);
   }

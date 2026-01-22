@@ -20,7 +20,7 @@
 
       <div class="symbol-select">
         <label>Select Symbol:</label>
-        <select [(ngModel)]="selectedSymbol" (change)="onSymbolChange()" class="select-input">
+        <select [(ngModel)]="selected_symbol" (change)="onSymbolChange()" class="select-input">
           <option value="">-- Select Symbol --</option>
           <option *ngFor="let symbol of filteredSymbols" [value]="symbol.symbol">
             {{ symbol.symbol }} ({{ symbol.currency_base }}/{{ symbol.currency_profit }})
@@ -28,7 +28,7 @@
         </select>
       </div>
 
-      <div class="tick-info" *ngIf="currentTick && selectedSymbol">
+      <div class="tick-info" *ngIf="currentTick && selected_symbol">
         <h3>Current Prices</h3>
         <div class="price-display">
           <div class="price-item bid">
@@ -89,7 +89,7 @@
         <button
           class="btn btn-buy"
           (click)="executeBuy()"
-          [disabled]="loading || !selectedSymbol"
+          [disabled]="loading || !selected_symbol"
         >
           <span *ngIf="!loading">BUY</span>
           <span *ngIf="loading">Processing...</span>
@@ -98,7 +98,7 @@
         <button
           class="btn btn-sell"
           (click)="executeSell()"
-          [disabled]="loading || !selectedSymbol"
+          [disabled]="loading || !selected_symbol"
         >
           <span *ngIf="!loading">SELL</span>
           <span *ngIf="loading">Processing...</span>
@@ -107,7 +107,7 @@
         <button
           class="btn btn-close"
           (click)="closeAllPositions()"
-          [disabled]="loading || !selectedSymbol"
+          [disabled]="loading || !selected_symbol"
         >
           <span *ngIf="!loading">CLOSE ALL</span>
           <span *ngIf="loading">Processing...</span>
@@ -115,7 +115,7 @@
       </div>
 
       <div class="action-info">
-        <p>Selected Symbol: <strong>{{ selectedSymbol || 'None' }}</strong></p>
+        <p>Selected Symbol: <strong>{{ selected_symbol || 'None' }}</strong></p>
         <p>Order Size: <strong>{{ orderForm.lot }}</strong> lots</p>
       </div>
     </div>

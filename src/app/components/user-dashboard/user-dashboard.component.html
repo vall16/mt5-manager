@@ -152,7 +152,7 @@
           <button
             class="action-btn primary"
             (click)="startListeningForBuy(trader)"
-            [class.active]="trader.customSignalInterval"
+            [class.active]="trader.custom_signal_interval"
           >
             {{ trader.listening ? '🔊 Listening...' : 'Listen' }}
           </button>
@@ -172,7 +172,7 @@
             </select> -->
 
             <select
-              [(ngModel)]="trader.selectedSignal"
+              [(ngModel)]="trader.selected_signal"
               class="signal-select"
             >
               <option
@@ -191,7 +191,7 @@
               type="number"
               min="1"
               required
-              [(ngModel)]="trader.customSignalInterval"
+              [(ngModel)]="trader.custom_signal_interval"
               #intervalCtrl2="ngModel"
               class="interval-input"
               placeholder="Interval (sec)"
@@ -201,7 +201,7 @@
             <ng-container *ngIf="trader.id != null">
 
 
-              <select [(ngModel)]="trader.selectedSymbol" class="interval-select" (click)="onSlaveSelected(trader)"   >
+              <select [(ngModel)]="trader.selected_symbol" class="interval-select" (click)="onSlaveSelected(trader)"   >
                 
                 <option *ngFor="let sym of slaveSymbols[trader.id] || []" [value]="sym.symbol">{{ sym.symbol }}</option>
               </select>

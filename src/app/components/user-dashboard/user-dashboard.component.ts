@@ -107,8 +107,8 @@ export class UserDashboardComponent implements OnInit {
 
       // ✅ DEFAULT SIGNAL SEMPRE IL PRIMO
       this.traders.forEach(trader => {
-        if (!trader.selectedSignal) {
-          trader.selectedSignal = this.availableSignals[0].value;
+        if (!trader.selected_signal) {
+          trader.selected_signal = this.availableSignals[0].value;
         }
       });
 
@@ -290,24 +290,6 @@ copyOrders(trader: Trader) {
 }
 
 
-
-// saveTrader(trader: Trader) {
-//   this.traderService.updateTraderServers(trader.id!, trader.master_server_id!, trader.slave_server_id!)
-//     .subscribe({
-//       next: (updatedTrader) => {
-//         console.log('📤 Trader inviato per update:', trader);
-
-//         trader.master_server_id = updatedTrader.master_server_id;
-//         trader.slave_server_id = updatedTrader.slave_server_id;
-//         alert(`Trader "${trader.name}" aggiornato con successo!`);
-//       },
-//       error: (err) => {
-//         console.error(err);
-//         alert('Errore durante l\'aggiornamento del trader');
-//       }
-//     });
-// }
-
 saveTrader(trader: Trader) {
   console.log('🛠️ [SAVE TRADER] Avvio aggiornamento trader');
   console.log('──────────────────────────────────────────');
@@ -333,7 +315,12 @@ saveTrader(trader: Trader) {
     trader.sl ?? null,
     trader.tp ?? null,
     trader.tsl ?? null,
-    trader.moltiplicatore ?? null
+    trader.moltiplicatore ?? null,
+    trader.selected_signal ?? null,
+    trader.custom_signal_interval ?? null,
+    trader.selected_symbol ?? null
+
+
   ).subscribe({
     next: (updatedTrader) => {
       console.log('✅ [UPDATE OK] Trader aggiornato dal backend:', updatedTrader);
@@ -345,6 +332,13 @@ saveTrader(trader: Trader) {
       trader.tp = updatedTrader.tp;
       trader.tsl = updatedTrader.tsl;
       trader.moltiplicatore = updatedTrader.moltiplicatore;
+
+      // 🆕 NUOVI PARAMETRI
+      trader.selected_signal =updatedTrader.selected_signal;
+      trader.custom_signal_interval = updatedTrader.custom_signal_interval;
+      trader.selected_symbol =updatedTrader.selected_symbol;
+      // trader.copyInterval ?? null
+
 
       alert(`Trader "${trader.name}" aggiornato con successo!`);
       this.loadTraders(); // 🔁 Ricarica la lista aggiornata
@@ -438,7 +432,7 @@ saveTrader(trader: Trader) {
 
   startListeningForBuy(trader: Trader) {
   // Verifica che sia stato selezionato un segnale
-    if (!trader.selectedSignal) {
+    if (!trader.selected_signal) {
       alert("Seleziona un segnale prima di avviare il listening!");
       return;
     }
@@ -448,18 +442,18 @@ saveTrader(trader: Trader) {
 
     if (trader.listening) {
       // ⭐ START LISTENING
-      console.log("Segnale selezionato:", trader.selectedSignal);
-      console.log("Intervallo custom:", trader.customSignalInterval);
-      console.log("Simbolo selezionato:", trader.selectedSymbol);
+      console.log("Segnale selezionato:", trader.selected_signal);
+      console.log("Intervallo custom:", trader.custom_signal_interval);
+      console.log("Simbolo selezionato:", trader.selected_symbol);
 
-      if (!trader.selectedSymbol) {
+      if (!trader.selected_symbol) {
         alert("Seleziona un simbolo prima di avviare il listening!");
         trader.listening = false;
         return;
       }
 
       // Passa anche il segnale selezionato al servizioo
-      this.traderService.startListening(trader, trader.selectedSignal).subscribe({
+      this.traderService.startListening(trader, trader.selected_signal).subscribe({
         next: (res: any) => {
           console.log("Polling started:", res);
         },
