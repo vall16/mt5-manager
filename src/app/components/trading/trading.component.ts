@@ -13,7 +13,7 @@ import { SymbolInfo, OrderRequest, Tick } from '../../models/mt5.models';
 })
 export class TradingComponent implements OnInit {
   symbols: SymbolInfo[] = [];
-  selectedSymbol: string = '';
+  selected_symbol: string = '';
   currentTick: Tick | null = null;
 
   orderForm = {
@@ -42,7 +42,7 @@ export class TradingComponent implements OnInit {
       next: (data) => {
         this.symbols = data.filter(s => s.tradable);
         if (this.symbols.length > 0) {
-          this.selectedSymbol = this.symbols[0].symbol;
+          this.selected_symbol = this.symbols[0].symbol;
           this.loadTick();
         }
         this.loading = false;
@@ -55,15 +55,15 @@ export class TradingComponent implements OnInit {
   }
 
   onSymbolChange() {
-    if (this.selectedSymbol) {
+    if (this.selected_symbol) {
       this.loadTick();
     }
   }
 
   loadTick() {
-    if (!this.selectedSymbol) return;
+    if (!this.selected_symbol) return;
 
-    this.mt5Service.getLastTick(this.selectedSymbol).subscribe({
+    this.mt5Service.getLastTick(this.selected_symbol).subscribe({
       next: (data) => {
         this.currentTick = data;
       },
@@ -81,13 +81,13 @@ export class TradingComponent implements OnInit {
   }
 
   executeBuy() {
-    if (!this.selectedSymbol) {
+    if (!this.selected_symbol) {
       this.showMessage('Please select a symbol', 'error');
       return;
     }
 
     const orderRequest: OrderRequest = {
-      symbol: this.selectedSymbol,
+      symbol: this.selected_symbol,
       lot: this.orderForm.lot,
       sl_point: this.orderForm.sl_point,
       tp_point: this.orderForm.tp_point,
@@ -114,13 +114,13 @@ export class TradingComponent implements OnInit {
   }
 
   executeSell() {
-    if (!this.selectedSymbol) {
+    if (!this.selected_symbol) {
       this.showMessage('Please select a symbol', 'error');
       return;
     }
 
     const orderRequest: OrderRequest = {
-      symbol: this.selectedSymbol,
+      symbol: this.selected_symbol,
       lot: this.orderForm.lot,
       sl_point: this.orderForm.sl_point,
       tp_point: this.orderForm.tp_point,
@@ -147,18 +147,18 @@ export class TradingComponent implements OnInit {
   }
 
   closeAllPositions() {
-    if (!this.selectedSymbol) {
+    if (!this.selected_symbol) {
       this.showMessage('Please select a symbol', 'error');
       return;
     }
 
-    if (!confirm(`Close all positions for ${this.selectedSymbol}?`)) {
+    if (!confirm(`Close all positions for ${this.selected_symbol}?`)) {
       return;
     }
 
     this.loading = true;
     this.mt5Service.closeAllPositions({
-      symbol: this.selectedSymbol,
+      symbol: this.selected_symbol,
       magic: this.orderForm.magic,
       deviation: this.orderForm.deviation
     }).subscribe({
@@ -188,7 +188,7 @@ export class TradingComponent implements OnInit {
 
   getSpreadPips(): number {
     if (!this.currentTick) return 0;
-    const symbolInfo = this.symbols.find(s => s.symbol === this.selectedSymbol);
+    const symbolInfo = this.symbols.find(s => s.symbol === this.selected_symbol);
     if (!symbolInfo) return 0;
     return (this.currentTick.ask - this.currentTick.bid) / symbolInfo.point;
   }
