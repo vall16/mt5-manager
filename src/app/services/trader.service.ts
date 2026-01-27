@@ -119,6 +119,7 @@ export class TraderService {
     tp?: number | null,
     tsl?: number | null,
     moltiplicatore?: number | null,
+    fix_lot?: number | null,
 
     // 🆕 nuovi parametri
     selected_signal?: string | null,
@@ -134,6 +135,7 @@ export class TraderService {
       tp: tp,
       tsl: tsl,
       moltiplicatore: moltiplicatore,
+      fix_lot: fix_lot,
 
       // 🆕 campi custom signal
       selected_signal: selected_signal,

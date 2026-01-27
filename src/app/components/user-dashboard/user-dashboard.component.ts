@@ -301,7 +301,8 @@ saveTrader(trader: Trader) {
     sl: trader.sl,
     tp: trader.tp,
     tsl: trader.tsl,
-    moltiplicatore: trader.moltiplicatore
+    moltiplicatore: trader.moltiplicatore,
+    fix_lot: trader.fix_lot
   });
   console.log('──────────────────────────────────────────');
 
@@ -317,6 +318,7 @@ saveTrader(trader: Trader) {
     trader.tp ?? null,
     trader.tsl ?? null,
     trader.moltiplicatore ?? null,
+    trader.fix_lot ?? null,
     trader.selected_signal ?? null,
     trader.custom_signal_interval ?? null,
     trader.selected_symbol ?? null
@@ -333,6 +335,7 @@ saveTrader(trader: Trader) {
       trader.tp = updatedTrader.tp;
       trader.tsl = updatedTrader.tsl;
       trader.moltiplicatore = updatedTrader.moltiplicatore;
+      trader.fix_lot = updatedTrader.fix_lot;
 
       // 🆕 NUOVI PARAMETRI
       trader.selected_signal =updatedTrader.selected_signal;
