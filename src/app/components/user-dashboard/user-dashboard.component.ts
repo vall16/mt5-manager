@@ -50,6 +50,7 @@ export class UserDashboardComponent implements OnInit {
 
   availableSignals = [
   { value: 'BASE', label: 'XAUUSD Base' },
+  { value: 'BASE_NOHOLD', label: 'XAUUSD Base NoHold' },
   { value: 'TRENDGUARD_XAU', label: 'XAUUSD Trend Guard' },
   { value: 'SUPER', label: 'XAUUSD Super' } // corrisponde a check_signal_super
 ];
