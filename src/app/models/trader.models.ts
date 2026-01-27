@@ -37,7 +37,7 @@ export interface Trader {
   tp?: number;                    // Take Profit
   tsl?: number;                   // Trailing Stop Loss
   moltiplicatore?: number;        // fattore di copia
-  fix_lot?: number;               // lotto fisso (opzionale)
+  fix_lot?: number;               // lotto fisso 
   created_at?: string;
   updated_at?: string;
   // copying?: boolean;  
