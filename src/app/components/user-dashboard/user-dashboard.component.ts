@@ -435,7 +435,7 @@ saveTrader(trader: Trader) {
 
 
   startListeningForBuy(trader: Trader) {
-  // Verifica che sia stato selezionato un segnale
+    // Verifica che sia stato selezionato un segnale
     if (!trader.selected_signal) {
       alert("Seleziona un segnale prima di avviare il listening!");
       return;
@@ -444,8 +444,22 @@ saveTrader(trader: Trader) {
     // Toggle ON/OFF
     trader.listening = !trader.listening;
 
+    // 🔹 recupero lo slave server reale, per trovare il broker
+    const slaveServer = this.servers.find(
+      s => s.id === trader.slave_server_id
+    );
+
+    if (!slaveServer) {
+      alert('❌ Slave server non trovato');
+      trader.listening = false;
+      return;
+    }
+    
+    trader.broker = slaveServer.server;
+    console.log("broker corrente:",slaveServer.server);
+
     if (trader.listening) {
-      // ⭐ START LISTENING
+      // ⭐ START LISTENING..
       console.log("Segnale selezionato:", trader.selected_signal);
       console.log("Intervallo custom:", trader.custom_signal_interval);
       console.log("Simbolo selezionato:", trader.selected_symbol);

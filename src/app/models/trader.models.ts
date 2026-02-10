@@ -40,6 +40,7 @@ export interface Trader {
   fix_lot?: number;               // lotto fisso 
   created_at?: string;
   updated_at?: string;
+  broker?: string;           // il broker corrente, preso dal server slave
   // copying?: boolean;  
 
   // 🔁 Campi locali (non nel DB)
