@@ -504,18 +504,6 @@ saveTrader(trader: Trader) {
     }
   }
 
-  // stopListening(trader: Trader) {
-  //   trader.listening = false;
-
-  //   trader.logs = trader.logs || [];
-  //   trader.logs.push("🔴 Listening stopped");
-
-  //   if (trader._listenInterval) {
-  //     clearInterval(trader._listenInterval);
-  //     trader._listenInterval = null;
-  //   }
-  // }
-
   // carico i simboli tradabii dallo slave
   onSlaveSelected(trader: Trader) {
     const slaveServer = this.servers.find(s => s.id === trader.slave_server_id);
