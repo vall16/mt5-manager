@@ -106,10 +106,13 @@ export class UserDashboardComponent implements OnInit {
     next: (tradersData: Trader[]) => {
       this.traders = tradersData;
 
-      // ✅ DEFAULT SIGNAL SEMPRE IL PRIMO
+      // ✅ DEFAULT SIGNAL SEMPRE IL PRIMO + carica simboli slave
       this.traders.forEach(trader => {
         if (!trader.selected_signal) {
           trader.selected_signal = this.availableSignals[0].value;
+        }
+        if (trader.slave_server_id) {
+          this.onSlaveSelected(trader);
         }
       });
 
