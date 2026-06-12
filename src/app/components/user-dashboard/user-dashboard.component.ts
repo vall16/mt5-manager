@@ -52,7 +52,9 @@ export class UserDashboardComponent implements OnInit {
   { value: 'BASE', label: 'XAUUSD Base' },
   { value: 'BASE_NOHOLD', label: 'XAUUSD Base NoHold' },
   { value: 'TRENDGUARD_XAU', label: 'XAUUSD Trend Guard' },
-  { value: 'SUPER', label: 'XAUUSD Super' } // corrisponde a check_signal_super
+  { value: 'SUPER', label: 'XAUUSD Super' },
+  { value: 'SUPER_USDJPY', label: 'USDJPY Super' },
+  { value: 'MSFT', label: 'MSFT M15' },
 ];
 
 
