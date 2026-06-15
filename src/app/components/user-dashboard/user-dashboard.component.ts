@@ -54,8 +54,9 @@ export class UserDashboardComponent implements OnInit {
   { value: 'TRENDGUARD_XAU', label: 'XAUUSD Trend Guard' },
   { value: 'SUPER', label: 'XAUUSD Super' },
   { value: 'SUPER_USDJPY', label: 'USDJPY Super' },
+  { value: 'GBPUSD', label: 'GBPUSD Super' },
   { value: 'MSFT', label: 'MSFT M15' },
-];
+  ];
 
 
 
