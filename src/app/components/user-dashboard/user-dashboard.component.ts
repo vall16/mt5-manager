@@ -55,7 +55,9 @@ export class UserDashboardComponent implements OnInit {
   { value: 'SUPER', label: 'XAUUSD Super' },
   { value: 'SUPER_USDJPY', label: 'USDJPY Super' },
   { value: 'GBPUSD', label: 'GBPUSD Super' },
+  { value: 'GBPJPY', label: 'GBPJPY Super' },
   { value: 'MSFT', label: 'MSFT M15' },
+  { value: 'NVDA', label: 'NVDA M15' },
   ];
 
 
