@@ -63,7 +63,12 @@
       <div *ngFor="let server of servers; let i = index" class="grid-row">
 
         <!-- SERVER -->
-        <div class="grid-cell">{{ server.server }}</div>
+        <div class="grid-cell">
+          <ng-container *ngIf="editingIndex !== i">{{ server.server }}</ng-container>
+          <ng-container *ngIf="editingIndex === i">
+            <input class="edit-input" [(ngModel)]="server.server">
+          </ng-container>
+        </div>
 
         <!-- ALIAS (EDIT) -->
         <div class="grid-cell">
