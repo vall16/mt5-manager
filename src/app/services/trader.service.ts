@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
 import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol, CheckServerResponse } from '../models/trader.models';
 import { environment } from '../../environments/environment';
@@ -56,8 +56,20 @@ export class TraderService {
       port: server.port
     };
 
-    // Tipizziamo il post così sappiamo esattamente cosa aspettarci (status, connected, ecc.)
     return this.http.post<CheckServerResponse>(`${this.apiUrl}/mt5/check-server`, body);
+  }
+
+  checkServerConnection(server: Server): Observable<{ serverId: number; connected: boolean }> {
+    if (!server.ip || !server.port) {
+      return of({ serverId: server.id!, connected: false });
+    }
+    return this.checkServer(server).pipe(
+      map(res => ({
+        serverId: server.id!,
+        connected: res.connected ?? false
+      })),
+      catchError(() => of({ serverId: server.id!, connected: false }))
+    );
   }
 
 

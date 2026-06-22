@@ -38,9 +38,16 @@
           <div class="drag-handle" cdkDragHandle>⠿</div>
           <div class="trader-info">
             <h4>{{ trader.name }}</h4>
-            <span class="trader-status" [class.active]="trader.status === 'active'" [class.inactive]="trader.status === 'inactive'">
-              {{ trader.status }}
-            </span>
+            <div class="status-row">
+              <span class="trader-status" [class.active]="trader.status === 'active'" [class.inactive]="trader.status === 'inactive'">
+                {{ trader.status }}
+              </span>
+              <span class="mt5-status" [class.connected]="isTraderConnected(trader)" [class.disconnected]="!isTraderConnected(trader)"
+                    [title]="isTraderConnected(trader) ? 'MT5 connected' : 'MT5 disconnected'">
+                <span class="mt5-dot"></span>
+                {{ isTraderConnected(trader) ? 'MT5 Online' : 'MT5 Offline' }}
+              </span>
+            </div>
           </div>
           <button class="delete-btn" (click)="deleteTrader(trader)">✕</button>
 

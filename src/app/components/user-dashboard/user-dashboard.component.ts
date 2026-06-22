@@ -47,6 +47,7 @@ export class UserDashboardComponent implements OnInit {
   error: string="";
   serverService: any;
   errorMessage: string | undefined;
+  serverConnected: { [serverId: number]: boolean } = {};
 
   availableSignals = [
   { value: 'BASE', label: 'XAUUSD Base' },
@@ -159,6 +160,8 @@ export class UserDashboardComponent implements OnInit {
       if (!tradersData.length) {
         console.warn('Nessun trader trovato.');
       }
+
+      this.checkAllServersConnection();
     },
     error: (err) => {
       // Qui non dovrebbe più arrivare nulla perché catchError intercetta tutto
@@ -466,6 +469,26 @@ saveTrader(trader: Trader) {
   return server ? server.server : 'Unknown';
 }
 
+  checkAllServersConnection() {
+    const uniqueSlaveIds = [...new Set(this.traders.map(t => t.slave_server_id).filter(id => id != null))];
+    uniqueSlaveIds.forEach(serverId => {
+      const server = this.servers.find(s => s.id === serverId);
+      if (!server) return;
+      this.traderService.checkServerConnection(server).subscribe({
+        next: (res) => {
+          this.serverConnected[res.serverId] = res.connected;
+        },
+        error: () => {
+          this.serverConnected[serverId!] = false;
+        }
+      });
+    });
+  }
+
+  isTraderConnected(trader: Trader): boolean {
+    if (!trader.slave_server_id) return false;
+    return this.serverConnected[trader.slave_server_id] ?? false;
+  }
 
   
   goToMT5Dashboard(trader: Trader) {
