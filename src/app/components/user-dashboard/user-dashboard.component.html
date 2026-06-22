@@ -31,10 +31,11 @@
 
     </div>
 
-    <div class="traders-grid">
-      <div class="trader-card" *ngFor="let trader of traders">
+    <div class="traders-grid" cdkDropList (cdkDropListDropped)="onDrop($event)">
+      <div class="trader-card" *ngFor="let trader of traders" cdkDrag>
 
         <div class="card-header">
+          <div class="drag-handle" cdkDragHandle>⠿</div>
           <div class="trader-info">
             <h4>{{ trader.name }}</h4>
             <span class="trader-status" [class.active]="trader.status === 'active'" [class.inactive]="trader.status === 'inactive'">
@@ -230,10 +231,6 @@
     </div>
   </div>
 </div>
-
-
-        </div>
-      </div>
       <!-- Nuova Card per aggiungere un trader -->
       <div class="trader-card add-trader-card">
         <div class="card-header">

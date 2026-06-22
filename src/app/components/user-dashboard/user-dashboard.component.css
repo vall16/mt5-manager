@@ -148,12 +148,50 @@
   border-radius: 12px;
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
+  transition: box-shadow 0.2s;
 }
 
 .trader-card:hover {
-  transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.cdk-drag-preview {
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+  transform: rotate(1deg);
+  opacity: 0.95;
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.3;
+  border: 2px dashed #667eea;
+  border-radius: 12px;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.traders-grid.cdk-drop-list-dragging .trader-card:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.drag-handle {
+  cursor: grab;
+  font-size: 20px;
+  color: #999;
+  padding: 4px;
+  user-select: none;
+  line-height: 1;
+  align-self: flex-start;
+  margin-right: 8px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
+
+.drag-handle:hover {
+  color: #667eea;
 }
 
 .card-header {
@@ -163,6 +201,11 @@
   margin-bottom: 16px;
   padding-bottom: 16px;
   border-bottom: 2px solid #f0f0f0;
+  gap: 8px;
+}
+
+.trader-info {
+  flex: 1;
 }
 
 .trader-info h4 {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-// import { EventEmitter, Output } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { AuthService } from '../../services/auth.service';
 import { TraderService } from '../../services/trader.service';
 import { NewTrader, Trader,BuyRequest } from '../../models/trader.models';
@@ -17,7 +17,7 @@ import { interval, Subscription } from 'rxjs';
 @Component({
   selector: 'app-user-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule,AddTraderModalComponent, ServersListComponent],
+  imports: [CommonModule, FormsModule, DragDropModule, AddTraderModalComponent, ServersListComponent],
   
   templateUrl: './user-dashboard.component.html',
   styleUrls: ['./user-dashboard.component.css']
@@ -72,10 +72,31 @@ export class UserDashboardComponent implements OnInit {
     private router: Router
   ) {}
 
+  private readonly ORDER_KEY = 'mt5pulse_trader_order';
+
   ngOnInit() {
 
     this.loadServersAndTraders();
 
+  }
+
+  onDrop(event: CdkDragDrop<Trader[]>) {
+    moveItemInArray(this.traders, event.previousIndex, event.currentIndex);
+    this.saveTraderOrder();
+  }
+
+  private loadTraderOrder(): number[] | null {
+    try {
+      const raw = localStorage.getItem(this.ORDER_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  }
+
+  private saveTraderOrder() {
+    try {
+      const ids = this.traders.filter(t => t.id != null).map(t => t.id);
+      localStorage.setItem(this.ORDER_KEY, JSON.stringify(ids));
+    } catch {}
   }
 
 
@@ -111,6 +132,19 @@ export class UserDashboardComponent implements OnInit {
   ).subscribe({
     next: (tradersData: Trader[]) => {
       this.traders = tradersData;
+
+      // 🔄 Applica ordinamento salvato (drag & drop)
+      const savedOrder = this.loadTraderOrder();
+      if (savedOrder) {
+        const map = new Map(this.traders.map(t => [t.id, t]));
+        const reordered: Trader[] = [];
+        for (const id of savedOrder) {
+          const t = map.get(id);
+          if (t) { reordered.push(t); map.delete(id); }
+        }
+        reordered.push(...map.values());
+        this.traders = reordered;
+      }
 
       // ✅ DEFAULT SIGNAL SEMPRE IL PRIMO + carica simboli slave
       this.traders.forEach(trader => {
