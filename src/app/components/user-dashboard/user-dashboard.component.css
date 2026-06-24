@@ -714,6 +714,45 @@
   margin-top: 6px;
 }
 
+.profit-tp-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #444;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.profit-tp-unit {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+}
+
+.log-box .signal-yellow {
+  color: #ffd700;
+  font-weight: 700;
+}
+
+.log-box .coin-red {
+  color: #ff4444;
+  font-weight: 700;
+}
+
 .small-error {
   font-size: 11px;     /* riduci il font */
   margin-top: 4px;

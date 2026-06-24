@@ -54,6 +54,10 @@ export interface Trader {
   logs?: string[];   
   listening?: boolean;
   _listenInterval?: any;   
+
+  // 🆕 Profit TP locale (non salvato in DB)
+  use_profit_tp?: boolean;
+  profit_tp_value?: number;
 }
 
 export interface NewTrader {

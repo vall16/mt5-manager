@@ -220,10 +220,23 @@
             <div class="error small-error" *ngIf="intervalCtrl2.invalid && intervalCtrl2.touched">
               Inserisci un numero valido (≥ 1 secondo)
             </div>
-          
-            <!-- <div *ngIf="signal">
-              🔹 Current Signal: {{ signal }}
-            </div> -->
+          </div>
+
+          <div class="profit-tp-row">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="trader.use_profit_tp" />
+              Close at profit
+            </label>
+            <input
+              type="number"
+              min="0.01"
+              step="0.01"
+              [(ngModel)]="trader.profit_tp_value"
+              class="interval-input"
+              placeholder="e.g. 3.0"
+              [disabled]="!trader.use_profit_tp"
+            />
+            <span class="profit-tp-unit">$</span>
           </div>
       </div>
         
