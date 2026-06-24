@@ -123,16 +123,16 @@
         </ng-container>
       </button>
       <div class="auto-copy-controls">
+        <label class="input-label">Copy frequency (seconds)</label>
         <input
           type="number"
           min="1"
           required
           [(ngModel)]="trader.copyInterval"
           #intervalCtrl="ngModel"
-          placeholder="Interval (sec)"
+          placeholder="e.g. 30"
           class="interval-input"
         />
-        <!--  Messaggio di validazione -->
         <div class="error small-error" *ngIf="intervalCtrl.invalid && intervalCtrl.touched">
           Inserisci un numero valido (≥ 1 secondo)
         </div>
@@ -195,6 +195,7 @@
 
 
           <div class="auto-copy-controls">
+            <label class="input-label">Signal frequency (seconds)</label>
             <input
               type="number"
               min="1"
@@ -202,10 +203,10 @@
               [(ngModel)]="trader.custom_signal_interval"
               #intervalCtrl2="ngModel"
               class="interval-input"
-              placeholder="Interval (sec)"
+              placeholder="e.g. 5"
             />
             <div></div>
-            <label>Symbols:</label>
+            <label class="input-label">Symbol:</label>
             <ng-container *ngIf="trader.id != null">
 
 
