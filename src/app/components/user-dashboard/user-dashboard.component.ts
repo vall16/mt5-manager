@@ -54,6 +54,7 @@ export class UserDashboardComponent implements OnInit {
   { value: 'BASE_NOHOLD', label: 'XAUUSD Base NoHold' },
   { value: 'TRENDGUARD_XAU', label: 'XAUUSD Trend Guard' },
   { value: 'SUPER', label: 'XAUUSD Super' },
+  { value: 'SUPER_PRO', label: 'XAUUSD Super Pro' },
   { value: 'ICHIMOKU', label: 'XAUUSD Ichimoku H1' },
   { value: 'SUPER_USDJPY', label: 'USDJPY Super' },
   { value: 'GBPUSD', label: 'GBPUSD Super' },
