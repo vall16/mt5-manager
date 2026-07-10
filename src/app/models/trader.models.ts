@@ -58,6 +58,9 @@ export interface Trader {
   // 🆕 Profit TP locale (non salvato in DB)
   use_profit_tp?: boolean;
   profit_tp_value?: number;
+
+  // 🆕 Blocco notturno (non salvato in DB)
+  block_night_trading?: boolean;
 }
 
 export interface NewTrader {
