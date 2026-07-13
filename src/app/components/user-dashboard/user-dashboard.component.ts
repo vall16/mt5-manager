@@ -42,12 +42,17 @@ export class UserDashboardComponent implements OnInit {
 
   showAddModal = false;
   showServersList = false;
+  showAnalyzeModal = false;
   selectedTrader: Trader | null = null;
   loading: boolean=false;
   error: string="";
   serverService: any;
   errorMessage: string | undefined;
   serverConnected: { [serverId: number]: boolean } = {};
+  analyzeTraderName = '';
+  analyzeLoading = false;
+  analyzeError = '';
+  analyzeResult: any = null;
 
   availableSignals = [
   { value: 'BASE', label: 'XAUUSD Base' },
@@ -439,6 +444,32 @@ saveTrader(trader: Trader) {
 
   closeServersList() {
     this.showServersList = false;
+  }
+
+  openAnalyze(trader: Trader) {
+    if (!trader.id) return;
+    this.analyzeTraderName = trader.name;
+    this.analyzeLoading = true;
+    this.analyzeError = '';
+    this.analyzeResult = null;
+    this.showAnalyzeModal = true;
+
+    this.traderService.analyzeTrader(trader.id).subscribe({
+      next: (res) => {
+        this.analyzeResult = res;
+        this.analyzeLoading = false;
+      },
+      error: (err) => {
+        this.analyzeError = err.error?.detail || 'Errore durante l\'analisi';
+        this.analyzeLoading = false;
+      }
+    });
+  }
+
+  closeAnalyze() {
+    this.showAnalyzeModal = false;
+    this.analyzeResult = null;
+    this.analyzeError = '';
   }
 
   // async onTraderAdded() {

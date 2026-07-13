@@ -101,6 +101,10 @@
       <div class="card-actions">
           <div class="card-actions">
             <button class="action-btn primary" (click)="saveTrader(trader)">💾 Save</button>
+            <button class="action-btn primary" (click)="openAnalyze(trader)" [disabled]="trader.analyzing">
+              <ng-container *ngIf="!trader.analyzing">🧠 Analyze</ng-container>
+              <ng-container *ngIf="trader.analyzing"><span class="button-spinner"></span> Analyzing...</ng-container>
+            </button>
           </div>
           
           <div class="card-actions">
@@ -329,5 +333,52 @@
   <div class="modal-content" (click)="$event.stopPropagation()">
     <!-- <app-servers-list (traderAdded)="onTraderAdded()" (cancel)="closeAddModal()"></app-servers-list> -->
      <app-servers-list></app-servers-list>
+  </div>
+</div>
+
+<div class="modal-overlay" *ngIf="showAnalyzeModal" (click)="closeAnalyze()">
+  <div class="modal-content analyze-modal" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h3>🧠 AI Analysis — {{ analyzeTraderName }}</h3>
+      <button class="delete-btn" (click)="closeAnalyze()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div *ngIf="analyzeLoading" class="analyze-loading">
+        <span class="button-spinner"></span>
+        <p>Analisi in corso... Gemini sta studiando i tuoi trade</p>
+      </div>
+      <div *ngIf="analyzeError" class="analyze-error">
+        <p>{{ analyzeError }}</p>
+      </div>
+      <div *ngIf="analyzeResult && !analyzeLoading">
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <span class="metric-value">{{ analyzeResult.metrics.win_rate }}%</span>
+            <span class="metric-label">Win Rate</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-value">${{ analyzeResult.metrics.total_profit }}</span>
+            <span class="metric-label">Profitto Totale</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-value">{{ analyzeResult.metrics.total_trades }}</span>
+            <span class="metric-label">Trade Totali</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-value">${{ analyzeResult.metrics.expectancy }}</span>
+            <span class="metric-label">Expectancy</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-value">{{ analyzeResult.metrics.recent_win_rate }}%</span>
+            <span class="metric-label">Win Rate (ultimi 20)</span>
+          </div>
+          <div class="metric-card">
+            <span class="metric-value">${{ analyzeResult.metrics.max_drawdown }}</span>
+            <span class="metric-label">Max Drawdown</span>
+          </div>
+        </div>
+        <div class="analysis-text">{{ analyzeResult.analysis }}</div>
+      </div>
+    </div>
   </div>
 </div>

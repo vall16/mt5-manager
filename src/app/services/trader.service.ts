@@ -189,6 +189,10 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/trade/stop_polling`, { trader_id: trader.id });
   }
 
+  analyzeTrader(traderId: number, limit: number = 100): Observable<any> {
+    return this.http.post(`${this.apiUrl}/db/analyze`, { trader_id: traderId, limit });
+  }
+
 
 
   getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {

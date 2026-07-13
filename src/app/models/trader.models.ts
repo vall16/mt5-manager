@@ -53,6 +53,7 @@ export interface Trader {
   copying?: boolean;
   logs?: string[];   
   listening?: boolean;
+  analyzing?: boolean;
   _listenInterval?: any;   
 
   // 🆕 Profit TP locale (non salvato in DB)
