@@ -189,8 +189,8 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/trade/stop_polling`, { trader_id: trader.id });
   }
 
-  analyzeTrader(traderId: number, limit: number = 100): Observable<any> {
-    return this.http.post(`${this.apiUrl}/db/analyze`, { trader_id: traderId, limit });
+  analyzeTrader(traderId: number, limit: number = 100, source: string = 'db', days: number = 30): Observable<any> {
+    return this.http.post(`${this.apiUrl}/db/analyze`, { trader_id: traderId, limit, source, days });
   }
 
 

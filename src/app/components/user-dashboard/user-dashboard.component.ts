@@ -53,6 +53,8 @@ export class UserDashboardComponent implements OnInit {
   analyzeLoading = false;
   analyzeError = '';
   analyzeResult: any = null;
+  analyzeSource: string = 'mt5';
+  analyzeDays: number = 30;
 
   availableSignals = [
   { value: 'BASE', label: 'XAUUSD Base' },
@@ -454,7 +456,7 @@ saveTrader(trader: Trader) {
     this.analyzeResult = null;
     this.showAnalyzeModal = true;
 
-    this.traderService.analyzeTrader(trader.id).subscribe({
+    this.traderService.analyzeTrader(trader.id, 100, this.analyzeSource, this.analyzeDays).subscribe({
       next: (res) => {
         this.analyzeResult = res;
         this.analyzeLoading = false;
