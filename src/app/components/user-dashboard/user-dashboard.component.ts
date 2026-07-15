@@ -456,7 +456,7 @@ saveTrader(trader: Trader) {
     this.analyzeResult = null;
     this.showAnalyzeModal = true;
 
-    this.traderService.analyzeTrader(trader.id, 100, this.analyzeSource, this.analyzeDays).subscribe({
+    this.traderService.analyzeTrader(trader.id, 1000, this.analyzeSource, this.analyzeDays).subscribe({
       next: (res) => {
         this.analyzeResult = res;
         this.analyzeLoading = false;
