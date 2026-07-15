@@ -351,6 +351,10 @@
   <div class="modal-content analyze-modal" (click)="$event.stopPropagation()">
     <div class="modal-header">
       <h3>🧠 AI Analysis — {{ analyzeTraderName }}</h3>
+      <span *ngIf="analyzeResult && analyzeResult.slave_ip" style="font-size:0.8rem; color:#666;">
+        Slave: {{ analyzeResult.slave_ip }}:{{ analyzeResult.slave_port }}
+        <span *ngIf="analyzeResult.mt5_login"> | Account: {{ analyzeResult.mt5_login }} ({{ analyzeResult.mt5_server }})</span>
+      </span>
       <button class="delete-btn" (click)="closeAnalyze()">✕</button>
     </div>
     <div class="modal-body">
