@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TraderService } from '../../services/trader.service';
@@ -44,7 +44,7 @@ interface BacktestResult {
   templateUrl: './backtest.component.html',
   styleUrls: ['./backtest.component.css']
 })
-export class BacktestComponent implements OnDestroy {
+export class BacktestComponent implements OnDestroy, OnInit {
   strategies = [
     'SUPER', 'SUPER_PRO', 'SUPER_USDJPY',
     'BASE', 'BASE_NOHOLD', 'TRENDGUARD', 'TRENDGUARD_XAU',
@@ -54,6 +54,9 @@ export class BacktestComponent implements OnDestroy {
   ];
 
   symbols = ['XAUUSD', 'EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDJPY', 'MSFT', 'NVDA'];
+
+  traders: any[] = [];
+  selectedTraderId: number | null = null;
 
   strategy = 'SUPER';
   symbol = 'XAUUSD';
@@ -69,16 +72,32 @@ export class BacktestComponent implements OnDestroy {
 
   constructor(private traderService: TraderService) {}
 
+  ngOnInit() {
+    this.traderService.loadTraders().subscribe({
+      next: (traders) => {
+        this.traders = traders;
+        if (traders.length === 1) {
+          this.selectedTraderId = traders[0].id;
+        }
+      }
+    });
+  }
+
   ngOnDestroy() {
     this.stopPolling();
   }
 
   runBacktest() {
+    if (!this.selectedTraderId) {
+      this.error = 'Seleziona un trader';
+      return;
+    }
+
     this.loading = true;
     this.error = '';
     this.result = null;
 
-    this.traderService.runBacktest(this.strategy, this.symbol, this.days, this.lot, this.balance).subscribe({
+    this.traderService.runBacktest(this.strategy, this.symbol, this.days, this.lot, this.balance, this.selectedTraderId).subscribe({
       next: (res) => {
         this.sessionId = res.session_id;
         this.startPolling();
