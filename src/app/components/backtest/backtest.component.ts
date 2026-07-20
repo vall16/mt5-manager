@@ -3,6 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TraderService } from '../../services/trader.service';
 
+interface BreakdownItem {
+  wins: number;
+  losses: number;
+  pnl: number;
+  win_rate: number;
+  total: number;
+  avg_pnl: number;
+}
+
 interface BacktestSummary {
   total_trades: number;
   wins: number;
@@ -17,6 +26,10 @@ interface BacktestSummary {
   avg_loss: number;
   win_loss_ratio: number;
   max_drawdown: number;
+  by_session: { [key: string]: BreakdownItem };
+  by_hour: { [key: number]: BreakdownItem };
+  by_day: { [key: string]: BreakdownItem };
+  by_direction: { [key: string]: BreakdownItem };
 }
 
 interface BacktestTrade {
@@ -68,6 +81,9 @@ export class BacktestComponent implements OnDestroy, OnInit {
   error = '';
   result: BacktestResult | null = null;
   sessionId: string | null = null;
+  progress = 0;
+  progressTrades = 0;
+  progressBalance = 0;
   private pollTimer: any = null;
 
   constructor(private traderService: TraderService) {}
@@ -96,6 +112,9 @@ export class BacktestComponent implements OnDestroy, OnInit {
     this.loading = true;
     this.error = '';
     this.result = null;
+    this.progress = 0;
+    this.progressTrades = 0;
+    this.progressBalance = 0;
 
     this.traderService.runBacktest(this.strategy, this.symbol, this.days, this.lot, this.balance, this.selectedTraderId).subscribe({
       next: (res) => {
@@ -126,8 +145,16 @@ export class BacktestComponent implements OnDestroy, OnInit {
       if (!this.sessionId) return;
       this.traderService.getBacktestStatus(this.sessionId).subscribe({
         next: (res) => {
-          if (res.status === 'done') {
-            this.result = res.result;
+          if (res.status === 'running') {
+            this.progress = res.progress || 0;
+            this.progressTrades = res.trades_count || 0;
+            this.progressBalance = res.balance || 0;
+          } else if (res.status === 'done') {
+            if (res.result?.error) {
+              this.error = res.result.error;
+            } else {
+              this.result = res.result;
+            }
             this.loading = false;
             this.stopPolling();
           } else if (res.status === 'error') {
@@ -155,5 +182,72 @@ export class BacktestComponent implements OnDestroy, OnInit {
       clearInterval(this.pollTimer);
       this.pollTimer = null;
     }
+  }
+
+  getSessionKeys(): string[] {
+    if (!this.result?.summary?.by_session) return [];
+    return ['ASIA', 'LONDON', 'NY-LON', 'NY', 'OFF'].filter(k => this.result!.summary.by_session[k]);
+  }
+
+  getDayKeys(): string[] {
+    if (!this.result?.summary?.by_day) return [];
+    const order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    return order.filter(k => this.result!.summary.by_day[k]);
+  }
+
+  getTopHours(): number[] {
+    if (!this.result?.summary?.by_hour) return [];
+    return Object.keys(this.result.summary.by_hour)
+      .map(Number)
+      .sort((a, b) => this.result!.summary.by_hour[b].pnl - this.result!.summary.by_hour[a].pnl)
+      .slice(0, 8);
+  }
+
+  exportCsv() {
+    if (!this.result || !this.result.trades.length) return;
+
+    const s = this.result.summary;
+    const r = this.result;
+    const lines: string[] = [];
+
+    lines.push('Strategy,Symbol,Days,Lot,Initial Balance');
+    lines.push(`${r.strategy},${r.symbol},${r.days},${r.lot},${r.initial_balance}`);
+    lines.push('');
+    lines.push('Total Trades,Wins,Losses,Win Rate,Gross Profit,Gross Loss,Net PnL,Final Balance,Return %,Avg Win,Avg Loss,Win/Loss Ratio,Max Drawdown');
+    lines.push(`${s.total_trades},${s.wins},${s.losses},${s.win_rate},${s.gross_profit},${s.gross_loss},${s.net_pnl},${s.final_balance},${s.return_pct},${s.avg_win},${s.avg_loss},${s.win_loss_ratio},${s.max_drawdown}`);
+    lines.push('');
+
+    if (s.by_session) {
+      lines.push('--- PER SESSIONE ---');
+      lines.push('Sessione,Trades,Wins,Losses,Win Rate,PnL,Avg PnL');
+      for (const k of Object.keys(s.by_session)) {
+        const v = s.by_session[k];
+        lines.push(`${k},${v.total},${v.wins},${v.losses},${v.win_rate},${v.pnl},${v.avg_pnl}`);
+      }
+      lines.push('');
+    }
+
+    if (s.by_direction) {
+      lines.push('--- PER DIREZIONE ---');
+      lines.push('Direzione,Trades,Wins,Losses,Win Rate,PnL,Avg PnL');
+      for (const k of Object.keys(s.by_direction)) {
+        const v = s.by_direction[k];
+        lines.push(`${k},${v.total},${v.wins},${v.losses},${v.win_rate},${v.pnl},${v.avg_pnl}`);
+      }
+      lines.push('');
+    }
+
+    lines.push('Time,Type,Exit,PnL,Balance');
+    for (const t of r.trades) {
+      lines.push(`${t.time},${t.type},${t.exit},${t.pnl},${t.balance}`);
+    }
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `backtest_${r.strategy}_${r.symbol}_${r.days}d.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 }

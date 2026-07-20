@@ -51,8 +51,14 @@
   <div class="error-box" *ngIf="error">{{ error }}</div>
 
   <div class="loading-box" *ngIf="loading">
-    <div class="spinner"></div>
-    <span>Running backtest...</span>
+    <div class="progress-container">
+      <div class="progress-bar" [style.width.%]="progress"></div>
+    </div>
+    <div class="progress-info">
+      <span>{{ progress }}%</span>
+      <span>Trades: {{ progressTrades }}</span>
+      <span>Balance: ${{ progressBalance | number:'1.2-2' }}</span>
+    </div>
   </div>
 
   <div class="results" *ngIf="result">
@@ -121,6 +127,114 @@
         <div class="detail-value" [class.positive]="result.summary.final_balance >= result.initial_balance" [class.negative]="result.summary.final_balance < result.initial_balance">
           ${{ result.summary.final_balance | number:'1.2-2' }}
         </div>
+      </div>
+    </div>
+
+    <div class="export-row">
+      <button class="export-btn" (click)="exportCsv()">Export CSV</button>
+    </div>
+
+    <div class="breakdowns" *ngIf="result.summary.by_session">
+      <div class="breakdown-section">
+        <h3>Per Sessione</h3>
+        <table class="breakdown-table">
+          <thead>
+            <tr><th>Sessione</th><th>Trades</th><th>Wins</th><th>Losses</th><th>Win Rate</th><th>PnL</th><th>Avg PnL</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let s of getSessionKeys()">
+              <td class="session-label">{{ s }}</td>
+              <td>{{ result.summary.by_session[s].total }}</td>
+              <td class="positive">{{ result.summary.by_session[s].wins }}</td>
+              <td class="negative">{{ result.summary.by_session[s].losses }}</td>
+              <td [class.positive]="result.summary.by_session[s].win_rate >= 50" [class.negative]="result.summary.by_session[s].win_rate < 50">
+                {{ result.summary.by_session[s].win_rate }}%
+              </td>
+              <td [class.positive]="result.summary.by_session[s].pnl >= 0" [class.negative]="result.summary.by_session[s].pnl < 0">
+                ${{ result.summary.by_session[s].pnl | number:'1.2-2' }}
+              </td>
+              <td [class.positive]="result.summary.by_session[s].avg_pnl >= 0" [class.negative]="result.summary.by_session[s].avg_pnl < 0">
+                ${{ result.summary.by_session[s].avg_pnl | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="breakdown-section">
+        <h3>Per Giorno</h3>
+        <table class="breakdown-table">
+          <thead>
+            <tr><th>Giorno</th><th>Trades</th><th>Wins</th><th>Losses</th><th>Win Rate</th><th>PnL</th><th>Avg PnL</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of getDayKeys()">
+              <td>{{ d }}</td>
+              <td>{{ result.summary.by_day[d].total }}</td>
+              <td class="positive">{{ result.summary.by_day[d].wins }}</td>
+              <td class="negative">{{ result.summary.by_day[d].losses }}</td>
+              <td [class.positive]="result.summary.by_day[d].win_rate >= 50" [class.negative]="result.summary.by_day[d].win_rate < 50">
+                {{ result.summary.by_day[d].win_rate }}%
+              </td>
+              <td [class.positive]="result.summary.by_day[d].pnl >= 0" [class.negative]="result.summary.by_day[d].pnl < 0">
+                ${{ result.summary.by_day[d].pnl | number:'1.2-2' }}
+              </td>
+              <td [class.positive]="result.summary.by_day[d].avg_pnl >= 0" [class.negative]="result.summary.by_day[d].avg_pnl < 0">
+                ${{ result.summary.by_day[d].avg_pnl | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="breakdown-section">
+        <h3>Per Direzione</h3>
+        <table class="breakdown-table">
+          <thead>
+            <tr><th>Direzione</th><th>Trades</th><th>Wins</th><th>Losses</th><th>Win Rate</th><th>PnL</th><th>Avg PnL</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of ['BUY', 'SELL']">
+              <td>
+                <span class="trade-type" [ngClass]="d === 'BUY' ? 'type-buy' : 'type-sell'">{{ d }}</span>
+              </td>
+              <td>{{ result.summary.by_direction[d].total }}</td>
+              <td class="positive">{{ result.summary.by_direction[d].wins }}</td>
+              <td class="negative">{{ result.summary.by_direction[d].losses }}</td>
+              <td [class.positive]="result.summary.by_direction[d].win_rate >= 50" [class.negative]="result.summary.by_direction[d].win_rate < 50">
+                {{ result.summary.by_direction[d].win_rate }}%
+              </td>
+              <td [class.positive]="result.summary.by_direction[d].pnl >= 0" [class.negative]="result.summary.by_direction[d].pnl < 0">
+                ${{ result.summary.by_direction[d].pnl | number:'1.2-2' }}
+              </td>
+              <td [class.positive]="result.summary.by_direction[d].avg_pnl >= 0" [class.negative]="result.summary.by_direction[d].avg_pnl < 0">
+                ${{ result.summary.by_direction[d].avg_pnl | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="breakdown-section">
+        <h3>Per Ora (migliori)</h3>
+        <table class="breakdown-table">
+          <thead>
+            <tr><th>Ora</th><th>Trades</th><th>Wins</th><th>Win Rate</th><th>PnL</th></tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let h of getTopHours()">
+              <td>{{ h }}:00</td>
+              <td>{{ result.summary.by_hour[h].total }}</td>
+              <td class="positive">{{ result.summary.by_hour[h].wins }}</td>
+              <td [class.positive]="result.summary.by_hour[h].win_rate >= 50" [class.negative]="result.summary.by_hour[h].win_rate < 50">
+                {{ result.summary.by_hour[h].win_rate }}%
+              </td>
+              <td [class.positive]="result.summary.by_hour[h].pnl >= 0" [class.negative]="result.summary.by_hour[h].pnl < 0">
+                ${{ result.summary.by_hour[h].pnl | number:'1.2-2' }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
 
