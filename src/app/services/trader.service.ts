@@ -193,8 +193,8 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/db/analyze`, { trader_id: traderId, limit, source, days });
   }
 
-  runBacktest(strategy: string, symbol: string, days: number, lot: number, balance: number, traderId: number): Observable<any> {
-    return this.http.post(`${this.apiUrl}/db/backtest`, { strategy, symbol, days, lot, balance, trader_id: traderId });
+  runBacktest(strategy: string, symbol: string, days: number, lot: number, balance: number, traderId: number, direction: string = 'both'): Observable<any> {
+    return this.http.post(`${this.apiUrl}/db/backtest`, { strategy, symbol, days, lot, balance, trader_id: traderId, direction });
   }
 
   getBacktestStatus(sessionId: string): Observable<any> {

@@ -37,6 +37,14 @@
         <label>Balance ($)</label>
         <input type="number" [(ngModel)]="balance" min="100" step="100" class="form-control" />
       </div>
+      <div class="form-group">
+        <label>Direction</label>
+        <select [(ngModel)]="direction" class="form-control">
+          <option value="both">Buy & Sell</option>
+          <option value="buy">Buy only</option>
+          <option value="sell">Sell only</option>
+        </select>
+      </div>
       <div class="form-group form-group-btn">
         <button class="run-btn" (click)="runBacktest()" [disabled]="loading || !selectedTraderId" *ngIf="!loading">
           Run Backtest

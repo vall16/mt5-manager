@@ -77,6 +77,7 @@ export class BacktestComponent implements OnDestroy, OnInit {
   days = 30;
   lot = 0.01;
   balance = 10000;
+  direction = 'both';
 
   loading = false;
   error = '';
@@ -124,7 +125,7 @@ export class BacktestComponent implements OnDestroy, OnInit {
     this.progressTrades = 0;
     this.progressBalance = 0;
 
-    this.traderService.runBacktest(this.strategy, this.symbol, this.days, this.lot, this.balance, this.selectedTraderId).subscribe({
+    this.traderService.runBacktest(this.strategy, this.symbol, this.days, this.lot, this.balance, this.selectedTraderId, this.direction).subscribe({
       next: (res) => {
         this.sessionId = res.session_id;
         this.startPolling();
