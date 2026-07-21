@@ -78,6 +78,10 @@
         <div class="summary-value">{{ result.summary.win_rate }}%</div>
       </div>
       <div class="summary-card">
+        <div class="summary-label">Trades/Giorno</div>
+        <div class="summary-value">{{ result.summary.trades_per_day }}</div>
+      </div>
+      <div class="summary-card">
         <div class="summary-label">Net PnL</div>
         <div class="summary-value" [class.positive]="result.summary.net_pnl >= 0" [class.negative]="result.summary.net_pnl < 0">
           ${{ result.summary.net_pnl | number:'1.2-2' }}

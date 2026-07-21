@@ -17,6 +17,7 @@ interface BacktestSummary {
   wins: number;
   losses: number;
   win_rate: number;
+  trades_per_day: number;
   gross_profit: number;
   gross_loss: number;
   net_pnl: number;
