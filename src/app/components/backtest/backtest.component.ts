@@ -89,6 +89,9 @@ export class BacktestComponent implements OnDestroy, OnInit {
   traderName = '';
   traderLogin = '';
   traderServer = '';
+  aiAnalysis = '';
+  aiLoading = false;
+  aiError = '';
   private pollTimer: any = null;
 
   constructor(private traderService: TraderService) {}
@@ -140,6 +143,27 @@ export class BacktestComponent implements OnDestroy, OnInit {
         this.error = 'Backtest cancelled';
         this.loading = false;
         this.stopPolling();
+      }
+    });
+  }
+
+  analyzeWithAI() {
+    if (!this.sessionId) return;
+    this.aiLoading = true;
+    this.aiError = '';
+    this.aiAnalysis = '';
+    this.traderService.analyzeBacktest(this.sessionId).subscribe({
+      next: (res) => {
+        if (res.error) {
+          this.aiError = res.error;
+        } else {
+          this.aiAnalysis = res.analysis;
+        }
+        this.aiLoading = false;
+      },
+      error: (err) => {
+        this.aiError = err.error?.error || 'Errore durante analisi AI';
+        this.aiLoading = false;
       }
     });
   }

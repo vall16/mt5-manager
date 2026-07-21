@@ -142,6 +142,21 @@
 
     <div class="export-row">
       <button class="export-btn" (click)="exportCsv()">Export CSV</button>
+      <button class="ai-btn" (click)="analyzeWithAI()" [disabled]="aiLoading" *ngIf="!aiAnalysis">
+        {{ aiLoading ? 'Analisi in corso...' : 'Analizza con AI' }}
+      </button>
+    </div>
+
+    <div class="ai-loading" *ngIf="aiLoading">
+      <div class="ai-spinner"></div>
+      <span>L'AI sta analizzando i risultati del backtest...</span>
+    </div>
+
+    <div class="ai-error" *ngIf="aiError">{{ aiError }}</div>
+
+    <div class="ai-analysis" *ngIf="aiAnalysis">
+      <h3>Analisi AI</h3>
+      <div class="ai-content">{{ aiAnalysis }}</div>
     </div>
 
     <div class="breakdowns" *ngIf="result.summary.by_session">

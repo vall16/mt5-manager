@@ -205,6 +205,10 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/db/backtest/${sessionId}/cancel`, {});
   }
 
+  analyzeBacktest(sessionId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/db/backtest/${sessionId}/analyze`, {});
+  }
+
 
 
   getSlaveSymbols(slaveApiUrl: string): Observable<{ symbols: SlaveSymbol[] }> {
