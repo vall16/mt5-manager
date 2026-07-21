@@ -67,7 +67,7 @@ export class BacktestComponent implements OnDestroy, OnInit {
     'GBPUSD', 'GBPJPY', 'AUDJPY'
   ];
 
-  symbols = ['XAUUSD', 'EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDJPY', 'MSFT.NAS', 'NVDA.NAS'];
+  symbols = ['XAUUSD', 'EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDJPY', 'MSFT', 'MSFT.NAS', 'NVDA', 'NVDA.NAS'];
 
   traders: any[] = [];
   selectedTraderId: number | null = null;
