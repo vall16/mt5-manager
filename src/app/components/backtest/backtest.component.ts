@@ -84,6 +84,10 @@ export class BacktestComponent implements OnDestroy, OnInit {
   progress = 0;
   progressTrades = 0;
   progressBalance = 0;
+  mt5Url = '';
+  traderName = '';
+  traderLogin = '';
+  traderServer = '';
   private pollTimer: any = null;
 
   constructor(private traderService: TraderService) {}
@@ -145,6 +149,10 @@ export class BacktestComponent implements OnDestroy, OnInit {
       if (!this.sessionId) return;
       this.traderService.getBacktestStatus(this.sessionId).subscribe({
         next: (res) => {
+          this.mt5Url = res.mt5_url || this.mt5Url;
+          this.traderName = res.trader_name || this.traderName;
+          this.traderLogin = res.trader_login || this.traderLogin;
+          this.traderServer = res.trader_server || this.traderServer;
           if (res.status === 'running') {
             this.progress = res.progress || 0;
             this.progressTrades = res.trades_count || 0;

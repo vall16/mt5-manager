@@ -50,6 +50,12 @@
 
   <div class="error-box" *ngIf="error">{{ error }}</div>
 
+  <div class="mt5-info" *ngIf="mt5Url">
+    <span class="mt5-info-item"><strong>MT5:</strong> {{ mt5Url }}</span>
+    <span class="mt5-info-item"><strong>Account:</strong> {{ traderLogin }} ({{ traderServer }})</span>
+    <span class="mt5-info-item"><strong>Trader:</strong> {{ traderName }}</span>
+  </div>
+
   <div class="loading-box" *ngIf="loading">
     <div class="progress-container">
       <div class="progress-bar" [style.width.%]="progress"></div>

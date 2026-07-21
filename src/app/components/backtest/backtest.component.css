@@ -151,6 +151,21 @@
   font-size: 14px;
 }
 
+.mt5-info {
+  display: flex;
+  gap: 24px;
+  background: #f0f4ff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  margin-bottom: 24px;
+  font-size: 13px;
+  color: #333;
+}
+
+.mt5-info-item strong {
+  color: #0056b3;
+}
+
 .summary-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
