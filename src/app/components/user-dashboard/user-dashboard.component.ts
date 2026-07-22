@@ -185,7 +185,7 @@ export class UserDashboardComponent implements OnInit {
 
     this.traderService.loadTraders().subscribe({
       next: (res: Trader[]) => {
-        this.traders = res;
+        this.traders = res.map(t => ({ ...t, direction_filter: t.direction_filter || 'both' }));
         this.loading = false;
       },
       error: (err) => {

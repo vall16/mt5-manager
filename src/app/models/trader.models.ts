@@ -62,6 +62,9 @@ export interface Trader {
 
   // 🆕 Blocco notturno (non salvato in DB)
   block_night_trading?: boolean;
+
+  // 🆕 Direction filter (buy/sell/both)
+  direction_filter?: string;
 }
 
 export interface NewTrader {
