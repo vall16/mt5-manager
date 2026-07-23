@@ -254,6 +254,27 @@ export class TraderService {
     );
 }
 
+  // ── Adaptive Agent ──
+
+  startAdaptive(traderId: number, strategyName: string, symbol: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/adaptive/start`, {
+      trader_id: traderId,
+      strategy_name: strategyName,
+      symbol: symbol,
+    });
+  }
+
+  stopAdaptive(traderId: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/adaptive/stop`, { trader_id: traderId });
+  }
+
+  getAdaptiveStatus(traderId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/adaptive/status/${traderId}`);
+  }
+
+  getAdaptiveStats(traderId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/adaptive/stats/${traderId}`);
+  }
 
 }
 

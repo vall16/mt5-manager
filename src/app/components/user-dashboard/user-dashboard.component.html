@@ -266,6 +266,14 @@
               🌙 Blocco notturno (00:00-05:00)
             </label>
           </div>
+
+          <div class="profit-tp-row">
+            <label class="checkbox-label">
+              <input type="checkbox" [(ngModel)]="trader.adaptive_enabled"
+                     (change)="toggleAdaptive(trader)" />
+              🧬 Adaptive SL/TP
+            </label>
+          </div>
       </div>
         
     

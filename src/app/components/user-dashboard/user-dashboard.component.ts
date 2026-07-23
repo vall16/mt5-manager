@@ -530,6 +530,33 @@ saveTrader(trader: Trader) {
     this.router.navigate(['/dashboard'], { state: { trader } });
   }
 
+  toggleAdaptive(trader: Trader) {
+    if (!trader.id) return;
+
+    if (trader.adaptive_enabled) {
+      const strategy = trader.selected_signal || 'SUPER';
+      const symbol = trader.selected_symbol || 'XAUUSD';
+      this.traderService.startAdaptive(trader.id, strategy, symbol).subscribe({
+        next: (res: any) => {
+          console.log(`🧬 Adaptive agent avviato per ${trader.name}:`, res);
+        },
+        error: (err: any) => {
+          console.error(`❌ Errore avvio adaptive per ${trader.name}:`, err);
+          trader.adaptive_enabled = false;
+        }
+      });
+    } else {
+      this.traderService.stopAdaptive(trader.id).subscribe({
+        next: (res: any) => {
+          console.log(`🧬 Adaptive agent fermato per ${trader.name}:`, res);
+        },
+        error: (err: any) => {
+          console.error(`❌ Errore stop adaptive per ${trader.name}:`, err);
+        }
+      });
+    }
+  }
+
   logout() {
     this.authService.logout();
   }
