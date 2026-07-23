@@ -66,6 +66,9 @@ export interface Trader {
   // 🆕 Direction filter (buy/sell/both)
   direction_filter?: string;
 
+  // 🆕 Session filter (ASIA,LONDON,NY-LON,NY,OFF)
+  sessions_filter?: string;
+
   // 🆕 Adaptive SL/TP (non salvato in DB)
   adaptive_enabled?: boolean;
 }

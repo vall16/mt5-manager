@@ -71,6 +71,54 @@ export class UserDashboardComponent implements OnInit {
   { value: 'NVDA', label: 'NVDA M15' },
   ];
 
+  availableSessions = [
+    { value: 'ASIA', label: 'ASIA', hours: '01:00 - 08:59' },
+    { value: 'LONDON', label: 'LONDON', hours: '09:00 - 13:59' },
+    { value: 'NY-LON', label: 'NY-LON', hours: '14:00 - 17:29' },
+    { value: 'NY', label: 'NY', hours: '17:30 - 21:59' },
+    { value: 'OFF', label: 'OFF', hours: '22:00 - 00:59' },
+  ];
+
+  sessionsDropdownOpen: { [traderId: number]: boolean } = {};
+
+  toggleSessionsDropdown(traderId: number) {
+    this.sessionsDropdownOpen[traderId] = !this.sessionsDropdownOpen[traderId];
+  }
+
+  toggleSession(trader: Trader, sessionValue: string) {
+    const current = this.getSessionsList(trader);
+    const idx = current.indexOf(sessionValue);
+    if (idx >= 0) {
+      current.splice(idx, 1);
+    } else {
+      current.push(sessionValue);
+    }
+    trader.sessions_filter = current.join(',');
+  }
+
+  isSessionSelected(trader: Trader, sessionValue: string): boolean {
+    return this.getSessionsList(trader).includes(sessionValue);
+  }
+
+  getSessionsList(trader: Trader): string[] {
+    if (!trader.sessions_filter) {
+      return ['ASIA', 'LONDON', 'NY-LON', 'NY', 'OFF'];
+    }
+    return trader.sessions_filter.split(',').map(s => s.trim()).filter(s => s);
+  }
+
+  getSessionsLabel(trader: Trader): string {
+    const list = this.getSessionsList(trader);
+    if (list.length === 5) return 'All';
+    if (list.length === 0) return 'None';
+    if (list.length <= 2) return list.join(', ');
+    return list.length + ' sessions';
+  }
+
+  closeSessionsDropdown(traderId: number) {
+    this.sessionsDropdownOpen[traderId] = false;
+  }
+
 
 
   // @Output() serverAdded = new EventEmitter<void>(); // <=== AGGIUNTO
@@ -160,6 +208,9 @@ export class UserDashboardComponent implements OnInit {
       this.traders.forEach(trader => {
         if (!trader.selected_signal) {
           trader.selected_signal = this.availableSignals[0].value;
+        }
+        if (!trader.sessions_filter) {
+          trader.sessions_filter = 'ASIA,LONDON,NY-LON,NY,OFF';
         }
         if (trader.slave_server_id) {
           this.onSlaveSelected(trader);
@@ -376,7 +427,8 @@ saveTrader(trader: Trader) {
     trader.fix_lot ?? null,
     trader.selected_signal ?? null,
     trader.custom_signal_interval ?? null,
-    trader.selected_symbol ?? null
+    trader.selected_symbol ?? null,
+    trader.sessions_filter ?? null
 
 
   ).subscribe({
@@ -396,6 +448,7 @@ saveTrader(trader: Trader) {
       trader.selected_signal =updatedTrader.selected_signal;
       trader.custom_signal_interval = updatedTrader.custom_signal_interval;
       trader.selected_symbol =updatedTrader.selected_symbol;
+      trader.sessions_filter = updatedTrader.sessions_filter;
       // trader.copyInterval ?? null
 
 

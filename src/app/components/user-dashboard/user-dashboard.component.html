@@ -212,6 +212,19 @@
               <option value="sell">Sell only</option>
             </select>
 
+            <div class="sessions-dropdown-container">
+              <button class="sessions-dropdown-btn" (click)="toggleSessionsDropdown(trader.id)" (blur)="closeSessionsDropdown(trader.id)">
+                {{ getSessionsLabel(trader) }} ▾
+              </button>
+              <div class="sessions-dropdown-menu" *ngIf="sessionsDropdownOpen[trader.id]">
+                <label *ngFor="let s of availableSessions" class="sessions-dropdown-item" (mousedown)="$event.preventDefault(); toggleSession(trader, s.value)">
+                  <input type="checkbox" [checked]="isSessionSelected(trader, s.value)" (change)="$event.stopPropagation()" />
+                  <span class="session-item-label">{{ s.label }}</span>
+                  <span class="session-item-hours">{{ s.hours }}</span>
+                </label>
+              </div>
+            </div>
+
           
 
 
