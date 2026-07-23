@@ -223,6 +223,17 @@ export class BacktestComponent implements OnDestroy, OnInit {
     return ['ASIA', 'LONDON', 'NY-LON', 'NY', 'OFF'].filter(k => this.result!.summary.by_session[k]);
   }
 
+  getSessionHours(session: string): string {
+    const hours: { [key: string]: string } = {
+      'ASIA': '01:00 - 08:59',
+      'LONDON': '09:00 - 13:59',
+      'NY-LON': '14:00 - 17:29',
+      'NY': '17:30 - 21:59',
+      'OFF': '22:00 - 00:59'
+    };
+    return hours[session] || '';
+  }
+
   getDayKeys(): string[] {
     if (!this.result?.summary?.by_day) return [];
     const order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];

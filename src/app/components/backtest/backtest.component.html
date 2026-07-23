@@ -176,7 +176,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let s of getSessionKeys()">
-              <td class="session-label">{{ s }}</td>
+              <td class="session-label">{{ s }} <span class="session-hours">({{ getSessionHours(s) }})</span></td>
               <td>{{ result.summary.by_session[s].total }}</td>
               <td class="positive">{{ result.summary.by_session[s].wins }}</td>
               <td class="negative">{{ result.summary.by_session[s].losses }}</td>

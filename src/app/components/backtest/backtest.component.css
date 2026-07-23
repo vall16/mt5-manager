@@ -489,6 +489,12 @@
   font-weight: 600;
 }
 
+.session-hours {
+  font-weight: 400;
+  font-size: 12px;
+  color: #888;
+}
+
 @media (max-width: 768px) {
   .config-grid {
     grid-template-columns: 1fr 1fr;
