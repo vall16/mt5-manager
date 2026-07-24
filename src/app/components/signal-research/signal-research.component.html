@@ -16,12 +16,6 @@
           </select>
         </div>
         <div class="form-group">
-          <label>Timeframe</label>
-          <select [(ngModel)]="config.timeframe" class="form-control">
-            <option *ngFor="let tf of timeframes" [value]="tf">{{ tf }}</option>
-          </select>
-        </div>
-        <div class="form-group">
           <label>Days</label>
           <input type="number" [(ngModel)]="config.days" min="7" max="365" class="form-control" />
         </div>
@@ -68,16 +62,23 @@
 
     <div class="config-section">
       <h3>Strategie</h3>
+      <div class="tf-filter-row">
+        <span class="tf-filter-label">Filtra per timeframe:</span>
+        <button class="tf-chip" [class.active]="tfFilter === ''" (click)="tfFilter = ''">Tutti</button>
+        <button class="tf-chip" [class.active]="tfFilter === 'M5'" (click)="tfFilter = 'M5'">M5</button>
+        <button class="tf-chip" [class.active]="tfFilter === 'M15'" (click)="tfFilter = 'M15'">M15</button>
+        <button class="tf-chip" [class.active]="tfFilter === 'M1'" (click)="tfFilter = 'M1'">M1</button>
+      </div>
       <div class="strategy-chips">
-        <button *ngFor="let s of allStrategies"
+        <button *ngFor="let s of filteredStrategies"
           class="strategy-chip"
           [class.selected]="isStrategySelected(s)"
           (click)="toggleStrategy(s)">
-          {{ s }}
+          {{ s }} <span class="chip-tf">{{ strategyTimeframes[s] }}</span>
         </button>
       </div>
       <div class="combo-count">
-        {{ getComboCount() }} combinazioni per strategia
+        {{ selectedStrategies.length }} strategie selezionate · {{ getComboCount() }} combinazioni per strategia
       </div>
     </div>
 

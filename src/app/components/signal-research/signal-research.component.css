@@ -85,6 +85,53 @@
   border-color: #667eea;
 }
 
+.tf-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tf-filter-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 500;
+}
+
+.tf-chip {
+  padding: 4px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  background: white;
+  font-size: 11px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tf-chip:hover {
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.tf-chip.active {
+  background: #667eea;
+  color: white;
+  border-color: #667eea;
+}
+
+.chip-tf {
+  font-size: 10px;
+  font-weight: 400;
+  color: #888;
+  margin-left: 4px;
+}
+
+.strategy-chip.selected .chip-tf {
+  color: rgba(255, 255, 255, 0.7);
+}
+
 .strategy-chips {
   display: flex;
   flex-wrap: wrap;

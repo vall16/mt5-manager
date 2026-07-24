@@ -48,16 +48,32 @@ interface BacktestTrade {
 })
 export class SignalResearchComponent implements OnInit {
   symbols = ['XAUUSD', 'EURUSD', 'GBPUSD', 'USDJPY', 'GBPJPY', 'AUDJPY', 'MSFT', 'MSFT.NAS', 'NVDA', 'NVDA.NAS'];
-  timeframes = ['M1', 'M5', 'M15', 'M30', 'H1', 'H4', 'D1'];
-  
-  allStrategies = [
-    'SUPER', 'SUPER_PRO', 'SUPER_USDJPY',
-    'BASE', 'BASE_NOHOLD', 'TRENDGUARD', 'TRENDGUARD_XAU',
-    'ICHIMOKU', 'EURUSD_NOHOLD',
-    'MSFT', 'NVDA',
-    'GBPUSD', 'GBPJPY', 'AUDJPY'
-  ];
+
+  strategyTimeframes: { [key: string]: string } = {
+    'SUPER': 'M1+M5+M15',
+    'SUPER_PRO': 'M1+M5+M15',
+    'SUPER_USDJPY': 'M1+M5+M15',
+    'BASE': 'M5',
+    'BASE_NOHOLD': 'M5',
+    'TRENDGUARD': 'M1+M5+M15',
+    'TRENDGUARD_XAU': 'M1+M5+M15',
+    'ICHIMOKU': 'M1+M5+M15+H1',
+    'EURUSD_NOHOLD': 'M5',
+    'MSFT': 'M1+M5+M15',
+    'NVDA': 'M15',
+    'GBPUSD': 'M5',
+    'GBPJPY': 'M5',
+    'AUDJPY': 'M5',
+  };
+
+  allStrategies = Object.keys(this.strategyTimeframes);
   selectedStrategies: string[] = [];
+  tfFilter = '';
+
+  get filteredStrategies(): string[] {
+    if (!this.tfFilter) return this.allStrategies;
+    return this.allStrategies.filter(s => this.strategyTimeframes[s].includes(this.tfFilter));
+  }
 
   config: ResearchConfig = {
     symbol: 'NVDA',
@@ -212,9 +228,17 @@ export class SignalResearchComponent implements OnInit {
   }
 
   getComboCount(): number {
-    const slCount = Math.floor((this.config.sl_max - this.config.sl_min) / this.config.sl_step) + 1;
-    const tpCount = Math.floor((this.config.tp_max - this.config.tp_min) / this.config.tp_step) + 1;
-    return slCount * tpCount;
+    const slValues = [];
+    const tpValues = [];
+    for (let sl = this.config.sl_min; sl <= this.config.sl_max; sl += this.config.sl_step) slValues.push(sl);
+    for (let tp = this.config.tp_min; tp <= this.config.tp_max; tp += this.config.tp_step) tpValues.push(tp);
+    let count = 0;
+    for (const sl of slValues) {
+      for (const tp of tpValues) {
+        if (tp > sl) count++;
+      }
+    }
+    return count;
   }
 
   exportCsv() {
