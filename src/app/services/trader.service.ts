@@ -278,6 +278,20 @@ export class TraderService {
     return this.http.get(`${this.apiUrl}/adaptive/stats/${traderId}`);
   }
 
+  // ── Signal Research ──
+
+  runSignalResearch(config: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/signal-research/run`, config);
+  }
+
+  getSignalResearchStatus(sessionId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/signal-research/${sessionId}`);
+  }
+
+  cancelSignalResearch(sessionId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/signal-research/${sessionId}/cancel`, {});
+  }
+
 }
 
   
