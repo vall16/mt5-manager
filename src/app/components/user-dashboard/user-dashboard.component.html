@@ -34,26 +34,27 @@
     <div class="traders-grid" cdkDropList (cdkDropListDropped)="onDrop($event)">
       <div class="trader-card" *ngFor="let trader of traders" cdkDrag>
 
-        <div class="card-header">
-          <div class="drag-handle" cdkDragHandle>⠿</div>
-          <div class="trader-info">
-            <h4>{{ trader.name }}</h4>
-            <div class="status-row">
-              <span class="trader-status" [class.active]="trader.status === 'active'" [class.inactive]="trader.status === 'inactive'">
-                {{ trader.status }}
-              </span>
-              <span class="mt5-status" [class.connected]="isTraderConnected(trader)" [class.disconnected]="!isTraderConnected(trader)"
-                    [title]="isTraderConnected(trader) ? 'MT5 connected' : 'MT5 disconnected'">
-                <span class="mt5-dot"></span>
-                {{ isTraderConnected(trader) ? 'MT5 Online' : 'MT5 Offline' }}
-              </span>
+        <div class="card-left">
+          <div class="card-header">
+            <div class="drag-handle" cdkDragHandle>⠿</div>
+            <div class="trader-info">
+              <h4>{{ trader.name }}</h4>
+              <div class="status-row">
+                <span class="trader-status" [class.active]="trader.status === 'active'" [class.inactive]="trader.status === 'inactive'">
+                  {{ trader.status }}
+                </span>
+                <span class="mt5-status" [class.connected]="isTraderConnected(trader)" [class.disconnected]="!isTraderConnected(trader)"
+                      [title]="isTraderConnected(trader) ? 'MT5 connected' : 'MT5 disconnected'">
+                  <span class="mt5-dot"></span>
+                  {{ isTraderConnected(trader) ? 'MT5 Online' : 'MT5 Offline' }}
+                </span>
+              </div>
             </div>
+            <button class="delete-btn" (click)="deleteTrader(trader)">✕</button>
+
           </div>
-          <button class="delete-btn" (click)="deleteTrader(trader)">✕</button>
 
-        </div>
-
-    <div class="card-body">
+      <div class="card-body">
       <div class="detail-row">
         <span class="label">Created:</span>
         <span class="value">{{ trader.created_at | date:'short' }}</span>
@@ -98,6 +99,7 @@
       </div>
 
       </div>
+        </div>
       <div class="card-actions">
           <div class="card-actions">
             <button class="action-btn primary" (click)="saveTrader(trader)">💾 Save</button>
@@ -308,8 +310,16 @@
     </div>
   </div>
 </div>
-      <!-- Nuova Card per aggiungere un trader -->
-      <div class="trader-card add-trader-card">
+</div>
+      <div class="empty-state" *ngIf="traders.length === 0">
+        <div class="empty-icon">📊</div>
+        <h3>No traders yet</h3>
+        <p>Click the "Add Trader" button to create your first MT5 trading account</p>
+      </div>
+    </div>
+
+      <!-- Add New Trader — sotto la griglia -->
+      <div class="add-trader-card">
         <div class="card-header">
           <h4>Add New Trader</h4>
         </div>
@@ -357,13 +367,6 @@
           <button class="action-btn primary" (click)="addTrader()">Add Trader</button>
         </div>
       </div>
-
-      <div class="empty-state" *ngIf="traders.length === 0">
-        <div class="empty-icon">📊</div>
-        <h3>No traders yet</h3>
-        <p>Click the "Add Trader" button to create your first MT5 trading account</p>
-      </div>
-    </div>
 
   </div>
 </div>
