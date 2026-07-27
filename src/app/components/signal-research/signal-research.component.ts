@@ -256,4 +256,28 @@ export class SignalResearchComponent implements OnInit {
     a.click();
     URL.revokeObjectURL(url);
   }
+
+  exportPdf() {
+    if (!this.optimizationResults.length) return;
+
+    const payload = {
+      ...this.config,
+      strategies: this.selectedStrategies,
+    };
+
+    this.traderService.exportSignalResearchPdf(payload, this.optimizationResults).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `signal_research_${this.config.symbol}_${this.config.days}d.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('PDF export error:', err);
+        alert('Errore durante l\'esportazione PDF');
+      }
+    });
+  }
 }

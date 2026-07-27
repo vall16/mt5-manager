@@ -292,6 +292,23 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/signal-research/${sessionId}/cancel`, {});
   }
 
+  exportSignalResearchPdf(config: any, results: any[]): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/signal-research/export-pdf`, {
+      symbol: config.symbol,
+      days: config.days,
+      lot: config.lot,
+      balance: config.balance,
+      sl_min: config.sl_min,
+      sl_max: config.sl_max,
+      sl_step: config.sl_step,
+      tp_min: config.tp_min,
+      tp_max: config.tp_max,
+      tp_step: config.tp_step,
+      strategies: config.strategies || [],
+      results,
+    }, { responseType: 'blob' });
+  }
+
 }
 
   

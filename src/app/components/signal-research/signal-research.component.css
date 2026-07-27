@@ -217,6 +217,13 @@
 
 .export-btn:hover { background: #e9ecef; }
 
+.pdf-btn {
+  background: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+.pdf-btn:hover { background: #c82333; }
+
 .error-box {
   background: #f8d7da;
   color: #721c24;

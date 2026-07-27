@@ -92,6 +92,9 @@
       <button class="export-btn" (click)="exportCsv()" *ngIf="optimizationResults.length > 0">
         Export CSV
       </button>
+      <button class="export-btn pdf-btn" (click)="exportPdf()" *ngIf="optimizationResults.length > 0">
+        Export PDF
+      </button>
     </div>
   </div>
 
