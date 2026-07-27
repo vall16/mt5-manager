@@ -29,7 +29,7 @@
         
       </div>
 
-    </div>
+        </div>
 
     <div class="traders-grid" cdkDropList (cdkDropListDropped)="onDrop($event)">
       <div class="trader-card" *ngFor="let trader of traders" cdkDrag>
@@ -97,13 +97,14 @@
           <input type="number" [(ngModel)]="trader.fix_lot" placeholder="Fix Lot" />
         </div>
       </div>
-
       </div>
+
+      <div class="save-section">
+        <button class="action-btn save-btn" (click)="saveTrader(trader)">💾 Salva Server + SL/TP</button>
+      </div>
+
         </div>
       <div class="card-actions">
-          <div class="save-section">
-            <button class="action-btn save-btn" (click)="saveTrader(trader)">💾 Salva Server + SL/TP</button>
-          </div>
 
           <div class="analyze-section">
             <button class="action-btn primary" (click)="openAnalyze(trader)" [disabled]="trader.analyzing">
