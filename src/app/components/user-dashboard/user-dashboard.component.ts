@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -127,7 +127,8 @@ export class UserDashboardComponent implements OnInit {
   constructor(
     public authService: AuthService,
     private traderService: TraderService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef
   ) {}
 
   private readonly ORDER_KEY = 'mt5pulse_trader_order';
@@ -412,10 +413,6 @@ saveTrader(trader: Trader) {
   });
   console.log('──────────────────────────────────────────');
 
-  // Aggiorna created_at con il time corrente
-  trader.created_at = new Date().toISOString();
-
-
   this.traderService.updateTraderServers(
     trader.id!,
     trader.master_server_id ?? null,
@@ -432,28 +429,12 @@ saveTrader(trader: Trader) {
 
 
   ).subscribe({
-    next: (updatedTrader) => {
-      console.log('✅ [UPDATE OK] Trader aggiornato dal backend:', updatedTrader);
+    next: (res) => {
+      console.log('✅ [UPDATE OK] Trader aggiornato dal backend:', res);
 
-      // aggiorna i valori locali
-      trader.master_server_id = updatedTrader.master_server_id;
-      trader.slave_server_id = updatedTrader.slave_server_id;
-      trader.sl = updatedTrader.sl;
-      trader.tp = updatedTrader.tp;
-      trader.tsl = updatedTrader.tsl;
-      trader.moltiplicatore = updatedTrader.moltiplicatore;
-      trader.fix_lot = updatedTrader.fix_lot;
-
-      // 🆕 NUOVI PARAMETRI
-      trader.selected_signal =updatedTrader.selected_signal;
-      trader.custom_signal_interval = updatedTrader.custom_signal_interval;
-      trader.selected_symbol =updatedTrader.selected_symbol;
-      trader.sessions_filter = updatedTrader.sessions_filter;
-      // trader.copyInterval ?? null
-
-
+      this.traders = [...this.traders];
+      this.cdr.detectChanges();
       alert(`Trader "${trader.name}" aggiornato con successo!`);
-      this.loadTraders(); // 🔁 Ricarica la lista aggiornata
 
     },
     error: (err) => {
