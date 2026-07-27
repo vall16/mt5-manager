@@ -71,6 +71,9 @@ export interface Trader {
 
   // 🆕 Adaptive SL/TP (non salvato in DB)
   adaptive_enabled?: boolean;
+
+  // 🆕 Forza SL/TP dal form (non salvato in DB)
+  use_signal_sl_tp?: boolean;
 }
 
 export interface NewTrader {
