@@ -7,6 +7,7 @@ interface OptimizationResult {
   strategy: string;
   sl: number;
   tp: number;
+  direction: string;
   max_hold: number;
   trades: number;
   win_rate: number;
@@ -28,6 +29,7 @@ interface ResearchConfig {
   tp_min: number;
   tp_max: number;
   tp_step: number;
+  direction: string;
   strategies: string[];
 }
 
@@ -87,6 +89,7 @@ export class SignalResearchComponent implements OnInit {
     tp_min: 200,
     tp_max: 1200,
     tp_step: 100,
+    direction: 'both',
     strategies: []
   };
 
@@ -243,9 +246,9 @@ export class SignalResearchComponent implements OnInit {
 
   exportCsv() {
     if (!this.optimizationResults.length) return;
-    const headers = ['Strategy', 'SL', 'TP', 'MaxHold', 'Trades', 'WinRate%', 'Return%', 'MaxDD', 'AvgHold', 'Sharpe'];
+    const headers = ['Strategy', 'SL', 'TP', 'Direction', 'Trades', 'WinRate%', 'Return%', 'MaxDD', 'AvgHold', 'Sharpe'];
     const rows = this.optimizationResults.map(r => [
-      r.strategy, r.sl, r.tp, r.max_hold, r.trades, r.win_rate, r.return_pct, r.max_dd, r.avg_hold, r.sharpe
+      r.strategy, r.sl, r.tp, r.direction, r.trades, r.win_rate, r.return_pct, r.max_dd, r.avg_hold, r.sharpe
     ]);
     const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
     const blob = new Blob([csv], { type: 'text/csv' });

@@ -27,6 +27,14 @@
           <label>Balance ($)</label>
           <input type="number" [(ngModel)]="config.balance" min="100" step="100" class="form-control" />
         </div>
+        <div class="form-group">
+          <label>Direction</label>
+          <select [(ngModel)]="config.direction" class="form-control">
+            <option value="both">Both (Buy + Sell)</option>
+            <option value="buy">Solo Buy</option>
+            <option value="sell">Solo Sell</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -125,7 +133,7 @@
            (click)="selectResult(r)">
         <div class="top-card-rank">#{{ i + 1 }}</div>
         <div class="top-card-strategy">{{ r.strategy }}</div>
-        <div class="top-card-params">SL={{ r.sl }} TP={{ r.tp }}</div>
+        <div class="top-card-params">SL={{ r.sl }} TP={{ r.tp }} <span class="direction-badge" [class.buy]="r.direction === 'buy'" [class.sell]="r.direction === 'sell'">{{ r.direction | uppercase }}</span></div>
         <div class="top-card-metrics">
           <span class="metric" [class.positive]="r.return_pct >= 0" [class.negative]="r.return_pct < 0">
             {{ r.return_pct >= 0 ? '+' : '' }}{{ r.return_pct | number:'1.1-1' }}%
@@ -146,6 +154,7 @@
             <th class="sortable" (click)="sortBy('strategy')">Strategy</th>
             <th class="sortable" (click)="sortBy('sl')">SL</th>
             <th class="sortable" (click)="sortBy('tp')">TP</th>
+            <th class="sortable" (click)="sortBy('direction')">Dir</th>
             <th class="sortable" (click)="sortBy('trades')">Trades</th>
             <th class="sortable" (click)="sortBy('win_rate')">Win Rate</th>
             <th class="sortable" (click)="sortBy('return_pct')">Return %</th>
@@ -161,6 +170,7 @@
             <td class="strategy-cell">{{ r.strategy }}</td>
             <td>{{ r.sl }}</td>
             <td>{{ r.tp }}</td>
+            <td><span class="direction-badge" [class.buy]="r.direction === 'buy'" [class.sell]="r.direction === 'sell'">{{ r.direction | uppercase }}</span></td>
             <td>{{ r.trades }}</td>
             <td [class.positive]="r.win_rate >= 50" [class.negative]="r.win_rate < 50">
               {{ r.win_rate | number:'1.1-1' }}%
@@ -183,7 +193,7 @@
     <!-- Selected Result Detail -->
     <div class="detail-panel" *ngIf="selectedResult">
       <div class="detail-header">
-        <h3>{{ selectedResult.strategy }} — SL={{ selectedResult.sl }} TP={{ selectedResult.tp }}</h3>
+        <h3>{{ selectedResult.strategy }} — SL={{ selectedResult.sl }} TP={{ selectedResult.tp }} <span class="direction-badge" [class.buy]="selectedResult.direction === 'buy'" [class.sell]="selectedResult.direction === 'sell'">{{ selectedResult.direction | uppercase }}</span></h3>
         <button class="close-btn" (click)="selectedResult = null">&times;</button>
       </div>
       <div class="detail-grid">
