@@ -58,7 +58,8 @@ export class SignalResearchComponent implements OnInit {
     'BASE': 'M5',
     'BASE_NOHOLD': 'M5',
     'TRENDGUARD': 'M1+M5+M15',
-    'TRENDGUARD_XAU': 'M1+M5+M15',
+    'TRENDGUARD_PRO': 'M1+M5+M15',
+    'HARMONIC': 'M1+M5+M15+H1',
     'ICHIMOKU': 'M1+M5+M15+H1',
     'EURUSD_NOHOLD': 'M5',
     'MSFT': 'M1+M5+M15',
@@ -66,6 +67,45 @@ export class SignalResearchComponent implements OnInit {
     'GBPUSD': 'M5',
     'GBPJPY': 'M5',
     'AUDJPY': 'M5',
+    'SCALPER_M1': 'M1',
+  };
+
+  strategyDefaults: { [key: string]: { sl_min: number; sl_max: number; sl_step: number; tp_min: number; tp_max: number; tp_step: number } } = {
+    'SUPER': { sl_min: 100, sl_max: 600, sl_step: 50, tp_min: 200, tp_max: 1200, tp_step: 50 },
+    'SUPER_PRO': { sl_min: 100, sl_max: 400, sl_step: 50, tp_min: 200, tp_max: 1000, tp_step: 50 },
+    'SUPER_USDJPY': { sl_min: 50, sl_max: 300, sl_step: 25, tp_min: 100, tp_max: 600, tp_step: 50 },
+    'BASE': { sl_min: 50, sl_max: 400, sl_step: 50, tp_min: 100, tp_max: 800, tp_step: 50 },
+    'BASE_NOHOLD': { sl_min: 50, sl_max: 300, sl_step: 25, tp_min: 100, tp_max: 600, tp_step: 50 },
+    'TRENDGUARD': { sl_min: 100, sl_max: 500, sl_step: 50, tp_min: 200, tp_max: 1000, tp_step: 50 },
+    'TRENDGUARD_PRO': { sl_min: 100, sl_max: 400, sl_step: 50, tp_min: 200, tp_max: 800, tp_step: 50 },
+    'HARMONIC': { sl_min: 200, sl_max: 800, sl_step: 50, tp_min: 400, tp_max: 1600, tp_step: 100 },
+    'ICHIMOKU': { sl_min: 100, sl_max: 500, sl_step: 50, tp_min: 200, tp_max: 1000, tp_step: 50 },
+    'EURUSD_NOHOLD': { sl_min: 30, sl_max: 200, sl_step: 10, tp_min: 60, tp_max: 400, tp_step: 20 },
+    'MSFT': { sl_min: 200, sl_max: 600, sl_step: 50, tp_min: 400, tp_max: 1500, tp_step: 100 },
+    'NVDA': { sl_min: 300, sl_max: 1500, sl_step: 100, tp_min: 600, tp_max: 3000, tp_step: 200 },
+    'GBPUSD': { sl_min: 30, sl_max: 200, sl_step: 10, tp_min: 60, tp_max: 400, tp_step: 20 },
+    'GBPJPY': { sl_min: 50, sl_max: 400, sl_step: 25, tp_min: 100, tp_max: 800, tp_step: 50 },
+    'AUDJPY': { sl_min: 30, sl_max: 200, sl_step: 10, tp_min: 60, tp_max: 400, tp_step: 20 },
+    'SCALPER_M1': { sl_min: 50, sl_max: 200, sl_step: 10, tp_min: 100, tp_max: 400, tp_step: 20 },
+  };
+
+  strategyDescriptions: { [key: string]: string } = {
+    'SUPER': 'Trend-following entry on M1 with M5/M15 confirmation. Best for trending markets.',
+    'SUPER_PRO': 'SUPER entry + reduced risk from M5/M15 filters. Stricter but higher quality signals.',
+    'SUPER_USDJPY': 'SUPER variant tuned for USDJPY. Same logic, adjusted SL/TP ranges for yen pairs.',
+    'BASE': 'Simple breakout strategy on M5. Takes entries at key level breaks.',
+    'BASE_NOHOLD': 'BASE without overnight hold. Flat before market close, re-enters next day.',
+    'TRENDGUARD': 'Uses ADX/DI cross for trend direction + volatility filter. Safer in strong trends.',
+    'TRENDGUARD_PRO': 'TRENDGUARD with tighter confirmation. Better Sharpe, fewer but higher quality trades.',
+    'HARMONIC': 'Harmonic pattern detection across M1-M15+H1. Longer hold, aims for bigger swings.',
+    'ICHIMOKU': 'Ichimoku Cloud across M1/M5/M15/H1. Uses kumo breakout + TK cross.',
+    'EURUSD_NOHOLD': 'EURUSD-specific, flat before rollover. No overnight exposure.',
+    'MSFT': 'MSFT/NASDAQ hybrid — runs SUPER logic on M1+M5+M15. Use SL 200-600.',
+    'NVDA': 'NVDA-specific trend on M15 only. Volatile — wide SL recommended.',
+    'GBPUSD': 'GBPUSD intraday breakout on M5. Quick scalps with tight SL.',
+    'GBPJPY': 'GBPJPY trend scalper on M5. High volatility — wide SL/TP ranges expected.',
+    'AUDJPY': 'AUDJPY momentum entry on M5. Medium vol, moderate hold times.',
+    'SCALPER_M1': 'Mean-reversion scalper su M1. Buy se price < EMA21 e RSI < 35. Sell se price > EMA21 e RSI > 65. Default SL 120/TP 250 (EURUSD).',
   };
 
   allStrategies = Object.keys(this.strategyTimeframes);
@@ -121,6 +161,18 @@ export class SignalResearchComponent implements OnInit {
       this.selectedStrategies.push(s);
     }
     this.config.strategies = [...this.selectedStrategies];
+    this.applyStrategyDefaults(s);
+  }
+
+  applyStrategyDefaults(s: string) {
+    const d = this.strategyDefaults[s];
+    if (!d) return;
+    this.config.sl_min = d.sl_min;
+    this.config.sl_max = d.sl_max;
+    this.config.sl_step = d.sl_step;
+    this.config.tp_min = d.tp_min;
+    this.config.tp_max = d.tp_max;
+    this.config.tp_step = d.tp_step;
   }
 
   isStrategySelected(s: string): boolean {

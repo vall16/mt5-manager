@@ -69,6 +69,7 @@ export class UserDashboardComponent implements OnInit {
   { value: 'AUDJPY', label: 'AUDJPY Super' },
   { value: 'MSFT', label: 'MSFT M15' },
   { value: 'NVDA', label: 'NVDA M15' },
+  { value: 'SCALPER_M1', label: 'EURUSD Scalper M1' },
   ];
 
   availableSessions = [

@@ -81,6 +81,7 @@
         <button *ngFor="let s of filteredStrategies"
           class="strategy-chip"
           [class.selected]="isStrategySelected(s)"
+          [title]="strategyDescriptions[s]"
           (click)="toggleStrategy(s)">
           {{ s }} <span class="chip-tf">{{ strategyTimeframes[s] }}</span>
         </button>
