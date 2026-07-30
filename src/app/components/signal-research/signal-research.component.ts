@@ -149,8 +149,6 @@ export class SignalResearchComponent implements OnInit {
   constructor(private traderService: TraderService) {}
 
   ngOnInit() {
-    this.selectedStrategies = ['NVDA', 'SUPER', 'BASE'];
-    this.config.strategies = this.selectedStrategies;
   }
 
   toggleStrategy(s: string) {
@@ -239,6 +237,9 @@ export class SignalResearchComponent implements OnInit {
             }
             this.loading = false;
             this.stopPolling();
+            if (!this.error && this.optimizationResults.length === 0) {
+              this.error = "Nessun risultato. Verifica che le strategie selezionate supportino il simbolo e timeframe scelti.";
+            }
           } else if (res.status === 'error') {
             this.error = res.result?.error || 'Research failed';
             this.loading = false;
