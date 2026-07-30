@@ -9,25 +9,25 @@
     <div class="config-section">
       <h3>Configurazione</h3>
       <div class="config-grid">
-        <div class="form-group">
+        <div class="form-group fg-symbol">
           <label>Symbol</label>
           <select [(ngModel)]="config.symbol" class="form-control">
             <option *ngFor="let s of symbols" [value]="s">{{ s }}</option>
           </select>
         </div>
-        <div class="form-group">
+        <div class="form-group fg-days">
           <label>Days</label>
           <input type="number" [(ngModel)]="config.days" min="7" max="365" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-money">
           <label>Lot</label>
           <input type="number" [(ngModel)]="config.lot" min="0.01" step="0.01" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-money">
           <label>Balance ($)</label>
           <input type="number" [(ngModel)]="config.balance" min="100" step="100" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-direction">
           <label>Direction</label>
           <select [(ngModel)]="config.direction" class="form-control">
             <option value="both">Both (Buy + Sell)</option>
@@ -41,27 +41,27 @@
     <div class="config-section">
       <h3>Range Ottimizzazione</h3>
       <div class="config-grid">
-        <div class="form-group">
+        <div class="form-group fg-sl">
           <label>SL Min</label>
           <input type="number" [(ngModel)]="config.sl_min" min="50" step="50" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-sl">
           <label>SL Max</label>
           <input type="number" [(ngModel)]="config.sl_max" min="100" step="50" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-sl">
           <label>SL Step</label>
           <input type="number" [(ngModel)]="config.sl_step" min="10" step="10" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-tp">
           <label>TP Min</label>
           <input type="number" [(ngModel)]="config.tp_min" min="50" step="50" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-tp">
           <label>TP Max</label>
           <input type="number" [(ngModel)]="config.tp_max" min="100" step="50" class="form-control" />
         </div>
-        <div class="form-group">
+        <div class="form-group fg-tp">
           <label>TP Step</label>
           <input type="number" [(ngModel)]="config.tp_step" min="10" step="10" class="form-control" />
         </div>

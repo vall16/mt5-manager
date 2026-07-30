@@ -60,15 +60,34 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
+  padding-left: 10px;
+  border-left: 4px solid transparent;
 }
 
 .form-group label {
   font-size: 11px;
   font-weight: 600;
-  color: #666;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
+
+.fg-symbol { border-left-color: #3b82f6; }
+.fg-symbol label { color: #3b82f6; }
+
+.fg-days { border-left-color: #6366f1; }
+.fg-days label { color: #6366f1; }
+
+.fg-money { border-left-color: #f59e0b; }
+.fg-money label { color: #f59e0b; }
+
+.fg-direction { border-left-color: #8b5cf6; }
+.fg-direction label { color: #8b5cf6; }
+
+.fg-sl { border-left-color: #ef4444; }
+.fg-sl label { color: #ef4444; }
+
+.fg-tp { border-left-color: #10b981; }
+.fg-tp label { color: #10b981; }
 
 .form-control {
   padding: 8px 10px;
@@ -77,12 +96,13 @@
   font-size: 13px;
   background: white;
   color: #1a1a1a;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-control:focus {
   outline: none;
   border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .tf-filter-row {
