@@ -4,7 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { TraderService } from '../../services/trader.service';
 
 interface AutoResult {
-  strategy: string;
+  label: string;
+  ema_fast: number;
+  ema_slow: number;
+  rsi_oversold: number;
+  rsi_overbought: number;
   sl: number;
   tp: number;
   direction: string;
@@ -84,27 +88,6 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     });
   }
 
-  getStrategyDescription(s: string): string {
-    const descs: {[key: string]: string} = {
-      'BASE': 'Breakout M5',
-      'BASE_NOHOLD': 'Breakout M5 no hold',
-      'TRENDGUARD': 'Trend ADX M1+M5+M15',
-      'TRENDGUARD_XAU': 'Trend ADX XAU',
-      'EURUSD_NOHOLD': 'EURUSD M5',
-      'SUPER': 'Super trend M1+M5+M15',
-      'SUPER_PRO': 'Super Pro M1+M5+M15',
-      'ICHIMOKU': 'Ichimoku M1+M5+M15+H1',
-      'MSFT': 'MSFT M1+M5+M15',
-      'NVDA': 'NVDA M15',
-      'SUPER_USDJPY': 'USDJPY Super',
-      'GBPUSD': 'GBPUSD M5',
-      'GBPJPY': 'GBPJPY M5',
-      'AUDJPY': 'AUDJPY M5',
-      'SCALPER_M1': 'Scalper M1',
-    };
-    return descs[s] || s;
-  }
-
   private startPolling() {
     this.stopPolling();
     this.pollTimer = setInterval(() => {
@@ -124,7 +107,7 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
             this.loading = false;
             this.stopPolling();
             if (!this.error && this.results.length === 0) {
-              this.error = 'Nessuna strategia ha prodotto risultati con i dati disponibili.';
+              this.error = 'Nessuna combinazione ha prodotto risultati.';
             }
           } else if (res.status === 'error') {
             this.error = res.result?.error || 'Discovery failed';
@@ -169,12 +152,13 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     }
   }
 
-  bestPerStrategy(): AutoResult[] {
+  bestPerParams(): AutoResult[] {
     const map = new Map<string, AutoResult>();
     for (const r of this.results) {
-      const existing = map.get(r.strategy);
+      const key = r.label;
+      const existing = map.get(key);
       if (!existing || r.return_pct > existing.return_pct) {
-        map.set(r.strategy, r);
+        map.set(key, r);
       }
     }
     return Array.from(map.values()).sort((a, b) => b.return_pct - a.return_pct);
