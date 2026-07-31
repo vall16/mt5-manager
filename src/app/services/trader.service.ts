@@ -297,6 +297,18 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/signal-research/${sessionId}/cancel`, {});
   }
 
+  exportAutoDiscoverPdf(config: any, results: any[]): Observable<Blob> {
+    return this.http.post(`${this.apiUrl}/signal-research/auto-discover/export-pdf`, {
+      symbol: config.symbol,
+      days: config.days,
+      lot: config.lot,
+      balance: config.balance,
+      target_return: config.target_return,
+      direction: config.direction,
+      results,
+    }, { responseType: 'blob' });
+  }
+
   exportSignalResearchPdf(config: any, results: any[]): Observable<Blob> {
     return this.http.post(`${this.apiUrl}/signal-research/export-pdf`, {
       symbol: config.symbol,

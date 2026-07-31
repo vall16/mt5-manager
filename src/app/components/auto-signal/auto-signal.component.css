@@ -168,10 +168,25 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  gap: 12px;
 }
 
 .results-header h2 { font-size: 20px; font-weight: 600; color: #1a1a1a; margin: 0; }
 .results-count { font-size: 13px; color: #888; }
+
+.export-btn {
+  margin-left: auto;
+  padding: 8px 14px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.export-btn:hover { opacity: 0.9; }
 
 .table-container {
   background: white;

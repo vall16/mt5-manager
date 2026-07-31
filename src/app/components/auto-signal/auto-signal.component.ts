@@ -88,6 +88,25 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     });
   }
 
+  exportPdf() {
+    if (!this.results.length) return;
+    const top = [...this.results].sort((a, b) => b.return_pct - a.return_pct).slice(0, 10);
+    this.traderService.exportAutoDiscoverPdf(this.config, top).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `auto_discover_${this.config.symbol}_${this.config.days}d.pdf`;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+      error: (err) => {
+        console.error('PDF export error:', err);
+        alert('Errore durante l\'esportazione PDF');
+      }
+    });
+  }
+
   private startPolling() {
     this.stopPolling();
     this.pollTimer = setInterval(() => {
