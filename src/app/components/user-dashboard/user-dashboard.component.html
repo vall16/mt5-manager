@@ -97,6 +97,13 @@
           <input type="number" [(ngModel)]="trader.fix_lot" placeholder="Fix Lot" />
         </div>
       </div>
+
+      <div class="profit-tp-row">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="trader.use_signal_sl_tp" />
+          📐 Forza SL/TP del form
+        </label>
+      </div>
       </div>
 
       <div class="save-section">
@@ -288,13 +295,6 @@
               <input type="checkbox" [(ngModel)]="trader.adaptive_enabled"
                      (change)="toggleAdaptive(trader)" />
               🧬 Adaptive SL/TP
-            </label>
-          </div>
-
-          <div class="profit-tp-row">
-            <label class="checkbox-label">
-              <input type="checkbox" [(ngModel)]="trader.use_signal_sl_tp" />
-              📐 Forza SL/TP del form
             </label>
           </div>
       </div>
