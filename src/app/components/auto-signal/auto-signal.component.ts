@@ -7,6 +7,7 @@ interface AutoResult {
   label: string;
   ema_fast: number;
   ema_slow: number;
+  rsi_period: number;
   rsi_oversold: number;
   rsi_overbought: number;
   sl: number;
@@ -48,9 +49,14 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     use_spread: true,
   };
 
+  mode: 'agent' | 'grid' = 'grid';
+  iterations = 4;
+  batchSize = 6;
+
   results: AutoResult[] = [];
   targetHits: string[] = [];
   targetReturn = 30;
+  analysis = '';
   loading = false;
   error = '';
   progress = 0;
@@ -72,9 +78,20 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = '';
     this.results = [];
+    this.analysis = '';
     this.progress = 0;
 
-    this.traderService.runAutoSignalResearch(this.config).subscribe({
+    const payload: any = { ...this.config };
+    if (this.mode === 'agent') {
+      payload.iterations = this.iterations;
+      payload.batch_size = this.batchSize;
+    }
+
+    const call = this.mode === 'agent'
+      ? this.traderService.runAgentSignalResearch(payload)
+      : this.traderService.runAutoSignalResearch(payload);
+
+    call.subscribe({
       next: (res) => {
         this.sessionId = res.session_id;
         this.startPolling();
@@ -131,6 +148,7 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
               this.results = res.result?.results || [];
               this.targetHits = res.result?.target_hits || [];
               this.targetReturn = res.result?.target_return || 30;
+              this.analysis = res.result?.analysis || '';
             }
             this.loading = false;
             this.stopPolling();

@@ -5,6 +5,12 @@
   </div>
 
   <div class="config-card">
+    <div class="mode-toggle">
+      <button class="mode-btn" [class.active]="mode === 'grid'" (click)="mode = 'grid'">Grid Search</button>
+      <button class="mode-btn" [class.active]="mode === 'agent'" (click)="mode = 'agent'">AI Agent</button>
+      <span class="mode-hint" *ngIf="mode === 'agent'">l'LLM guida la ricerca: testa, analizza i risultati OOS e propone i parametri migliori</span>
+      <span class="mode-hint" *ngIf="mode === 'grid'">prova esaurientemente tutte le combinazioni di una griglia predefinita</span>
+    </div>
     <div class="config-grid">
       <div class="form-group">
         <label>Symbol</label>
@@ -50,6 +56,14 @@
       <div class="form-group checkbox-group">
         <label><input type="checkbox" [(ngModel)]="config.use_spread" /> Costi spread</label>
       </div>
+      <div class="form-group" *ngIf="mode === 'agent'">
+        <label>Iterazioni</label>
+        <input type="number" [(ngModel)]="iterations" min="1" max="10" class="form-control" />
+      </div>
+      <div class="form-group" *ngIf="mode === 'agent'">
+        <label>Proposte / iterazione</label>
+        <input type="number" [(ngModel)]="batchSize" min="2" max="15" class="form-control" />
+      </div>
     </div>
 
     <div class="config-actions">
@@ -86,6 +100,11 @@
   <div class="no-target" *ngIf="results.length > 0 && targetHits.length === 0 && !loading">
     <p>Nessuna combinazione ha raggiunto il {{ targetReturn }}% di return target.
     Prova con un periodo più lungo, simbolo diverso, o modifica il target.</p>
+  </div>
+
+  <div class="analysis-box" *ngIf="analysis && !loading">
+    <h3>Analisi dell'agente AI</h3>
+    <pre>{{ analysis }}</pre>
   </div>
 
   <div class="results" *ngIf="results.length > 0 && !loading">

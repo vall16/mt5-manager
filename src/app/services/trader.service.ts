@@ -289,6 +289,10 @@ export class TraderService {
     return this.http.post(`${this.apiUrl}/signal-research/auto-discover`, config);
   }
 
+  runAgentSignalResearch(config: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/signal-research/agent-discover`, config);
+  }
+
   getSignalResearchStatus(sessionId: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/signal-research/${sessionId}`);
   }
