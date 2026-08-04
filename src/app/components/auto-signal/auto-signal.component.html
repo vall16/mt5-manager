@@ -36,6 +36,20 @@
         <label>Target Return %</label>
         <input type="number" [(ngModel)]="config.target_return" min="5" max="500" class="form-control" />
       </div>
+      <div class="form-group">
+        <label>Min Trades</label>
+        <input type="number" [(ngModel)]="config.min_trades" min="1" max="500" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label>Sessioni (es. London,NewYork)</label>
+        <input type="text" [(ngModel)]="config.sessions_filter" class="form-control" placeholder="vuoto = tutte" />
+      </div>
+      <div class="form-group checkbox-group">
+        <label><input type="checkbox" [(ngModel)]="config.volume_filter" /> Filtro volume</label>
+      </div>
+      <div class="form-group checkbox-group">
+        <label><input type="checkbox" [(ngModel)]="config.use_spread" /> Costi spread</label>
+      </div>
     </div>
 
     <div class="config-actions">
@@ -89,7 +103,8 @@
             <th class="sortable" (click)="sortBy('sl')">SL</th>
             <th class="sortable" (click)="sortBy('tp')">TP</th>
             <th class="sortable" (click)="sortBy('direction')">Dir</th>
-            <th class="sortable" (click)="sortBy('return_pct')">Return %</th>
+            <th class="sortable" (click)="sortBy('return_pct')">Ret IS %</th>
+            <th class="sortable" (click)="sortBy('oos_return_pct')">Ret OOS %</th>
             <th class="sortable" (click)="sortBy('trades')">Trades</th>
             <th class="sortable" (click)="sortBy('win_rate')">Win Rate</th>
             <th class="sortable" (click)="sortBy('max_dd')">Max DD</th>
@@ -107,6 +122,9 @@
             <td><span class="direction-badge" [class.buy]="r.direction === 'buy'" [class.sell]="r.direction === 'sell'">{{ r.direction | uppercase }}</span></td>
             <td [class.positive]="r.return_pct >= 0" [class.negative]="r.return_pct < 0" class="return-cell">
               {{ r.return_pct >= 0 ? '+' : '' }}{{ r.return_pct | number:'1.1-1' }}%
+            </td>
+            <td [class.positive]="r.oos_return_pct >= 0" [class.negative]="r.oos_return_pct < 0" class="return-cell oos-cell">
+              {{ r.oos_return_pct >= 0 ? '+' : '' }}{{ r.oos_return_pct | number:'1.1-1' }}%
             </td>
             <td>{{ r.trades }}</td>
             <td [class.positive]="r.win_rate >= 50">{{ r.win_rate | number:'1.1-1' }}%</td>
@@ -131,7 +149,8 @@
                 <th class="sortable" (click)="sortBy('sl')">SL</th>
                 <th class="sortable" (click)="sortBy('tp')">TP</th>
                 <th class="sortable" (click)="sortBy('direction')">Dir</th>
-                <th class="sortable" (click)="sortBy('return_pct')">Return %</th>
+                <th class="sortable" (click)="sortBy('return_pct')">Ret IS %</th>
+                <th class="sortable" (click)="sortBy('oos_return_pct')">Ret OOS %</th>
                 <th class="sortable" (click)="sortBy('trades')">Trades</th>
                 <th class="sortable" (click)="sortBy('win_rate')">Win Rate</th>
                 <th class="sortable" (click)="sortBy('max_dd')">Max DD</th>
@@ -147,6 +166,9 @@
                 <td><span class="direction-badge" [class.buy]="r.direction === 'buy'" [class.sell]="r.direction === 'sell'">{{ r.direction | uppercase }}</span></td>
                 <td [class.positive]="r.return_pct >= 0" [class.negative]="r.return_pct < 0" class="return-cell">
                   {{ r.return_pct >= 0 ? '+' : '' }}{{ r.return_pct | number:'1.1-1' }}%
+                </td>
+                <td [class.positive]="r.oos_return_pct >= 0" [class.negative]="r.oos_return_pct < 0" class="return-cell oos-cell">
+                  {{ r.oos_return_pct >= 0 ? '+' : '' }}{{ r.oos_return_pct | number:'1.1-1' }}%
                 </td>
                 <td>{{ r.trades }}</td>
                 <td [class.positive]="r.win_rate >= 50">{{ r.win_rate | number:'1.1-1' }}%</td>

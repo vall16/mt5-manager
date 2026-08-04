@@ -17,6 +17,11 @@ interface AutoResult {
   return_pct: number;
   max_dd: number;
   sharpe: number;
+  oos_trades: number;
+  oos_win_rate: number;
+  oos_return_pct: number;
+  oos_max_dd: number;
+  oos_sharpe: number;
   target_hit: boolean;
 }
 
@@ -37,6 +42,10 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     balance: 1000,
     direction: 'both',
     target_return: 30,
+    min_trades: 20,
+    volume_filter: false,
+    sessions_filter: '',
+    use_spread: true,
   };
 
   results: AutoResult[] = [];
@@ -48,7 +57,7 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
   sessionId: string | null = null;
   private pollTimer: any = null;
 
-  sortKey = 'return_pct';
+  sortKey = 'oos_return_pct';
   sortDir: 'asc' | 'desc' = 'desc';
 
   constructor(private traderService: TraderService) {}
@@ -176,10 +185,14 @@ export class AutoSignalComponent implements OnInit, OnDestroy {
     for (const r of this.results) {
       const key = r.label;
       const existing = map.get(key);
-      if (!existing || r.return_pct > existing.return_pct) {
+      const score = r.oos_return_pct ?? r.return_pct;
+      const existingScore = existing ? (existing.oos_return_pct ?? existing.return_pct) : -Infinity;
+      if (!existing || score > existingScore) {
         map.set(key, r);
       }
     }
-    return Array.from(map.values()).sort((a, b) => b.return_pct - a.return_pct);
+    return Array.from(map.values()).sort((a, b) =>
+      (b.oos_return_pct ?? b.return_pct) - (a.oos_return_pct ?? a.return_pct)
+    );
   }
 }
