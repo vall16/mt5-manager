@@ -56,6 +56,14 @@ export class UserDashboardComponent implements OnInit {
   analyzeSource: string = 'mt5';
   analyzeDays: number = 30;
 
+  // ── AI Strategy Supervisor ──
+  supervisorStatus: any = null;
+  supervisorLoading = false;
+  supervisorInterval: number = 600;
+  supervisorModel: string = 'openrouter/free';
+  supervisorApplying: { [traderId: number]: boolean } = {};
+  private supervisorRefreshSub: Subscription | null = null;
+
   availableSignals = [
   { value: 'BASE', label: 'XAUUSD Base' },
   { value: 'BASE_NOHOLD', label: 'XAUUSD Base NoHold' },
@@ -138,6 +146,11 @@ export class UserDashboardComponent implements OnInit {
   ngOnInit() {
 
     this.loadServersAndTraders();
+    this.loadSupervisorStatus();
+
+    this.supervisorRefreshSub = interval(30000).subscribe(() => {
+      if (this.supervisorStatus?.running) this.loadSupervisorStatus();
+    });
 
   }
 
@@ -360,6 +373,108 @@ async deleteTrader(trader: Trader) {
   ngOnDestroy() {
     // 🔒 Stoppa tutti gli auto-copy quando si lascia la pagina
     Object.values(this.copySubscriptions).forEach(sub => sub.unsubscribe());
+    if (this.supervisorRefreshSub) {
+      this.supervisorRefreshSub.unsubscribe();
+      this.supervisorRefreshSub = null;
+    }
+  }
+
+  // ── AI Strategy Supervisor ──
+  loadSupervisorStatus() {
+    this.traderService.getSupervisorStatus().subscribe({
+      next: (res: any) => {
+        this.supervisorStatus = res;
+        if (res?.interval_seconds) this.supervisorInterval = res.interval_seconds;
+      },
+      error: (err) => console.error('Supervisor status error:', err)
+    });
+  }
+
+  toggleSupervisor() {
+    if (this.supervisorStatus?.running) this.stopSupervisor();
+    else this.startSupervisor();
+  }
+
+  startSupervisor() {
+    this.supervisorLoading = true;
+    this.traderService.startSupervisor({
+      interval_seconds: Number(this.supervisorInterval),
+      model: this.supervisorModel
+    }).subscribe({
+      next: () => {
+        this.supervisorLoading = false;
+        this.loadSupervisorStatus();
+      },
+      error: (err) => {
+        this.supervisorLoading = false;
+        console.error('Supervisor start error:', err);
+        alert(err.error?.detail || 'Errore avvio supervisore');
+      }
+    });
+  }
+
+  stopSupervisor() {
+    this.supervisorLoading = true;
+    this.traderService.stopSupervisor().subscribe({
+      next: () => {
+        this.supervisorLoading = false;
+        this.loadSupervisorStatus();
+      },
+      error: (err) => {
+        this.supervisorLoading = false;
+        console.error('Supervisor stop error:', err);
+        alert(err.error?.detail || 'Errore stop supervisore');
+      }
+    });
+  }
+
+  runSupervisorNow() {
+    this.supervisorLoading = true;
+    this.traderService.runSupervisorNow().subscribe({
+      next: (res: any) => {
+        this.supervisorLoading = false;
+        this.supervisorStatus = res;
+        if (res?.interval_seconds) this.supervisorInterval = res.interval_seconds;
+      },
+      error: (err) => {
+        this.supervisorLoading = false;
+        console.error('Supervisor run-now error:', err);
+        alert(err.error?.detail || 'Errore analisi immediata');
+      }
+    });
+  }
+
+  saveSupervisorConfig() {
+    this.traderService.updateSupervisorConfig({
+      interval_seconds: Number(this.supervisorInterval),
+      model: this.supervisorModel
+    }).subscribe({
+      next: () => {
+        alert('Config supervisore salvata');
+        this.loadSupervisorStatus();
+      },
+      error: (err) => {
+        console.error('Supervisor config error:', err);
+        alert(err.error?.detail || 'Errore salvataggio config');
+      }
+    });
+  }
+
+  applySupervisor(rec: any, action: string) {
+    if (!rec?.trader_id) return;
+    this.supervisorApplying[rec.trader_id] = true;
+    this.traderService.applySupervisorAction(rec.trader_id, action).subscribe({
+      next: (res: any) => {
+        console.log('Supervisor apply:', res);
+        alert(res.message || `Azione ${action} applicata`);
+        this.loadSupervisorStatus();
+      },
+      error: (err: any) => {
+        console.error('Supervisor apply error:', err);
+        alert(err.error?.detail || 'Errore applicando azione');
+      },
+      complete: () => { this.supervisorApplying[rec.trader_id] = false; }
+    });
   }
 
 

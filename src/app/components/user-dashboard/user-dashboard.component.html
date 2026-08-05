@@ -14,6 +14,156 @@
     </button>
   </div>
 
+  <div class="supervisor-section">
+    <div class="section-header">
+      <h3>AI Strategy Supervisor</h3>
+      <div class="header-buttons">
+        <span class="supervisor-status-badge" [class.running]="supervisorStatus?.running"
+              [class.stopped]="!supervisorStatus?.running">
+          <span class="status-dot"></span>
+          {{ supervisorStatus?.running ? 'Running' : 'Stopped' }}
+        </span>
+        <button class="supervisor-toggle-btn" (click)="loadSupervisorStatus()" [disabled]="supervisorLoading"
+                title="Ricarica i trader attivi gestiti">
+          &#8635; Refresh
+        </button>
+        <button class="add-server-btn" (click)="runSupervisorNow()" [disabled]="supervisorLoading">
+          <span *ngIf="!supervisorLoading">&#9889; Run Now</span>
+          <span *ngIf="supervisorLoading">Analisi...</span>
+        </button>
+        <button class="supervisor-toggle-btn" (click)="toggleSupervisor()">
+          {{ supervisorStatus?.running ? 'Stop' : 'Start' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="supervisor-card">
+      <div class="supervisor-controls">
+        <label class="supervisor-label">
+          Intervallo (sec)
+          <input type="number" min="60" [(ngModel)]="supervisorInterval" class="supervisor-input" />
+        </label>
+        <label class="supervisor-label">
+          Modello LLM
+          <input type="text" [(ngModel)]="supervisorModel" class="supervisor-input" />
+        </label>
+        <button class="supervisor-toggle-btn" (click)="saveSupervisorConfig()">Salva config</button>
+      </div>
+
+      <div class="supervisor-meta" *ngIf="supervisorStatus">
+        <span>Ultima analisi: {{ supervisorStatus.last_run || 'mai eseguita' }}</span>
+        <span *ngIf="supervisorStatus.llm_used === true">LLM: OpenRouter</span>
+        <span *ngIf="supervisorStatus.llm_used === false" class="safety-note">Solo regole di sicurezza</span>
+        <span *ngIf="supervisorStatus.last_error" class="supervisor-error">Error: {{ supervisorStatus.last_error }}</span>
+      </div>
+
+      <div class="supervisor-reasoning" *ngIf="supervisorStatus?.reasoning">
+        <strong>Ragionamento AI:</strong> {{ supervisorStatus.reasoning }}
+      </div>
+
+      <div class="supervisor-managed" *ngIf="supervisorStatus?.managed_traders?.length">
+        <div class="managed-title">Trader gestiti ({{ supervisorStatus.managed_traders.length }})</div>
+        <table class="supervisor-table managed-table">
+          <thead>
+            <tr>
+              <th>Trader</th>
+              <th>Strategia</th>
+              <th>Simbolo</th>
+              <th>Intervallo</th>
+              <th>Stato</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let t of supervisorStatus.managed_traders">
+              <td>{{ t.name }}</td>
+              <td>{{ t.strategy }}</td>
+              <td>{{ t.symbol }}</td>
+              <td>{{ t.interval }} min</td>
+              <td>
+                <span class="managed-status" [class.running]="t.current_status === 'RUNNING'"
+                      [class.stopped]="t.current_status === 'STOPPED'">
+                  <span class="status-dot"></span> {{ t.current_status }}
+                </span>
+              </td>
+              <td>
+                <button *ngIf="t.current_status === 'RUNNING'"
+                        class="apply-btn apply-pause"
+                        (click)="applySupervisor(t, 'PAUSE')"
+                        [disabled]="supervisorApplying[t.trader_id]">
+                  {{ supervisorApplying[t.trader_id] ? '...' : 'Pausa' }}
+                </button>
+                <span *ngIf="t.current_status !== 'RUNNING'" class="managed-idle">—</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="supervisor-table-wrap" *ngIf="supervisorStatus?.recommendations?.length">
+        <table class="supervisor-table">
+          <thead>
+            <tr>
+              <th>Trader</th>
+              <th>Strategia</th>
+              <th>Simbolo</th>
+              <th>Stato</th>
+              <th>Mercato</th>
+              <th>Perf (WR / P&L)</th>
+              <th>Raccomandazione</th>
+              <th>Conf</th>
+              <th>Motivo</th>
+              <th>Azioni</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let rec of supervisorStatus.recommendations">
+              <td>{{ rec.name }}</td>
+              <td>{{ rec.strategy }}</td>
+              <td>{{ rec.symbol }}</td>
+              <td>{{ rec.current_status }}</td>
+              <td>
+                {{ rec.market?.regime || '-' }} / ATR {{ rec.market?.atr_m5 != null ? rec.market.atr_m5 : '-' }}
+                <span *ngIf="rec.market?.ok === false" class="supervisor-error" [title]="rec.market?.error">!</span>
+              </td>
+              <td>{{ rec.performance?.win_rate != null ? rec.performance.win_rate + '%' : '-' }} /
+                  ${{ rec.performance?.net_profit_30 ?? 0 }}</td>
+              <td>
+                <span class="rec-badge"
+                      [class.active]="rec.recommended_action === 'ACTIVE'"
+                      [class.pause]="rec.recommended_action === 'PAUSE'"
+                      [class.watch]="rec.recommended_action === 'WATCH'">
+                  {{ rec.recommended_action }}
+                </span>
+                <span *ngIf="rec.safety_override" class="safety-flag" title="Imposta dalle regole di sicurezza">S</span>
+              </td>
+              <td>{{ (rec.confidence * 100) | number:'1.0-0' }}%</td>
+              <td class="rec-reason">{{ rec.reason }}</td>
+              <td>
+                <button *ngIf="rec.current_status === 'STOPPED' && rec.recommended_action !== 'PAUSE'"
+                        class="apply-btn apply-active"
+                        (click)="applySupervisor(rec, 'ACTIVE')"
+                        [disabled]="supervisorApplying[rec.trader_id]">
+                  {{ supervisorApplying[rec.trader_id] ? '...' : 'Attiva' }}
+                </button>
+                <button *ngIf="rec.current_status === 'RUNNING'"
+                        class="apply-btn apply-pause"
+                        (click)="applySupervisor(rec, 'PAUSE')"
+                        [disabled]="supervisorApplying[rec.trader_id]">
+                  {{ supervisorApplying[rec.trader_id] ? '...' : 'Pausa' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="supervisor-empty" *ngIf="!supervisorStatus?.recommendations?.length">
+        Nessuna raccomandazione disponibile. Avvia il supervisore o premi "Run Now".
+      </div>
+    </div>
+  </div>
+
   <div class="traders-section">
     <div class="section-header">
       <h3>My Traders</h3>

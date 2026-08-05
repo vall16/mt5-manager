@@ -279,6 +279,32 @@ export class TraderService {
     return this.http.get(`${this.apiUrl}/adaptive/stats/${traderId}`);
   }
 
+  // ── AI Strategy Supervisor ──
+
+  startSupervisor(config?: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/supervisor/start`, config || {});
+  }
+
+  stopSupervisor(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/supervisor/stop`, {});
+  }
+
+  runSupervisorNow(): Observable<any> {
+    return this.http.post(`${this.apiUrl}/supervisor/run-now`, {});
+  }
+
+  getSupervisorStatus(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/supervisor/status`);
+  }
+
+  updateSupervisorConfig(config: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/supervisor/config`, config);
+  }
+
+  applySupervisorAction(traderId: number, action: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/supervisor/apply`, { trader_id: traderId, action });
+  }
+
   // ── Signal Research ──
 
   runSignalResearch(config: any): Observable<any> {
