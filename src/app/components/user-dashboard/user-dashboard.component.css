@@ -720,6 +720,31 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
+.copy-disabled-block {
+  opacity: 0.55;
+  pointer-events: none;
+  filter: grayscale(0.6);
+}
+
+.disabled-tag {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  color: #6b7280;
+  background: #e5e7eb;
+  border-radius: 4px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.server-card select:disabled {
+  background-color: #f1f3f5;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
 .copy-section h5 {
   font-size: 0.95rem;
   margin-bottom: 8px;

@@ -677,10 +677,6 @@ saveTrader(trader: Trader) {
   }
 
   
-  goToMT5Dashboard(trader: Trader) {
-    this.router.navigate(['/dashboard'], { state: { trader } });
-  }
-
   toggleAdaptive(trader: Trader) {
     if (!trader.id) return;
 
