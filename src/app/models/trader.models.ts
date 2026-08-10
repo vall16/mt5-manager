@@ -111,5 +111,22 @@ export interface SlaveSymbol {
   point: number;    // valore di un punto, es. 0.00001
 }
 
+export interface SlaveOrder {
+  id: number;
+  trader_id: number;
+  master_order_id: number | null;
+  master_ticket: number | null;
+  ticket: number;
+  symbol: string;
+  type: number;
+  volume: number;
+  price_open: number;
+  price_close: number;
+  profit: number;
+  comment: string | null;
+  opened_at: string;
+  closed_at: string;
+}
+
 
 

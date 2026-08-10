@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap, throwError } from 'rxjs';
 import { Server } from '../models/server.model';
-import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol, CheckServerResponse } from '../models/trader.models';
+import { BuyRequest, CopyOrdersResponse, Trader,SlaveSymbol, CheckServerResponse, SlaveOrder } from '../models/trader.models';
 import { environment } from '../../environments/environment';
 
 
@@ -194,6 +194,14 @@ export class TraderService {
 
   analyzeTrader(traderId: number, limit: number = 100, source: string = 'db', days: number = 30): Observable<any> {
     return this.http.post(`${this.apiUrl}/db/analyze`, { trader_id: traderId, limit, source, days });
+  }
+
+  getTradeHistory(traderId: number, symbol?: string): Observable<SlaveOrder[]> {
+    let params = `trader_id=${traderId}`;
+    if (symbol && symbol.trim() !== '') {
+      params += `&symbol=${encodeURIComponent(symbol.trim())}`;
+    }
+    return this.http.get<SlaveOrder[]>(`${this.apiUrl}/db/history?${params}`);
   }
 
   runBacktest(strategy: string, symbol: string, days: number, lot: number, balance: number, traderId: number, direction: string = 'both'): Observable<any> {

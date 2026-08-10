@@ -113,34 +113,6 @@ export interface OrderResult {
   request: any;
 }
 
-export interface Deal {
-  ticket: number;
-  order: number;
-  time: number;
-  time_msc: number;
-  type: number;
-  entry: number;
-  magic: number;
-  position_id: number;
-  reason: number;
-  volume: number;
-  price: number;
-  commission: number;
-  swap: number;
-  profit: number;
-  fee: number;
-  symbol: string;
-  comment: string;
-  external_id: string;
-}
-
-export interface DealsResponse {
-  total: number;
-  limit: number;
-  offset: number;
-  data: Deal[];
-}
-
 export interface MarginInfo {
   balance: number;
   equity: number;
