@@ -39,7 +39,7 @@
 .grid-row {
   display: grid;
   grid-template-columns:
-    1.2fr 1fr 1fr 1fr 1fr 1fr 0.6fr 1.5fr 0.8fr 0.8fr 2fr;
+    0.3fr 1.2fr 1fr 1fr 1fr 1fr 0.6fr 1.5fr 0.8fr 0.8fr 2fr;
   gap: 10px;
   align-items: center;
 }
@@ -57,6 +57,58 @@
 
 .grid-row:hover {
   background: #fafafa;
+}
+
+/* ---------------- DRAG & DROP ---------------- */
+.drag-handle-cell {
+  display: flex;
+  justify-content: center;
+}
+
+.drag-handle {
+  cursor: grab;
+  color: #9ca3af;
+  font-size: 16px;
+  padding: 2px 4px;
+  border-radius: 4px;
+  user-select: none;
+  transition: color 0.15s;
+}
+
+.drag-handle:hover {
+  color: #4f46e5;
+  background: #eef2ff;
+}
+
+.grid-row.cdk-drag-preview {
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  opacity: 0.95;
+  padding: 10px 0;
+}
+
+.grid-row.cdk-drag-placeholder {
+  opacity: 0.4;
+  background: #eef2ff;
+  border-radius: 8px;
+}
+
+.grid-row.cdk-drag-animating {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.grid-body.cdk-drop-list-dragging .grid-row:not(.cdk-drag-placeholder) {
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.grid-row.editing-row {
+  cursor: default;
+}
+
+.grid-row.editing-row .drag-handle {
+  cursor: not-allowed;
+  color: #d1d5db;
 }
 
 .grid-cell {

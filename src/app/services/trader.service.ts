@@ -42,6 +42,10 @@ export class TraderService {
    return this.http.put(`${this.apiUrl}/db/servers/${server.id}`, server);
   }
 
+  reorderServers(orderedIds: number[]): Observable<any> {
+    return this.http.put(`${this.apiUrl}/db/servers/reorder`, { ordered_ids: orderedIds });
+  }
+
 
   checkServer(server: Server): Observable<CheckServerResponse> {
     // Per il check bastano IP e Porta dell'agente

@@ -45,6 +45,7 @@
 
     <!-- HEADER GRID -->
     <div class="grid-header">
+      <div class="grid-cell"></div>
       <div class="grid-cell">Server</div>
       <div class="grid-cell">Alias</div>
       <div class="grid-cell">Platform</div>
@@ -59,8 +60,17 @@
     </div>
 
     <!-- BODY GRID -->
-    <div class="grid-body">
-      <div *ngFor="let server of servers; let i = index" class="grid-row">
+    <div class="grid-body" cdkDropList (cdkDropListDropped)="onDrop($event)">
+      <div *ngFor="let server of servers; let i = index"
+           class="grid-row"
+           [class.editing-row]="editingIndex === i"
+           cdkDrag
+           [cdkDragDisabled]="editingIndex === i">
+
+        <!-- DRAG HANDLE -->
+        <div class="grid-cell drag-handle-cell">
+          <div class="drag-handle" cdkDragHandle title="Trascina per riordinare">⠿</div>
+        </div>
 
         <!-- SERVER -->
         <div class="grid-cell">

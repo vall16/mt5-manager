@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Server } from '../../models/server.model';
 import { TraderService } from '../../services/trader.service';
 
 @Component({
   selector: 'app-servers-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   templateUrl: './servers-list.component.html',
   styleUrls: ['./servers-list.component.css']
 })
@@ -118,6 +119,18 @@ export class ServersListComponent implements OnInit {
     this.traderService.startServer(server).subscribe({
       next: () => this.startingIndex = null,
       error: () => this.startingIndex = null
+    });
+  }
+
+  // ---------------- REORDER ----------------
+  onDrop(event: CdkDragDrop<Server[]>): void {
+    moveItemInArray(this.servers, event.previousIndex, event.currentIndex);
+
+    this.traderService.reorderServers(this.servers.map(s => s.id!)).subscribe({
+      error: err => {
+        alert('Errore riordino: ' + (err.message || err));
+        this.loadServers();
+      }
     });
   }
 
