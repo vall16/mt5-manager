@@ -163,9 +163,7 @@
         </div>
 
         <!-- ACTIONS -->
-        <div class="grid-cell">
-
-          <!-- VIEW MODE -->
+        <div class="grid-cell actions">
           <ng-container *ngIf="editingIndex !== i">
             <button class="action-btn secondary" (click)="startEdit(i)">✏️ Edit</button>
             <button class="action-btn secondary" (click)="deleteServer(server)">Delete</button>
@@ -186,7 +184,6 @@
             <button class="action-btn primary" (click)="saveEdit(server)">💾 Save</button>
             <button class="action-btn secondary" (click)="cancelEdit()">✖ Cancel</button>
           </ng-container>
-
         </div>
 
       </div>

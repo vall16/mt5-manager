@@ -39,7 +39,7 @@
 .grid-row {
   display: grid;
   grid-template-columns:
-    0.3fr 1.2fr 1fr 1fr 1fr 1fr 0.6fr 1.5fr 0.8fr 0.8fr 2fr;
+    0.3fr 1.2fr 1fr 1fr 1fr 1fr 1fr 0.6fr 1.5fr 0.8fr 0.8fr 2.4fr;
   gap: 10px;
   align-items: center;
 }
@@ -113,6 +113,20 @@
 
 .grid-cell {
   font-size: 12px;
+}
+
+/* ---------------- ACTIONS CELL ---------------- */
+.grid-row .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.grid-row .actions .action-btn {
+  margin-right: 0;
+  padding: 5px 8px;
+  white-space: nowrap;
 }
 
 /* ---------------- EDIT ---------------- */
