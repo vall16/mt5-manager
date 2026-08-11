@@ -73,17 +73,17 @@
         </div>
 
         <!-- SERVER -->
-        <div class="grid-cell">
-          <ng-container *ngIf="editingIndex !== i">{{ server.server }}</ng-container>
+        <div class="grid-cell" [title]="server.server">
+          <ng-container *ngIf="editingIndex !== i">{{ server.server || '—' }}</ng-container>
           <ng-container *ngIf="editingIndex === i">
             <input class="edit-input" [(ngModel)]="server.server">
           </ng-container>
         </div>
 
         <!-- ALIAS (EDIT) -->
-        <div class="grid-cell">
+        <div class="grid-cell" [title]="server.server_alias">
           <ng-container *ngIf="editingIndex !== i">
-            <b>{{ server.server_alias }}</b>
+            <b>{{ server.server_alias || '—' }}</b>
           </ng-container>
           <ng-container *ngIf="editingIndex === i">
             <input class="edit-input" [(ngModel)]="server.server_alias">
@@ -91,11 +91,11 @@
         </div>
 
         <!-- PLATFORM -->
-        <div class="grid-cell">{{ server.platform }}</div>
+        <div class="grid-cell">{{ server.platform || '—' }}</div>
 
         <!-- USER -->
         <div class="grid-cell">
-          <ng-container *ngIf="editingIndex !== i">{{ server.user }}</ng-container>
+          <ng-container *ngIf="editingIndex !== i">{{ server.user || '—' }}</ng-container>
           <ng-container *ngIf="editingIndex === i">
             <input class="edit-input" [(ngModel)]="server.user">
           </ng-container>
@@ -104,7 +104,7 @@
         <!-- PASSWORD -->
         <div class="grid-cell">
           <ng-container *ngIf="editingIndex !== i">
-            {{ server.pwd }}
+            {{ server.pwd ? '••••••••' : '—' }}
           </ng-container>
 
           
@@ -115,7 +115,7 @@
 
         <!-- IP -->
         <div class="grid-cell">
-          <ng-container *ngIf="editingIndex !== i">{{ server.ip }}</ng-container>
+          <ng-container *ngIf="editingIndex !== i">{{ server.ip || '—' }}</ng-container>
           <ng-container *ngIf="editingIndex === i">
             <input class="edit-input" [(ngModel)]="server.ip">
           </ng-container>
@@ -123,15 +123,15 @@
 
         <!-- PORT -->
         <div class="grid-cell">
-          <ng-container *ngIf="editingIndex !== i">{{ server.port }}</ng-container>
+          <ng-container *ngIf="editingIndex !== i">{{ server.port || '—' }}</ng-container>
           <ng-container *ngIf="editingIndex === i">
             <input type="number" class="edit-input" [(ngModel)]="server.port">
           </ng-container>
         </div>
 
         <!-- PATH -->
-        <div class="grid-cell">
-          <ng-container *ngIf="editingIndex !== i">{{ server.path }}</ng-container>
+        <div class="grid-cell" [title]="server.path">
+          <ng-container *ngIf="editingIndex !== i">{{ server.path || '—' }}</ng-container>
           <ng-container *ngIf="editingIndex === i">
             <input class="edit-input" [(ngModel)]="server.path">
           </ng-container>
@@ -157,22 +157,23 @@
         <div class="grid-cell">
           <span class="runtime-badge"
                 [class.online]="server.runtimeStatus === 'online'"
-                [class.offline]="server.runtimeStatus === 'offline'">
-            {{ server.runtimeStatus | uppercase }}
+                [class.offline]="server.runtimeStatus === 'offline'"
+                [class.unknown]="!server.runtimeStatus">
+            {{ server.runtimeStatus ? (server.runtimeStatus | uppercase) : '—' }}
           </span>
         </div>
 
         <!-- ACTIONS -->
         <div class="grid-cell actions">
           <ng-container *ngIf="editingIndex !== i">
-            <button class="action-btn secondary" (click)="startEdit(i)">✏️ Edit</button>
-            <button class="action-btn secondary" (click)="deleteServer(server)">Delete</button>
-            <button class="action-btn primary"
+            <button class="action-btn edit" (click)="startEdit(i)">✏️ Edit</button>
+            <button class="action-btn delete" (click)="deleteServer(server)">Delete</button>
+            <button class="action-btn test"
                     (click)="checkServer(i)"
                     [disabled]="testingIndex === i">
               Test
             </button>
-            <button class="action-btn primary"
+            <button class="action-btn start"
                     (click)="startServer(server, i)"
                     [disabled]="startingIndex === i">
               ▶️ Start
@@ -181,8 +182,8 @@
 
           <!-- EDIT MODE -->
           <ng-container *ngIf="editingIndex === i">
-            <button class="action-btn primary" (click)="saveEdit(server)">💾 Save</button>
-            <button class="action-btn secondary" (click)="cancelEdit()">✖ Cancel</button>
+            <button class="action-btn save" (click)="saveEdit(server)">💾 Save</button>
+            <button class="action-btn cancel" (click)="cancelEdit()">✖ Cancel</button>
           </ng-container>
         </div>
 
