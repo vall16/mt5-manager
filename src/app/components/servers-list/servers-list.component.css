@@ -226,6 +226,10 @@
   text-overflow: clip;
 }
 
+.grid-header .grid-cell:nth-child(12) {
+  text-align: center;
+}
+
 .grid-body {
   position: relative;
 }
