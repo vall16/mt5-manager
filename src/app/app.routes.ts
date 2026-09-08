@@ -11,11 +11,11 @@ export const routes: Routes = [
   
   { path: '', component: LoginComponent },     
   // { path: '', component: UserDashboardComponent },       
-  { path: 'history', component: HistoryComponent },
+  { path: 'history', component: HistoryComponent, canActivate: [authGuard] },
   { path: 'user-dashboard', component: UserDashboardComponent, canActivate: [authGuard] },
-  { path: 'backtest', component: BacktestComponent },
-  { path: 'signal-research', component: SignalResearchComponent },
-  { path: 'signal-research-auto', component: AutoSignalComponent },
+  { path: 'backtest', component: BacktestComponent, canActivate: [authGuard] },
+  { path: 'signal-research', component: SignalResearchComponent, canActivate: [authGuard] },
+  { path: 'signal-research-auto', component: AutoSignalComponent, canActivate: [authGuard] },
   //  { path: 'user-dashboard', component: UserDashboardComponent },
   
 ];

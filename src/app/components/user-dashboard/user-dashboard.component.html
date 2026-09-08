@@ -14,7 +14,18 @@
     </button>
   </div>
 
-  <div class="supervisor-section">
+  <div class="error-banner" *ngIf="errorMessage">
+    <span class="error-icon">⚠</span>
+    <span>{{ errorMessage }}</span>
+    <button class="error-close" (click)="errorMessage = ''">✕</button>
+  </div>
+
+  <div class="loading-overlay" *ngIf="loading">
+    <div class="spinner"></div>
+    <span>Caricamento dati...</span>
+  </div>
+
+  <div class="supervisor-section" *ngIf="!loading">
     <div class="section-header">
       <h3>AI Strategy Supervisor</h3>
       <div class="header-buttons">
@@ -164,7 +175,7 @@
     </div>
   </div>
 
-  <div class="traders-section">
+  <div class="traders-section" *ngIf="!loading">
     <div class="section-header">
       <h3>My Traders</h3>
       
