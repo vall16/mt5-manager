@@ -54,12 +54,9 @@ export class SignalResearchComponent implements OnInit {
   strategyTimeframes: { [key: string]: string } = {
     'SUPER': 'M1+M5+M15',
     'SUPER_PRO': 'M1+M5+M15',
+    'SUPER_LIVE': 'M1+M5+M15',
     'SUPER_USDJPY': 'M1+M5+M15',
-    'BASE': 'M5',
     'BASE_NOHOLD': 'M5',
-    'TRENDGUARD': 'M1+M5+M15',
-    'TRENDGUARD_PRO': 'M1+M5+M15',
-    'HARMONIC': 'M1+M5+M15+H1',
     'ICHIMOKU': 'M1+M5+M15+H1',
     'EURUSD_NOHOLD': 'M5',
     'MSFT': 'M1+M5+M15',
@@ -68,17 +65,15 @@ export class SignalResearchComponent implements OnInit {
     'GBPJPY': 'M5',
     'AUDJPY': 'M5',
     'SCALPER_M1': 'M1',
+    'LONDON_BREAKOUT': 'M5',
   };
 
   strategyDefaults: { [key: string]: { sl_min: number; sl_max: number; sl_step: number; tp_min: number; tp_max: number; tp_step: number } } = {
     'SUPER': { sl_min: 100, sl_max: 600, sl_step: 50, tp_min: 200, tp_max: 1200, tp_step: 50 },
     'SUPER_PRO': { sl_min: 100, sl_max: 400, sl_step: 50, tp_min: 200, tp_max: 1000, tp_step: 50 },
+    'SUPER_LIVE': { sl_min: 100, sl_max: 600, sl_step: 50, tp_min: 200, tp_max: 1200, tp_step: 50 },
     'SUPER_USDJPY': { sl_min: 50, sl_max: 300, sl_step: 25, tp_min: 100, tp_max: 600, tp_step: 50 },
-    'BASE': { sl_min: 50, sl_max: 400, sl_step: 50, tp_min: 100, tp_max: 800, tp_step: 50 },
     'BASE_NOHOLD': { sl_min: 50, sl_max: 300, sl_step: 25, tp_min: 100, tp_max: 600, tp_step: 50 },
-    'TRENDGUARD': { sl_min: 100, sl_max: 500, sl_step: 50, tp_min: 200, tp_max: 1000, tp_step: 50 },
-    'TRENDGUARD_PRO': { sl_min: 100, sl_max: 400, sl_step: 50, tp_min: 200, tp_max: 800, tp_step: 50 },
-    'HARMONIC': { sl_min: 200, sl_max: 800, sl_step: 50, tp_min: 400, tp_max: 1600, tp_step: 100 },
     'ICHIMOKU': { sl_min: 100, sl_max: 500, sl_step: 50, tp_min: 200, tp_max: 1000, tp_step: 50 },
     'EURUSD_NOHOLD': { sl_min: 30, sl_max: 200, sl_step: 10, tp_min: 60, tp_max: 400, tp_step: 20 },
     'MSFT': { sl_min: 200, sl_max: 600, sl_step: 50, tp_min: 400, tp_max: 1500, tp_step: 100 },
@@ -87,17 +82,15 @@ export class SignalResearchComponent implements OnInit {
     'GBPJPY': { sl_min: 50, sl_max: 400, sl_step: 25, tp_min: 100, tp_max: 800, tp_step: 50 },
     'AUDJPY': { sl_min: 30, sl_max: 200, sl_step: 10, tp_min: 60, tp_max: 400, tp_step: 20 },
     'SCALPER_M1': { sl_min: 50, sl_max: 200, sl_step: 10, tp_min: 100, tp_max: 400, tp_step: 20 },
+    'LONDON_BREAKOUT': { sl_min: 200, sl_max: 800, sl_step: 50, tp_min: 300, tp_max: 1500, tp_step: 100 },
   };
 
   strategyDescriptions: { [key: string]: string } = {
     'SUPER': 'Trend-following entry on M1 with M5/M15 confirmation. Best for trending markets.',
     'SUPER_PRO': 'SUPER entry + reduced risk from M5/M15 filters. Stricter but higher quality signals.',
+    'SUPER_LIVE': 'SUPER variant for live trading. Same logic as SUPER with production-tuned parameters.',
     'SUPER_USDJPY': 'SUPER variant tuned for USDJPY. Same logic, adjusted SL/TP ranges for yen pairs.',
-    'BASE': 'Simple breakout strategy on M5. Takes entries at key level breaks.',
-    'BASE_NOHOLD': 'BASE without overnight hold. Flat before market close, re-enters next day.',
-    'TRENDGUARD': 'Uses ADX/DI cross for trend direction + volatility filter. Safer in strong trends.',
-    'TRENDGUARD_PRO': 'TRENDGUARD with tighter confirmation. Better Sharpe, fewer but higher quality trades.',
-    'HARMONIC': 'Harmonic pattern detection across M1-M15+H1. Longer hold, aims for bigger swings.',
+    'BASE_NOHOLD': 'Simple M5 strategy without overnight hold. Flat before market close, re-enters next day.',
     'ICHIMOKU': 'Ichimoku Cloud across M1/M5/M15/H1. Uses kumo breakout + TK cross.',
     'EURUSD_NOHOLD': 'EURUSD-specific, flat before rollover. No overnight exposure.',
     'MSFT': 'MSFT/NASDAQ hybrid — runs SUPER logic on M1+M5+M15. Use SL 200-600.',
@@ -106,6 +99,7 @@ export class SignalResearchComponent implements OnInit {
     'GBPJPY': 'GBPJPY trend scalper on M5. High volatility — wide SL/TP ranges expected.',
     'AUDJPY': 'AUDJPY momentum entry on M5. Medium vol, moderate hold times.',
     'SCALPER_M1': 'Mean-reversion scalper su M1. Buy se price < EMA21 e RSI < 35. Sell se price > EMA21 e RSI > 65. Default SL 120/TP 250 (EURUSD).',
+    'LONDON_BREAKOUT': 'Breakout del range asiatico (00:00-07:00 UTC) all\'apertura di Londra. Entry su M5 con volume confirmation. SL al centro del range, TP 1.5x altezza range. Solo 07:00-11:00 UTC.',
   };
 
   allStrategies = Object.keys(this.strategyTimeframes);
