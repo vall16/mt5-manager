@@ -5,6 +5,7 @@ import { UserDashboardComponent } from './components/user-dashboard/user-dashboa
 import { BacktestComponent } from './components/backtest/backtest.component';
 import { SignalResearchComponent } from './components/signal-research/signal-research.component';
 import { AutoSignalComponent } from './components/auto-signal/auto-signal.component';
+import { StrategiesGuideComponent } from './components/strategies-guide/strategies-guide.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
@@ -16,6 +17,7 @@ export const routes: Routes = [
   { path: 'backtest', component: BacktestComponent, canActivate: [authGuard] },
   { path: 'signal-research', component: SignalResearchComponent, canActivate: [authGuard] },
   { path: 'signal-research-auto', component: AutoSignalComponent, canActivate: [authGuard] },
+  { path: 'strategies-guide', component: StrategiesGuideComponent, canActivate: [authGuard] },
   //  { path: 'user-dashboard', component: UserDashboardComponent },
   
 ];
