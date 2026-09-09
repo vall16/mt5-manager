@@ -40,7 +40,7 @@ export class StrategiesGuideComponent {
       frequency: '2-5 trade/giorno',
       tags: ['Trend', 'Multi-TF', 'Momentum', 'Regime Filter'],
       tips: [
-        'Evitare nei giorni di NFP/CPI/FOMC (il regime filter reagisce con ritardo)',
+        'News Filter attivo: trading sospeso ±30 min da NFP/CPI/FOMC automaticamente',
         'Funziona meglio in sessione London/NY dove la volatilità è sufficiente',
         'In sessione asiatica tende a stare in hold (corretto)',
         'Se il mercato è in range stretto, non darà segnali per ore — è normale'
@@ -98,7 +98,7 @@ export class StrategiesGuideComponent {
       tags: ['Breakout', 'Time-based', 'One-shot', 'Volume'],
       tips: [
         'Funziona meglio quando il range asiatico è stretto (< 200 punti su gold)',
-        'Nei giorni di news maje (NFP, FOMC) aumenta il rischio di fakeout',
+        'News Filter: nei giorni di NFP/FOMC il trading è bloccato automaticamente ±30 min',
         'Complementare a SUPER: LB tradà la mattina, SUPER può tradare tutto il giorno',
         'Se il prezzo torna dentro il range dopo il breakout, il SL al centro ti protegge',
         'Non forzare: se non c\'è breakout nelle prime 2 ore, il giorno è "no trade"'
@@ -121,7 +121,7 @@ export class StrategiesGuideComponent {
         'Non darà MAI segnale fuori dalla sessione USA — è by design',
         'I primi 30 min dopo l\'apertura (09:30-10:00 ET) sono i più volatili',
         'Il time exit (30 min) evita di tenere posizioni in sideways',
-        'Evitare il giorno degli earnings MSFT (volatilità estrema)'
+        'News Filter: earnings MSFT e dati USA bloccano il trading automaticamente'
       ]
     },
     {
@@ -141,7 +141,7 @@ export class StrategiesGuideComponent {
         'NVDA è molto più volatile di MSFT: SL/TP devono essere ampi',
         'Non usare lot alti: un movimento del 5% su NVDA è normale',
         'Il time frame M15 filtra il noise di M1/M5',
-        'Evitare il giorno degli earnings NVDA e i giorni di Fed'
+        'News Filter: earnings NVDA e giorni di Fed bloccano il trading automaticamente'
       ]
     },
     {
